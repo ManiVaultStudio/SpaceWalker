@@ -1,0 +1,5 @@
+{
+    "name" : "SpaceWalker",
+    "version" : "1",
+    "dependencies" : ["Points"]
+}

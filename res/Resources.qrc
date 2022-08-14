@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>shaders/SelectionTool.frag</file>
+        <file>shaders/SelectionTool.vert</file>
+        <file>shaders/TrianglePlot.frag</file>
+        <file>shaders/TrianglePlot.vert</file>
+        <file>shaders/Graph.frag</file>
+        <file>shaders/Graph.vert</file>
+    </qresource>
+</RCC>
