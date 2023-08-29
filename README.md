@@ -16,16 +16,21 @@ Currently, only a Windows installer is provided, Linux and Mac will follow in th
 # Example Datasets
 In the paper several datasets are discussed which are available here for exploring locally via downloading a ManiVault project file.
 
-* [**smFish**]()
-* [**MERFISH**]()
-* [**EEL FISH**]()
-* [**Allen Brain Cell Atlas**]()
+smFISH           |  MERFISH
+:-------------------------:|:-------------------------:
+<img src="https://github.com/ManiVaultStudio/SpaceWalker/assets/2978176/08e17665-0b0c-48aa-8e76-9a39b8093f69" width="90%" /> [![Download Icon]][SMLink] |  TBA
+**EEL FISH** | **ABC Atlas**
+<img src="https://github.com/ManiVaultStudio/SpaceWalker/assets/2978176/cc487851-6af5-41b5-98a8-c85a1d21d8e0" width="90%" /> [![Download Icon]][EELLink] | <img src="https://github.com/ManiVaultStudio/SpaceWalker/assets/2978176/e473439c-471d-4c9d-a4a6-b887f3e81838" width="90%" /> [![Download Icon]][ABCLink]
 
 <!---------------------------------------------------------------------------->
 [Link]: https://www.biorxiv.org/content/10.1101/2023.03.20.532934v1 'Download the Installer'
+[SMLink]: https://www.biorxiv.org/content/10.1101/2023.03.20.532934v1 'smFISH'
+[EELLink]: https://www.biorxiv.org/content/10.1101/2023.03.20.532934v1 'EEL FISH'
+[ABCLink]: https://www.biorxiv.org/content/10.1101/2023.03.20.532934v1 'EEL FISH'
 <!---------------------------------------------------------------------------->
 [Button Example]: https://img.shields.io/badge/Title-37a779?style=for-the-badge
 [Button Icon]: https://img.shields.io/badge/Installation-EF2D5E?style=for-the-badge&logoColor=white&logo=DocuSign
+[Download Icon]: https://img.shields.io/badge/Download-EF2D5E?style=for-the-badge&logoColor=white&logo=DocuSign
 [#]: #
 
 # License
