@@ -1,5 +1,5 @@
 #include "PositionAction.h"
-#include "ScatterplotPlugin.h"
+#include "SpaceWalkerPlugin.h"
 
 #include <QMenu>
 
@@ -19,24 +19,24 @@ PositionAction::PositionAction(QObject* parent, const QString& title) :
     _xDimensionPickerAction.setToolTip("X dimension");
     _yDimensionPickerAction.setToolTip("Y dimension");
 
-    auto scatterplotPlugin = dynamic_cast<ScatterplotPlugin*>(parent->parent());
+    auto spaceWalkerPlugin = dynamic_cast<SpaceWalkerPlugin*>(parent->parent());
 
-    if (scatterplotPlugin == nullptr)
+    if (spaceWalkerPlugin == nullptr)
         return;
 
-    connect(&_xDimensionPickerAction, &DimensionPickerAction::currentDimensionIndexChanged, [this, scatterplotPlugin](const std::uint32_t& currentDimensionIndex) {
-        if (scatterplotPlugin->isDataInitialized())
-            scatterplotPlugin->setXDimension(currentDimensionIndex);
+    connect(&_xDimensionPickerAction, &DimensionPickerAction::currentDimensionIndexChanged, [this, spaceWalkerPlugin](const std::uint32_t& currentDimensionIndex) {
+        if (spaceWalkerPlugin->isDataInitialized())
+            spaceWalkerPlugin->setXDimension(currentDimensionIndex);
     });
 
-    connect(&_yDimensionPickerAction, &DimensionPickerAction::currentDimensionIndexChanged, [this, scatterplotPlugin](const std::uint32_t& currentDimensionIndex) {
-        if (scatterplotPlugin->isDataInitialized())
-            scatterplotPlugin->setYDimension(currentDimensionIndex);
+    connect(&_yDimensionPickerAction, &DimensionPickerAction::currentDimensionIndexChanged, [this, spaceWalkerPlugin](const std::uint32_t& currentDimensionIndex) {
+        if (spaceWalkerPlugin->isDataInitialized())
+            spaceWalkerPlugin->setYDimension(currentDimensionIndex);
     });
 
-    connect(&scatterplotPlugin->getPositionDataset(), &Dataset<Points>::changed, this, [this, scatterplotPlugin]() {
-        _xDimensionPickerAction.setPointsDataset(scatterplotPlugin->getPositionDataset());
-        _yDimensionPickerAction.setPointsDataset(scatterplotPlugin->getPositionDataset());
+    connect(&spaceWalkerPlugin->getPositionDataset(), &Dataset<Points>::changed, this, [this, spaceWalkerPlugin]() {
+        _xDimensionPickerAction.setPointsDataset(spaceWalkerPlugin->getPositionDataset());
+        _yDimensionPickerAction.setPointsDataset(spaceWalkerPlugin->getPositionDataset());
 
         _xDimensionPickerAction.setCurrentDimensionIndex(0);
 
@@ -45,13 +45,13 @@ PositionAction::PositionAction(QObject* parent, const QString& title) :
         _yDimensionPickerAction.setCurrentDimensionIndex(yIndex);
     });
 
-    const auto updateReadOnly = [this, scatterplotPlugin]() -> void {
-        setEnabled(scatterplotPlugin->getPositionDataset().isValid());
+    const auto updateReadOnly = [this, spaceWalkerPlugin]() -> void {
+        setEnabled(spaceWalkerPlugin->getPositionDataset().isValid());
     };
 
     updateReadOnly();
 
-    connect(&scatterplotPlugin->getPositionDataset(), &Dataset<Points>::changed, this, updateReadOnly);
+    connect(&spaceWalkerPlugin->getPositionDataset(), &Dataset<Points>::changed, this, updateReadOnly);
 }
 
 QMenu* PositionAction::getContextMenu(QWidget* parent /*= nullptr*/)

@@ -1,6 +1,6 @@
 #include "PointPlotAction.h"
 #include "ScalarSourceAction.h"
-#include "ScatterplotPlugin.h"
+#include "SpaceWalkerPlugin.h"
 #include "ScatterplotWidget.h"
 #include "ProjectionView.h"
 
@@ -10,7 +10,7 @@ using namespace gui;
 
 PointPlotAction::PointPlotAction(QObject* parent, const QString& title) :
     VerticalGroupAction(parent, title),
-    _scatterplotPlugin(nullptr),
+    _spaceWalkerPlugin(nullptr),
     _sizeAction(this, "Point size", 0.0, 40.0, DEFAULT_POINT_SIZE),
     _opacityAction(this, "Point opacity", 0.0, 100.0, DEFAULT_POINT_OPACITY),
     _pointSizeScalars(),
@@ -111,18 +111,18 @@ PointPlotAction::PointPlotAction(QObject* parent, const QString& title) :
     });
 }
 
-void PointPlotAction::initialize(ScatterplotPlugin* scatterplotPlugin)
+void PointPlotAction::initialize(SpaceWalkerPlugin* spaceWalkerPlugin)
 {
-    Q_ASSERT(scatterplotPlugin != nullptr);
+    Q_ASSERT(spaceWalkerPlugin != nullptr);
 
-    if (scatterplotPlugin == nullptr)
+    if (spaceWalkerPlugin == nullptr)
         return;
 
-    _scatterplotPlugin = scatterplotPlugin;
+    _spaceWalkerPlugin = spaceWalkerPlugin;
 
-    connect(&_scatterplotPlugin->getPositionDataset(), &Dataset<Points>::changed, this, [this]() {
+    connect(&_spaceWalkerPlugin->getPositionDataset(), &Dataset<Points>::changed, this, [this]() {
 
-        const auto positionDataset = _scatterplotPlugin->getPositionDataset();
+        const auto positionDataset = _spaceWalkerPlugin->getPositionDataset();
 
         if (!positionDataset.isValid())
             return;
@@ -133,7 +133,7 @@ void PointPlotAction::initialize(ScatterplotPlugin* scatterplotPlugin)
         _sizeAction.addDataset(positionDataset);
         _opacityAction.addDataset(positionDataset);
 
-        const auto positionSourceDataset = _scatterplotPlugin->getPositionSourceDataset();
+        const auto positionSourceDataset = _spaceWalkerPlugin->getPositionSourceDataset();
 
         if (positionSourceDataset.isValid()) {
             _sizeAction.addDataset(positionSourceDataset);
@@ -149,10 +149,10 @@ void PointPlotAction::initialize(ScatterplotPlugin* scatterplotPlugin)
         _opacityAction.getSourceAction().getPickerAction().setCurrentIndex(0);
     });
 
-    connect(&_scatterplotPlugin->getPositionDataset(), &Dataset<Points>::childAdded, this, &PointPlotAction::updateDefaultDatasets);
-    connect(&_scatterplotPlugin->getPositionDataset(), &Dataset<Points>::childRemoved, this, &PointPlotAction::updateDefaultDatasets);
-    connect(&_scatterplotPlugin->getPositionDataset(), &Dataset<Points>::dataSelectionChanged, this, &PointPlotAction::updateScatterPlotWidgetPointSizeScalars);
-    connect(&_scatterplotPlugin->getPositionDataset(), &Dataset<Points>::dataSelectionChanged, this, &PointPlotAction::updateScatterPlotWidgetPointOpacityScalars);
+    connect(&_spaceWalkerPlugin->getPositionDataset(), &Dataset<Points>::childAdded, this, &PointPlotAction::updateDefaultDatasets);
+    connect(&_spaceWalkerPlugin->getPositionDataset(), &Dataset<Points>::childRemoved, this, &PointPlotAction::updateDefaultDatasets);
+    connect(&_spaceWalkerPlugin->getPositionDataset(), &Dataset<Points>::dataSelectionChanged, this, &PointPlotAction::updateScatterPlotWidgetPointSizeScalars);
+    connect(&_spaceWalkerPlugin->getPositionDataset(), &Dataset<Points>::dataSelectionChanged, this, &PointPlotAction::updateScatterPlotWidgetPointOpacityScalars);
 
     connect(&_sizeAction, &ScalarAction::magnitudeChanged, this, &PointPlotAction::updateScatterPlotWidgetPointSizeScalars);
     connect(&_sizeAction, &ScalarAction::offsetChanged, this, &PointPlotAction::updateScatterPlotWidgetPointSizeScalars);
@@ -169,12 +169,12 @@ void PointPlotAction::initialize(ScatterplotPlugin* scatterplotPlugin)
 
 QMenu* PointPlotAction::getContextMenu()
 {
-    if (_scatterplotPlugin == nullptr)
+    if (_spaceWalkerPlugin == nullptr)
         return nullptr;
 
     auto menu = new QMenu("Plot settings");
 
-    const auto renderMode = _scatterplotPlugin->getScatterplotWidget().getRenderMode();
+    const auto renderMode = _spaceWalkerPlugin->getScatterplotWidget().getRenderMode();
 
     const auto addActionToMenu = [menu](QAction* action) {
         auto actionMenu = new QMenu(action->text());
@@ -215,10 +215,10 @@ void PointPlotAction::addPointOpacityDataset(const Dataset<DatasetImpl>& pointOp
 
 void PointPlotAction::updateDefaultDatasets()
 {
-    if (_scatterplotPlugin == nullptr)
+    if (_spaceWalkerPlugin == nullptr)
         return;
 
-    auto positionDataset = Dataset<Points>(_scatterplotPlugin->getPositionDataset());
+    auto positionDataset = Dataset<Points>(_spaceWalkerPlugin->getPositionDataset());
 
     if (!positionDataset.isValid())
         return;
@@ -241,31 +241,31 @@ void PointPlotAction::updateDefaultDatasets()
 
 void PointPlotAction::updateScatterPlotWidgetPointSizeScalars()
 {
-    if (_scatterplotPlugin == nullptr)
+    if (_spaceWalkerPlugin == nullptr)
         return;
 
-    //if (!_scatterplotPlugin->getDataStore().hasData())
+    //if (!_spaceWalkerPlugin->getDataStore().hasData())
     //    return;
 
-    _scatterplotPlugin->getScatterplotWidget().setPointSize(_sizeAction.getMagnitudeAction().getValue());
+    _spaceWalkerPlugin->getScatterplotWidget().setPointSize(_sizeAction.getMagnitudeAction().getValue());
 
 
 
-    const auto numberOfPoints = _scatterplotPlugin->getDataStore().getProjectionView().rows();
+    const auto numberOfPoints = _spaceWalkerPlugin->getDataStore().getProjectionView().rows();
 
     //if (numberOfPoints != _pointSizeScalars.size())
     //    _pointSizeScalars.resize(numberOfPoints);
 
     //std::fill(_pointSizeScalars.begin(), _pointSizeScalars.end(), _sizeAction.getMagnitudeAction().getValue());
 
-    _scatterplotPlugin->getProjectionViews()[0]->setSourcePointSize(_sizeAction.getMagnitudeAction().getValue());
-    _scatterplotPlugin->getProjectionViews()[1]->setSourcePointSize(_sizeAction.getMagnitudeAction().getValue());
-    _scatterplotPlugin->getSelectedView()->setSourcePointSize(_sizeAction.getMagnitudeAction().getValue());
+    _spaceWalkerPlugin->getProjectionViews()[0]->setSourcePointSize(_sizeAction.getMagnitudeAction().getValue());
+    _spaceWalkerPlugin->getProjectionViews()[1]->setSourcePointSize(_sizeAction.getMagnitudeAction().getValue());
+    _spaceWalkerPlugin->getSelectedView()->setSourcePointSize(_sizeAction.getMagnitudeAction().getValue());
 
     return;
 
     if (_sizeAction.isSourceSelection()) {
-        auto positionDataset = _scatterplotPlugin->getPositionDataset();
+        auto positionDataset = _spaceWalkerPlugin->getPositionDataset();
 
         std::fill(_pointSizeScalars.begin(), _pointSizeScalars.end(), _sizeAction.getMagnitudeAction().getValue());
 
@@ -287,7 +287,7 @@ void PointPlotAction::updateScatterPlotWidgetPointSizeScalars()
 
         auto pointSizeSourceDataset = Dataset<Points>(_sizeAction.getCurrentDataset());
 
-        if (pointSizeSourceDataset.isValid() && pointSizeSourceDataset->getNumPoints() == _scatterplotPlugin->getPositionDataset()->getNumPoints())
+        if (pointSizeSourceDataset.isValid() && pointSizeSourceDataset->getNumPoints() == _spaceWalkerPlugin->getPositionDataset()->getNumPoints())
         {
             pointSizeSourceDataset->visitData([this, pointSizeSourceDataset, numberOfPoints](auto pointData) {
                 const auto currentDimensionIndex    = _sizeAction.getSourceAction().getDimensionPickerAction().getCurrentDimensionIndex();
@@ -312,22 +312,22 @@ void PointPlotAction::updateScatterPlotWidgetPointSizeScalars()
         }
     }
 
-    _scatterplotPlugin->getScatterplotWidget().setPointSizeScalars(_pointSizeScalars);
+    _spaceWalkerPlugin->getScatterplotWidget().setPointSizeScalars(_pointSizeScalars);
 }
 
 void PointPlotAction::updateScatterPlotWidgetPointOpacityScalars()
 {
-    if (_scatterplotPlugin == nullptr)
+    if (_spaceWalkerPlugin == nullptr)
         return;
 
-    if (!_scatterplotPlugin->getPositionDataset().isValid())
+    if (!_spaceWalkerPlugin->getPositionDataset().isValid())
         return;
 
-    _opacityAction.getMagnitudeAction().setEnabled(!_scatterplotPlugin->hasMaskApplied());
+    _opacityAction.getMagnitudeAction().setEnabled(!_spaceWalkerPlugin->hasMaskApplied());
 
-    if (_scatterplotPlugin->hasMaskApplied()) return;
+    if (_spaceWalkerPlugin->hasMaskApplied()) return;
 
-    const auto numberOfPoints = _scatterplotPlugin->getPositionDataset()->getNumPoints();
+    const auto numberOfPoints = _spaceWalkerPlugin->getPositionDataset()->getNumPoints();
 
     if (numberOfPoints != _pointOpacityScalars.size())
         _pointOpacityScalars.resize(numberOfPoints);
@@ -337,7 +337,7 @@ void PointPlotAction::updateScatterPlotWidgetPointOpacityScalars()
     std::fill(_pointOpacityScalars.begin(), _pointOpacityScalars.end(), opacityMagnitude);
 
     if (_opacityAction.isSourceSelection()) {
-        auto positionDataset    = _scatterplotPlugin->getPositionDataset();
+        auto positionDataset    = _spaceWalkerPlugin->getPositionDataset();
         auto selectionSet       = positionDataset->getSelection<Points>();
 
         std::fill(_pointOpacityScalars.begin(), _pointOpacityScalars.end(), 0.01f * _opacityAction.getMagnitudeAction().getValue());
@@ -355,7 +355,7 @@ void PointPlotAction::updateScatterPlotWidgetPointOpacityScalars()
     if (_opacityAction.isSourceDataset()) {
         auto pointOpacitySourceDataset = Dataset<Points>(_opacityAction.getCurrentDataset());
 
-        if (pointOpacitySourceDataset.isValid() && pointOpacitySourceDataset->getNumPoints() == _scatterplotPlugin->getPositionDataset()->getNumPoints()) {
+        if (pointOpacitySourceDataset.isValid() && pointOpacitySourceDataset->getNumPoints() == _spaceWalkerPlugin->getPositionDataset()->getNumPoints()) {
             pointOpacitySourceDataset->visitData([this, pointOpacitySourceDataset, numberOfPoints, opacityMagnitude](auto pointData) {
                 const auto currentDimensionIndex    = _opacityAction.getSourceAction().getDimensionPickerAction().getCurrentDimensionIndex();
                 const auto opacityOffset            = 0.01f * _opacityAction.getSourceAction().getOffsetAction().getValue();
@@ -387,7 +387,7 @@ void PointPlotAction::updateScatterPlotWidgetPointOpacityScalars()
         }
     }
 
-    _scatterplotPlugin->getScatterplotWidget().setPointOpacityScalars(_pointOpacityScalars);
+    _spaceWalkerPlugin->getScatterplotWidget().setPointOpacityScalars(_pointOpacityScalars);
 }
 
 void PointPlotAction::connectToPublicAction(WidgetAction* publicAction, bool recursive)

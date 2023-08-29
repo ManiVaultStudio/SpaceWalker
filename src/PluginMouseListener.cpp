@@ -1,4 +1,4 @@
-#include "ScatterplotPlugin.h"
+#include "SpaceWalkerPlugin.h"
 
 #include "ScatterplotWidget.h"
 
@@ -81,7 +81,7 @@ int findClosestPointToMouse(const DataMatrix& projection, const Bounds& bounds, 
     return closestIndex;
 }
 
-void ScatterplotPlugin::notifyNewSelectedPoint()
+void SpaceWalkerPlugin::notifyNewSelectedPoint()
 {
     int selectedPoint = _globalSelectedPoint;
 
@@ -100,7 +100,7 @@ void ScatterplotPlugin::notifyNewSelectedPoint()
     events().notifyDatasetDataSelectionChanged(_positionDataset);
 }
 
-void ScatterplotPlugin::mousePositionChanged(Vector2f mousePos)
+void SpaceWalkerPlugin::mousePositionChanged(Vector2f mousePos)
 {
     hdps::Bounds bounds = _scatterPlotWidget->getBounds();
 
@@ -123,7 +123,7 @@ void ScatterplotPlugin::mousePositionChanged(Vector2f mousePos)
     notifyNewSelectedPoint();
 }
 
-bool ScatterplotPlugin::eventFilter(QObject* target, QEvent* event)
+bool SpaceWalkerPlugin::eventFilter(QObject* target, QEvent* event)
 {
     auto shouldPaint = false;
 

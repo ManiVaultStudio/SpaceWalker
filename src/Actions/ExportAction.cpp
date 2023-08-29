@@ -1,6 +1,6 @@
 #include "ExportAction.h"
 
-#include "ScatterplotPlugin.h"
+#include "SpaceWalkerPlugin.h"
 #include "ScatterplotWidget.h"
 
 #include <QMenu>
@@ -19,16 +19,16 @@ ExportAction::ExportAction(QObject* parent, const QString& title) :
     setConfigurationFlag(WidgetAction::ConfigurationFlag::ForceCollapsedInGroup);
 }
 
-void ExportAction::initialize(ScatterplotPlugin* scatterplotPlugin)
+void ExportAction::initialize(SpaceWalkerPlugin* spaceWalkerPlugin)
 {
-    connect(&_exportRankingsAction, &TriggerAction::triggered, this, [scatterplotPlugin]() {
-        scatterplotPlugin->exportDimRankings();
+    connect(&_exportRankingsAction, &TriggerAction::triggered, this, [spaceWalkerPlugin]() {
+        spaceWalkerPlugin->exportDimRankings();
     });
-    connect(&_exportFloodnodesAction, &TriggerAction::triggered, this, [scatterplotPlugin]() {
-        scatterplotPlugin->exportFloodnodes();
+    connect(&_exportFloodnodesAction, &TriggerAction::triggered, this, [spaceWalkerPlugin]() {
+        spaceWalkerPlugin->exportFloodnodes();
     });
-    connect(&_importKnnGraphAction, &TriggerAction::triggered, this, [scatterplotPlugin]() {
-        scatterplotPlugin->importKnnGraph();
+    connect(&_importKnnGraphAction, &TriggerAction::triggered, this, [spaceWalkerPlugin]() {
+        spaceWalkerPlugin->importKnnGraph();
     });
 }
 

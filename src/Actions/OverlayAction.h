@@ -8,7 +8,7 @@
 
 using namespace hdps::gui;
 
-class ScatterplotPlugin;
+class SpaceWalkerPlugin;
 
 class OverlayAction : public WidgetAction
 {
@@ -28,7 +28,7 @@ protected: // Widget
 public:
     Q_INVOKABLE OverlayAction(QObject* parent, const QString& title);
 
-    void initialize(ScatterplotPlugin* scatterplotPlugin);
+    void initialize(SpaceWalkerPlugin* spaceWalkerPlugin);
 
     QMenu* getContextMenu();
 
@@ -64,7 +64,7 @@ public: // Action getters
     //GroupAction& getOverlayGroupAction() { return _overlayGroupAction; }
 
 private:
-    ScatterplotPlugin*  _scatterplotPlugin;             /** Pointer to scatterplot plugin */
+    SpaceWalkerPlugin*  _spaceWalkerPlugin;             /** Pointer to scatterplot plugin */
     TriggerAction       _computeKnnGraphAction;
 
     IntegralAction      _floodDecimal;

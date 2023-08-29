@@ -1,5 +1,5 @@
 #include "MiscellaneousAction.h"
-#include "ScatterplotPlugin.h"
+#include "SpaceWalkerPlugin.h"
 #include "ScatterplotWidget.h"
 
 using namespace hdps::gui;
@@ -8,7 +8,7 @@ const QColor MiscellaneousAction::DEFAULT_BACKGROUND_COLOR = qRgb(22, 22, 22);
 
 MiscellaneousAction::MiscellaneousAction(QObject* parent, const QString& title) :
     VerticalGroupAction(parent, title),
-    _scatterplotPlugin(dynamic_cast<ScatterplotPlugin*>(parent->parent())),
+    _spaceWalkerPlugin(dynamic_cast<SpaceWalkerPlugin*>(parent->parent())),
     _backgroundColorAction(this, "Background color")
 {
     setIcon(Application::getIconFont("FontAwesome").getIcon("cog"));
@@ -20,7 +20,7 @@ MiscellaneousAction::MiscellaneousAction(QObject* parent, const QString& title) 
     _backgroundColorAction.setColor(DEFAULT_BACKGROUND_COLOR);
 
     const auto updateBackgroundColor = [this]() -> void {
-        _scatterplotPlugin->getScatterplotWidget().setBackgroundColor(_backgroundColorAction.getColor());
+        _spaceWalkerPlugin->getScatterplotWidget().setBackgroundColor(_backgroundColorAction.getColor());
     };
 
     connect(&_backgroundColorAction, &ColorAction::colorChanged, this, [this, updateBackgroundColor](const QColor& color) {

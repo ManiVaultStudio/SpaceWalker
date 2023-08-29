@@ -1,12 +1,12 @@
 #include "RenderModeAction.h"
-#include "ScatterplotPlugin.h"
+#include "SpaceWalkerPlugin.h"
 #include "ScatterplotWidget.h"
 
 using namespace hdps::gui;
 
 RenderModeAction::RenderModeAction(QObject* parent, const QString& title) :
     OptionAction(parent, title, { "Scatter", "Density", "Contour", "Cell"}),
-    _scatterplotPlugin(nullptr),
+    _spaceWalkerPlugin(nullptr),
     _scatterPlotAction(this, "Scatter"),
     _densityPlotAction(this, "Density"),
     _contourPlotAction(this, "Contour"),
@@ -37,19 +37,19 @@ RenderModeAction::RenderModeAction(QObject* parent, const QString& title) :
     _cellPlotAction.setToolTip("Set render mode to cell plot (V)");
 }
 
-void RenderModeAction::initialize(ScatterplotPlugin* scatterplotPlugin)
+void RenderModeAction::initialize(SpaceWalkerPlugin* spaceWalkerPlugin)
 {
-    Q_ASSERT(scatterplotPlugin != nullptr);
+    Q_ASSERT(spaceWalkerPlugin != nullptr);
 
-    if (scatterplotPlugin == nullptr)
+    if (spaceWalkerPlugin == nullptr)
         return;
 
-    _scatterplotPlugin = scatterplotPlugin;
+    _spaceWalkerPlugin = spaceWalkerPlugin;
 
-    _scatterplotPlugin->getWidget().addAction(&_scatterPlotAction);
-    //_scatterplotPlugin->getWidget().addAction(&_densityPlotAction);
-    //_scatterplotPlugin->getWidget().addAction(&_contourPlotAction);
-    _scatterplotPlugin->getWidget().addAction(&_cellPlotAction);
+    _spaceWalkerPlugin->getWidget().addAction(&_scatterPlotAction);
+    //_spaceWalkerPlugin->getWidget().addAction(&_densityPlotAction);
+    //_spaceWalkerPlugin->getWidget().addAction(&_contourPlotAction);
+    _spaceWalkerPlugin->getWidget().addAction(&_cellPlotAction);
 
     const auto currentIndexChanged = [this]() {
         const auto renderMode = static_cast<RenderMode>(getCurrentIndex());
@@ -59,29 +59,29 @@ void RenderModeAction::initialize(ScatterplotPlugin* scatterplotPlugin)
         _contourPlotAction.setChecked(renderMode == RenderMode::ContourPlot);
         _cellPlotAction.setChecked(renderMode == RenderMode::CellPlot);
 
-        _scatterplotPlugin->getScatterplotWidget().setRenderMode(static_cast<ScatterplotWidget::RenderMode>(getCurrentIndex()));
+        _spaceWalkerPlugin->getScatterplotWidget().setRenderMode(static_cast<ScatterplotWidget::RenderMode>(getCurrentIndex()));
     };
 
     currentIndexChanged();
 
     connect(this, &OptionAction::currentIndexChanged, this, currentIndexChanged);
 
-    connect(&_scatterPlotAction, &QAction::toggled, this, [this, scatterplotPlugin](bool toggled) {
+    connect(&_scatterPlotAction, &QAction::toggled, this, [this, spaceWalkerPlugin](bool toggled) {
         if (toggled)
             setCurrentIndex(static_cast<std::int32_t>(RenderMode::ScatterPlot));
     });
 
-    connect(&_densityPlotAction, &QAction::toggled, this, [this, scatterplotPlugin](bool toggled) {
+    connect(&_densityPlotAction, &QAction::toggled, this, [this, spaceWalkerPlugin](bool toggled) {
         if (toggled)
             setCurrentIndex(static_cast<std::int32_t>(RenderMode::DensityPlot));
     });
 
-    connect(&_contourPlotAction, &QAction::toggled, this, [this, scatterplotPlugin](bool toggled) {
+    connect(&_contourPlotAction, &QAction::toggled, this, [this, spaceWalkerPlugin](bool toggled) {
         if (toggled)
             setCurrentIndex(static_cast<std::int32_t>(RenderMode::ContourPlot));
     });
 
-    connect(&_cellPlotAction, &QAction::toggled, this, [this, scatterplotPlugin](bool toggled) {
+    connect(&_cellPlotAction, &QAction::toggled, this, [this, spaceWalkerPlugin](bool toggled) {
         if (toggled)
             setCurrentIndex(static_cast<std::int32_t>(RenderMode::CellPlot));
     });
@@ -89,12 +89,12 @@ void RenderModeAction::initialize(ScatterplotPlugin* scatterplotPlugin)
     setCurrentIndex(static_cast<std::int32_t>(RenderMode::ScatterPlot));
 
     const auto updateReadOnly = [this]() -> void {
-        setEnabled(_scatterplotPlugin->getPositionDataset().isValid());
+        setEnabled(_spaceWalkerPlugin->getPositionDataset().isValid());
     };
 
     updateReadOnly();
 
-    connect(&_scatterplotPlugin->getPositionDataset(), &Dataset<Points>::changed, this, updateReadOnly);
+    connect(&_spaceWalkerPlugin->getPositionDataset(), &Dataset<Points>::changed, this, updateReadOnly);
 }
 
 QMenu* RenderModeAction::getContextMenu()

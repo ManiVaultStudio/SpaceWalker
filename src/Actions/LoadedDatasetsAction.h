@@ -6,7 +6,7 @@
 
 using namespace hdps::gui;
 
-class ScatterplotPlugin;
+class SpaceWalkerPlugin;
 
 class LoadedDatasetsAction : public VerticalGroupAction
 {
@@ -25,7 +25,7 @@ class LoadedDatasetsAction : public VerticalGroupAction
 public:
     Q_INVOKABLE LoadedDatasetsAction(QObject* parent, const QString& title);
 
-    void initialize(ScatterplotPlugin* scatterplotPlugin);
+    void initialize(SpaceWalkerPlugin* spaceWalkerPlugin);
 
 public: // Serialization
 
@@ -42,7 +42,7 @@ public: // Serialization
     QVariantMap toVariantMap() const override;
 
 private:
-    ScatterplotPlugin*      _scatterplotPlugin;             /** Pointer to scatterplot plugin */
+    SpaceWalkerPlugin*      _spaceWalkerPlugin;             /** Pointer to scatterplot plugin */
     DatasetPickerAction     _positionDatasetPickerAction;
     DatasetPickerAction     _colorDatasetPickerAction;
     DatasetPickerAction     _sliceDatasetPickerAction;

@@ -15,7 +15,7 @@
 
 using namespace hdps::gui;
 
-class ScatterplotPlugin;
+class SpaceWalkerPlugin;
 
 class SettingsAction : public GroupAction
 {
@@ -63,7 +63,7 @@ public: // Action getters
     TriggerAction& getClearMaskAction() { return _clearMaskAction; }
 
 protected:
-    ScatterplotPlugin*          _scatterplotPlugin;         /** Pointer to scatter plot plugin */
+    SpaceWalkerPlugin*          _spaceWalkerPlugin;         /** Pointer to scatter plot plugin */
     LoadedDatasetsAction        _currentDatasetAction;
     RenderModeAction            _renderModeAction;          /** Action for configuring render mode */
     PositionAction              _positionAction;            /** Action for configuring point positions */

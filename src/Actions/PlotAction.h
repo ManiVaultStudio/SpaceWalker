@@ -5,7 +5,7 @@
 #include "PointPlotAction.h"
 #include "DensityPlotAction.h"
 
-class ScatterplotPlugin;
+class SpaceWalkerPlugin;
 
 using namespace hdps::gui;
 
@@ -30,10 +30,10 @@ public:
     Q_INVOKABLE PlotAction(QObject* parent, const QString& title);
 
     /**
-     * Initialize the selection action with \p scatterplotPlugin
-     * @param scatterplotPlugin Pointer to scatterplot plugin
+     * Initialize the selection action with \p spaceWalkerPlugin
+     * @param spaceWalkerPlugin Pointer to scatterplot plugin
      */
-    void initialize(ScatterplotPlugin* scatterplotPlugin);
+    void initialize(SpaceWalkerPlugin* spaceWalkerPlugin);
 
     /**
      * Get action context menu
@@ -76,7 +76,7 @@ public: // Action getters
     DensityPlotAction& getDensityPlotAction() { return _densityPlotAction; }
 
 private:
-    ScatterplotPlugin*  _scatterplotPlugin;     /** Pointer to scatterplot plugin */
+    SpaceWalkerPlugin*  _spaceWalkerPlugin;     /** Pointer to scatterplot plugin */
     PointPlotAction     _pointPlotAction;       /** Point plot action */
     DensityPlotAction   _densityPlotAction;     /** Density plot action */
 

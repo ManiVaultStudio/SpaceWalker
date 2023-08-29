@@ -52,13 +52,13 @@ enum class OverlayType
     DIRECTIONS
 };
 
-class ScatterplotPlugin : public ViewPlugin
+class SpaceWalkerPlugin : public ViewPlugin
 {
     Q_OBJECT
     
 public:
-    ScatterplotPlugin(const PluginFactory* factory);
-    ~ScatterplotPlugin() override;
+    SpaceWalkerPlugin(const PluginFactory* factory);
+    ~SpaceWalkerPlugin() override;
 
     bool isDataInitialized() { return _dataInitialized; }
 
@@ -274,16 +274,16 @@ protected:
 // Factory
 // =============================================================================
 
-class ScatterplotPluginFactory : public ViewPluginFactory
+class SpaceWalkerPluginFactory : public ViewPluginFactory
 {
     Q_INTERFACES(hdps::plugin::ViewPluginFactory hdps::plugin::PluginFactory)
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID   "nl.biovault.GradientExplorerPlugin"
-                      FILE  "GradientExplorerPlugin.json")
+    Q_PLUGIN_METADATA(IID   "nl.biovault.SpaceWalkerPlugin"
+                      FILE  "SpaceWalkerPlugin.json")
     
 public:
-    ScatterplotPluginFactory(void) {}
-    ~ScatterplotPluginFactory(void) override {}
+    SpaceWalkerPluginFactory(void) {}
+    ~SpaceWalkerPluginFactory(void) override {}
 
     /**
      * Get plugin icon

@@ -1,6 +1,6 @@
 #include "FilterAction.h"
 
-#include "ScatterplotPlugin.h"
+#include "SpaceWalkerPlugin.h"
 #include "ScatterplotWidget.h"
 
 #include <QMenu>
@@ -8,7 +8,7 @@
 
 FilterAction::FilterAction(QObject* parent, const QString& title) :
     WidgetAction(parent, "Filter Settings"),
-    _scatterplotPlugin(nullptr),
+    _spaceWalkerPlugin(nullptr),
     _spatialPeakFilterAction(this, "Spatial Peak Filter"),
     _hdPeakFilterAction(this, "HD Peak Filter"),
     _restrictToFloodAction(this, "Restrict to flood nodes", true),
@@ -22,40 +22,40 @@ FilterAction::FilterAction(QObject* parent, const QString& title) :
     setConfigurationFlag(WidgetAction::ConfigurationFlag::ForceCollapsedInGroup);
 }
 
-void FilterAction::initialize(ScatterplotPlugin* scatterplotPlugin)
+void FilterAction::initialize(SpaceWalkerPlugin* spaceWalkerPlugin)
 {
-    auto& spatialPeakFilter = scatterplotPlugin->getSpatialPeakFilter();
-    auto& hdPeakFilter = scatterplotPlugin->getHDPeakFilter();
+    auto& spatialPeakFilter = spaceWalkerPlugin->getSpatialPeakFilter();
+    auto& hdPeakFilter = spaceWalkerPlugin->getHDPeakFilter();
 
-    connect(&_spatialPeakFilterAction, &TriggerAction::triggered, this, [scatterplotPlugin]() {
-        scatterplotPlugin->setFilterType(filters::FilterType::SPATIAL_PEAK);
-        scatterplotPlugin->setFilterLabelText("Spatial Peak Ranking");
-        scatterplotPlugin->getScatterplotWidget().showFiltersCircles(true);
-        scatterplotPlugin->getScatterplotWidget().update();
+    connect(&_spatialPeakFilterAction, &TriggerAction::triggered, this, [spaceWalkerPlugin]() {
+        spaceWalkerPlugin->setFilterType(filters::FilterType::SPATIAL_PEAK);
+        spaceWalkerPlugin->setFilterLabelText("Spatial Peak Ranking");
+        spaceWalkerPlugin->getScatterplotWidget().showFiltersCircles(true);
+        spaceWalkerPlugin->getScatterplotWidget().update();
         });
-    connect(&_hdPeakFilterAction, &TriggerAction::triggered, this, [scatterplotPlugin]() {
-        if (scatterplotPlugin->getFloodFill().getNumWaves() == 0)
+    connect(&_hdPeakFilterAction, &TriggerAction::triggered, this, [spaceWalkerPlugin]() {
+        if (spaceWalkerPlugin->getFloodFill().getNumWaves() == 0)
         {
             qDebug() << "No flood-fill loaded, cannot do HD ranking";
             return;
         }
-        scatterplotPlugin->setFilterType(filters::FilterType::HD_PEAK);
-        scatterplotPlugin->setFilterLabelText("HD Peak Ranking");
-        scatterplotPlugin->getScatterplotWidget().showFiltersCircles(false);
-        scatterplotPlugin->getScatterplotWidget().update();
+        spaceWalkerPlugin->setFilterType(filters::FilterType::HD_PEAK);
+        spaceWalkerPlugin->setFilterLabelText("HD Peak Ranking");
+        spaceWalkerPlugin->getScatterplotWidget().showFiltersCircles(false);
+        spaceWalkerPlugin->getScatterplotWidget().update();
         });
 
-    connect(&_innerFilterSizeAction, &DecimalAction::valueChanged, [scatterplotPlugin, &spatialPeakFilter](const float& value) {
-        float projSize = scatterplotPlugin->getProjectionSize();
+    connect(&_innerFilterSizeAction, &DecimalAction::valueChanged, [spaceWalkerPlugin, &spatialPeakFilter](const float& value) {
+        float projSize = spaceWalkerPlugin->getProjectionSize();
         spatialPeakFilter.setInnerFilterRadius(value * 0.01f);
-        scatterplotPlugin->getScatterplotWidget().setFilterRadii(Vector2f(spatialPeakFilter.getInnerFilterRadius() * projSize, spatialPeakFilter.getOuterFilterRadius() * projSize));
-        scatterplotPlugin->onPointSelection();
+        spaceWalkerPlugin->getScatterplotWidget().setFilterRadii(Vector2f(spatialPeakFilter.getInnerFilterRadius() * projSize, spatialPeakFilter.getOuterFilterRadius() * projSize));
+        spaceWalkerPlugin->onPointSelection();
         });
-    connect(&_outerFilterSizeAction, &DecimalAction::valueChanged, [scatterplotPlugin, &spatialPeakFilter](const float& value) {
-        float projSize = scatterplotPlugin->getProjectionSize();
+    connect(&_outerFilterSizeAction, &DecimalAction::valueChanged, [spaceWalkerPlugin, &spatialPeakFilter](const float& value) {
+        float projSize = spaceWalkerPlugin->getProjectionSize();
         spatialPeakFilter.setOuterFilterRadius(value * 0.01f);
-        scatterplotPlugin->getScatterplotWidget().setFilterRadii(Vector2f(spatialPeakFilter.getInnerFilterRadius() * projSize, spatialPeakFilter.getOuterFilterRadius() * projSize));
-        scatterplotPlugin->onPointSelection();
+        spaceWalkerPlugin->getScatterplotWidget().setFilterRadii(Vector2f(spatialPeakFilter.getInnerFilterRadius() * projSize, spatialPeakFilter.getOuterFilterRadius() * projSize));
+        spaceWalkerPlugin->onPointSelection();
         });
 
     connect(&_hdInnerFilterSizeAction, &IntegralAction::valueChanged, [&hdPeakFilter](int value) { hdPeakFilter.setInnerFilterSize(value); });

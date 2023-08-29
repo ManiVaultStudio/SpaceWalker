@@ -9,7 +9,7 @@
 
 using namespace hdps::gui;
 
-class ScatterplotPlugin;
+class SpaceWalkerPlugin;
 
 class FilterAction : public WidgetAction
 {
@@ -29,7 +29,7 @@ protected: // Widget
 public:
     Q_INVOKABLE FilterAction(QObject* parent, const QString& title);
 
-    void initialize(ScatterplotPlugin* scatterplotPlugin);
+    void initialize(SpaceWalkerPlugin* spaceWalkerPlugin);
 
     QMenu* getContextMenu();
 
@@ -66,7 +66,7 @@ public: // Action getters
     //IntegralAction& getHDOuterFilterSizeAction() { return _hdOuterFilterSizeAction; }
 
 protected:
-    ScatterplotPlugin*  _scatterplotPlugin;             /** Pointer to scatterplot plugin */
+    SpaceWalkerPlugin*  _spaceWalkerPlugin;             /** Pointer to scatterplot plugin */
     TriggerAction       _spatialPeakFilterAction;
     TriggerAction       _hdPeakFilterAction;
 

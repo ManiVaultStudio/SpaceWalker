@@ -1,6 +1,6 @@
 #include "OverlayAction.h"
 
-#include "ScatterplotPlugin.h"
+#include "SpaceWalkerPlugin.h"
 #include "ScatterplotWidget.h"
 
 #include <QMenu>
@@ -8,7 +8,7 @@
 
 OverlayAction::OverlayAction(QObject* parent, const QString& title) :
     WidgetAction(parent, "Overlay Settings"),
-    _scatterplotPlugin(nullptr),
+    _spaceWalkerPlugin(nullptr),
     _computeKnnGraphAction(this, "Compute Floods"),
     _floodDecimal(this, "Flood nodes", 10, 500, 10),
     _floodStepsAction(this, "Flood steps", 2, 50, 10),
@@ -32,58 +32,58 @@ OverlayAction::OverlayAction(QObject* parent, const QString& title) :
 
     //TriggersAction* overlayTriggers = new TriggersAction(&_overlayGroupAction, "Overlay Triggers", _triggers);
 
-    //connect(overlayTriggers, &TriggersAction::triggered, this, [scatterplotPlugin](int32_t triggerIndex)
+    //connect(overlayTriggers, &TriggersAction::triggered, this, [spaceWalkerPlugin](int32_t triggerIndex)
     //{
-    //    scatterplotPlugin->getScatterplotWidget().showDirections(false);
+    //    spaceWalkerPlugin->getScatterplotWidget().showDirections(false);
     //    switch (triggerIndex)
     //    {
-    //    case 0: scatterplotPlugin->setOverlayType(OverlayType::NONE); break;
-    //    case 1: scatterplotPlugin->setOverlayType(OverlayType::DIM_VALUES); break;
-    //    case 2: scatterplotPlugin->setOverlayType(OverlayType::LOCAL_DIMENSIONALITY); break;
-    //    case 3: {scatterplotPlugin->setOverlayType(OverlayType::DIRECTIONS); scatterplotPlugin->getScatterplotWidget().showDirections(true); break; }
+    //    case 0: spaceWalkerPlugin->setOverlayType(OverlayType::NONE); break;
+    //    case 1: spaceWalkerPlugin->setOverlayType(OverlayType::DIM_VALUES); break;
+    //    case 2: spaceWalkerPlugin->setOverlayType(OverlayType::LOCAL_DIMENSIONALITY); break;
+    //    case 3: {spaceWalkerPlugin->setOverlayType(OverlayType::DIRECTIONS); spaceWalkerPlugin->getScatterplotWidget().showDirections(true); break; }
     //    }
     //});
 }
 
-void OverlayAction::initialize(ScatterplotPlugin* scatterplotPlugin)
+void OverlayAction::initialize(SpaceWalkerPlugin* spaceWalkerPlugin)
 {
-    connect(&_computeKnnGraphAction, &TriggerAction::triggered, this, [scatterplotPlugin](bool enabled)
+    connect(&_computeKnnGraphAction, &TriggerAction::triggered, this, [spaceWalkerPlugin](bool enabled)
     {
-        scatterplotPlugin->createKnnIndex();
-        scatterplotPlugin->computeKnnGraph();
+        spaceWalkerPlugin->createKnnIndex();
+        spaceWalkerPlugin->computeKnnGraph();
     });
 
-    connect(&_floodDecimal, &IntegralAction::valueChanged, this, [scatterplotPlugin](int32_t value)
+    connect(&_floodDecimal, &IntegralAction::valueChanged, this, [spaceWalkerPlugin](int32_t value)
     {
-        scatterplotPlugin->rebuildKnnGraph(value);
+        spaceWalkerPlugin->rebuildKnnGraph(value);
     });
 
-    connect(&_floodStepsAction, &IntegralAction::valueChanged, this, [scatterplotPlugin](int32_t value)
+    connect(&_floodStepsAction, &IntegralAction::valueChanged, this, [spaceWalkerPlugin](int32_t value)
     {
-        scatterplotPlugin->setFloodSteps(value);
-        scatterplotPlugin->onPointSelection();
+        spaceWalkerPlugin->setFloodSteps(value);
+        spaceWalkerPlugin->onPointSelection();
     });
 
-    connect(&_sharedDistAction, &ToggleAction::toggled, this, [scatterplotPlugin](bool enabled)
+    connect(&_sharedDistAction, &ToggleAction::toggled, this, [spaceWalkerPlugin](bool enabled)
     {
-        scatterplotPlugin->useSharedDistances(enabled);
+        spaceWalkerPlugin->useSharedDistances(enabled);
     });
 
     // Overlay buttons
-    connect(&_floodOverlayAction, &TriggerAction::triggered, this, [scatterplotPlugin](bool enabled)
+    connect(&_floodOverlayAction, &TriggerAction::triggered, this, [spaceWalkerPlugin](bool enabled)
     {
-        scatterplotPlugin->setOverlayType(OverlayType::NONE);
-        scatterplotPlugin->onPointSelection();
+        spaceWalkerPlugin->setOverlayType(OverlayType::NONE);
+        spaceWalkerPlugin->onPointSelection();
     });
-    connect(&_dimensionOverlayAction, &TriggerAction::triggered, this, [scatterplotPlugin](bool enabled)
+    connect(&_dimensionOverlayAction, &TriggerAction::triggered, this, [spaceWalkerPlugin](bool enabled)
     {
-        scatterplotPlugin->setOverlayType(OverlayType::DIM_VALUES);
-        scatterplotPlugin->onPointSelection();
+        spaceWalkerPlugin->setOverlayType(OverlayType::DIM_VALUES);
+        spaceWalkerPlugin->onPointSelection();
     });
-    connect(&_dimensionalityOverlayAction, &TriggerAction::triggered, this, [scatterplotPlugin](bool enabled)
+    connect(&_dimensionalityOverlayAction, &TriggerAction::triggered, this, [spaceWalkerPlugin](bool enabled)
     {
-        scatterplotPlugin->setOverlayType(OverlayType::LOCAL_DIMENSIONALITY);
-        scatterplotPlugin->onPointSelection();
+        spaceWalkerPlugin->setOverlayType(OverlayType::LOCAL_DIMENSIONALITY);
+        spaceWalkerPlugin->onPointSelection();
     });
 }
 

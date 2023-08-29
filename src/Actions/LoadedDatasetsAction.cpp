@@ -1,5 +1,5 @@
 #include "LoadedDatasetsAction.h"
-#include "ScatterplotPlugin.h"
+#include "SpaceWalkerPlugin.h"
 
 #include "PointData/PointData.h"
 #include "ColorData/ColorData.h"
@@ -40,33 +40,33 @@ LoadedDatasetsAction::LoadedDatasetsAction(QObject* parent, const QString& title
     });
 
     //connect(&_colorDatasetPickerAction, &DatasetPickerAction::datasetPicked, [this](Dataset<DatasetImpl> pickedDataset) -> void {
-    //    _scatterplotPlugin->getSettingsAction().getColoringAction().setCurrentColorDataset(pickedDataset);
+    //    _spaceWalkerPlugin->getSettingsAction().getColoringAction().setCurrentColorDataset(pickedDataset);
     //});
     
-    //connect(&_scatterplotPlugin->getSettingsAction().getColoringAction(), &ColoringAction::currentColorDatasetChanged, this, [this](Dataset<DatasetImpl> currentColorDataset) -> void {
+    //connect(&_spaceWalkerPlugin->getSettingsAction().getColoringAction(), &ColoringAction::currentColorDatasetChanged, this, [this](Dataset<DatasetImpl> currentColorDataset) -> void {
     //    _colorDatasetPickerAction.setCurrentDataset(currentColorDataset);
     //});
 }
 
-void LoadedDatasetsAction::initialize(ScatterplotPlugin* scatterplotPlugin)
+void LoadedDatasetsAction::initialize(SpaceWalkerPlugin* spaceWalkerPlugin)
 {
-    Q_ASSERT(scatterplotPlugin != nullptr);
+    Q_ASSERT(spaceWalkerPlugin != nullptr);
 
-    if (scatterplotPlugin == nullptr)
+    if (spaceWalkerPlugin == nullptr)
         return;
 
-    _scatterplotPlugin = scatterplotPlugin;
+    _spaceWalkerPlugin = spaceWalkerPlugin;
 
     connect(&_positionDatasetPickerAction, &DatasetPickerAction::datasetPicked, [this](Dataset<DatasetImpl> pickedDataset) -> void {
-        _scatterplotPlugin->getPositionDataset() = pickedDataset;
-        //_scatterplotPlugin->positionDatasetChanged();
+        _spaceWalkerPlugin->getPositionDataset() = pickedDataset;
+        //_spaceWalkerPlugin->positionDatasetChanged();
     });
 
-    connect(&_scatterplotPlugin->getPositionDataset(), &Dataset<Points>::changed, this, [this](DatasetImpl* dataset) -> void {
+    connect(&_spaceWalkerPlugin->getPositionDataset(), &Dataset<Points>::changed, this, [this](DatasetImpl* dataset) -> void {
         _positionDatasetPickerAction.setCurrentDataset(dataset);
     });
 
-    connect(&_scatterplotPlugin->getSliceDataset(), &Dataset<Clusters>::changed, this, [this](DatasetImpl* dataset) -> void {
+    connect(&_spaceWalkerPlugin->getSliceDataset(), &Dataset<Clusters>::changed, this, [this](DatasetImpl* dataset) -> void {
         _sliceDatasetPickerAction.setCurrentDataset(dataset);
     });
 }
@@ -84,7 +84,7 @@ void LoadedDatasetsAction::fromVariantMap(const QVariantMap& variantMap)
     if (positionDataset.isValid())
     {
         Dataset pickedDataset = core()->getDataManager().getSet(positionDataset.getDatasetId());
-        _scatterplotPlugin->getPositionDataset() = pickedDataset;
+        _spaceWalkerPlugin->getPositionDataset() = pickedDataset;
     }
 
     // Load slice dataset
@@ -93,10 +93,10 @@ void LoadedDatasetsAction::fromVariantMap(const QVariantMap& variantMap)
     {
         qDebug() << ">>>>> Found a slice dataset " << sliceDataset->getGuiName();
         Dataset pickedDataset = core()->getDataManager().getSet(sliceDataset.getDatasetId());
-        _scatterplotPlugin->getSliceDataset() = pickedDataset;
+        _spaceWalkerPlugin->getSliceDataset() = pickedDataset;
     }
 
-    //_scatterplotPlugin->positionDatasetChanged();
+    //_spaceWalkerPlugin->positionDatasetChanged();
 }
 
 QVariantMap LoadedDatasetsAction::toVariantMap() const

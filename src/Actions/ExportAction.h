@@ -6,7 +6,7 @@
 
 using namespace hdps::gui;
 
-class ScatterplotPlugin;
+class SpaceWalkerPlugin;
 
 class ExportAction : public WidgetAction
 {
@@ -26,7 +26,7 @@ protected: // Widget
 public:
     Q_INVOKABLE ExportAction(QObject* parent, const QString& title);
 
-    void initialize(ScatterplotPlugin* scatterplotPlugin);
+    void initialize(SpaceWalkerPlugin* spaceWalkerPlugin);
 
     QMenu* getContextMenu();
 

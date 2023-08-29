@@ -1,5 +1,5 @@
 #include "ExportImageDialog.h"
-#include "ScatterplotPlugin.h"
+#include "SpaceWalkerPlugin.h"
 
 #include <Application.h>
 
@@ -7,12 +7,12 @@
 
 using namespace hdps;
 
-ExportImageDialog::ExportImageDialog(QWidget* parent, ScatterplotPlugin& scatterplotPlugin) :
+ExportImageDialog::ExportImageDialog(QWidget* parent, SpaceWalkerPlugin& spaceWalkerPlugin) :
     QDialog(parent),
-    _scatterplotPlugin(scatterplotPlugin),
-    _exportImageAction(&scatterplotPlugin, "ExportImageAction")
+    _spaceWalkerPlugin(spaceWalkerPlugin),
+    _exportImageAction(&spaceWalkerPlugin, "ExportImageAction")
 {
-    setWindowTitle("Export " + scatterplotPlugin.getPositionDataset()->getGuiName() + " to image(s)");
+    setWindowTitle("Export " + spaceWalkerPlugin.getPositionDataset()->getGuiName() + " to image(s)");
     setWindowIcon(Application::getIconFont("FontAwesome").getIcon("file-export"));
     setModal(true);
 

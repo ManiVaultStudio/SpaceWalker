@@ -6,7 +6,7 @@
 
 using namespace hdps::gui;
 
-class ScatterplotPlugin;
+class SpaceWalkerPlugin;
 
 /**
  * Density plot action class
@@ -29,10 +29,10 @@ public:
     Q_INVOKABLE DensityPlotAction(QObject* parent, const QString& title);
 
     /**
-     * Initialize the selection action with \p scatterplotPlugin
-     * @param scatterplotPlugin Pointer to scatterplot plugin
+     * Initialize the selection action with \p spaceWalkerPlugin
+     * @param spaceWalkerPlugin Pointer to scatterplot plugin
      */
-    void initialize(ScatterplotPlugin* scatterplotPlugin);
+    void initialize(SpaceWalkerPlugin* spaceWalkerPlugin);
 
     /**
      * Get action context menu
@@ -81,7 +81,7 @@ public: // Action getters
     ToggleAction& getContinuousUpdatesAction() { return _continuousUpdatesAction; }
 
 private:
-    ScatterplotPlugin*  _scatterplotPlugin;         /** Pointer to scatterplot plugin */
+    SpaceWalkerPlugin*  _spaceWalkerPlugin;         /** Pointer to scatterplot plugin */
     DecimalAction       _sigmaAction;               /** Density sigma action */
     ToggleAction        _continuousUpdatesAction;   /** Live updates action */
 

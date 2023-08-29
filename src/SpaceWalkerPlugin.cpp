@@ -1,4 +1,4 @@
-#include "ScatterplotPlugin.h"
+#include "SpaceWalkerPlugin.h"
 #include "ScatterplotWidget.h"
 #include "ProjectionView.h"
 #include "DataHierarchyItem.h"
@@ -46,7 +46,7 @@
 #include <random>
 #include <chrono>
 
-Q_PLUGIN_METADATA(IID "nl.biovault.GradientExplorerPlugin")
+Q_PLUGIN_METADATA(IID "nl.biovault.SpaceWalkerPlugin")
 
 using namespace hdps;
 using namespace hdps::util;
@@ -80,7 +80,7 @@ namespace
     }
 }
 
-ScatterplotPlugin::ScatterplotPlugin(const PluginFactory* factory) :
+SpaceWalkerPlugin::SpaceWalkerPlugin(const PluginFactory* factory) :
     ViewPlugin(factory),
     _positionDataset(),
     _positionSourceDataset(),
@@ -136,9 +136,9 @@ ScatterplotPlugin::ScatterplotPlugin(const PluginFactory* factory) :
     connect(_projectionViews[1], &ProjectionView::initialized, this, [this]() {_projectionViews[1]->setColorMap(_colorMapAction.getColorMapImage().mirrored(false, true)); });
     connect(_selectedView, &ProjectionView::initialized, this, [this]() {_selectedView->setColorMap(_colorMapAction.getColorMapImage().mirrored(false, true)); });
 
-    connect(_graphView, &GraphView::lineClicked, this, &ScatterplotPlugin::onLineClicked);
+    connect(_graphView, &GraphView::lineClicked, this, &SpaceWalkerPlugin::onLineClicked);
     _graphTimer->setSingleShot(true);
-    connect(_graphTimer, &QTimer::timeout, this, &ScatterplotPlugin::computeGraphs);
+    connect(_graphTimer, &QTimer::timeout, this, &SpaceWalkerPlugin::computeGraphs);
 
     connect(_scatterPlotWidget, &ScatterplotWidget::customContextMenuRequested, this, [this](const QPoint& point) {
         if (!_positionDataset.isValid())
@@ -260,12 +260,12 @@ ScatterplotPlugin::ScatterplotPlugin(const PluginFactory* factory) :
     _scatterPlotWidget->installEventFilter(this);
 }
 
-ScatterplotPlugin::~ScatterplotPlugin()
+SpaceWalkerPlugin::~SpaceWalkerPlugin()
 {
 
 }
 
-void ScatterplotPlugin::init()
+void SpaceWalkerPlugin::init()
 {
     auto layout = new QVBoxLayout();
     auto gradientViewLayout = new QVBoxLayout();
@@ -326,29 +326,29 @@ void ScatterplotPlugin::init()
     getWidget().setLayout(layout);
 
     // Update the data when the scatter plot widget is initialized
-    //connect(_scatterPlotWidget, &ScatterplotWidget::initialized, this, &ScatterplotPlugin::updateProjectionData);
+    //connect(_scatterPlotWidget, &ScatterplotWidget::initialized, this, &SpaceWalkerPlugin::updateProjectionData);
 
     //_eventListener.setEventCore(Application::core());
     _eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DatasetDataSelectionChanged));
-    _eventListener.registerDataEventByType(PointType, std::bind(&ScatterplotPlugin::onDataEvent, this, std::placeholders::_1));
+    _eventListener.registerDataEventByType(PointType, std::bind(&SpaceWalkerPlugin::onDataEvent, this, std::placeholders::_1));
 
     // Load points when the pointer to the position dataset changes
-    //connect(&_positionDataset, &Dataset<Points>::changed, this, &ScatterplotPlugin::positionDatasetChanged);
+    //connect(&_positionDataset, &Dataset<Points>::changed, this, &SpaceWalkerPlugin::positionDatasetChanged);
 
     // Update points when the position dataset data changes
-    //connect(&_positionDataset, &Dataset<Points>::dataChanged, this, &ScatterplotPlugin::updateData);
+    //connect(&_positionDataset, &Dataset<Points>::dataChanged, this, &SpaceWalkerPlugin::updateData);
 
     // Update point selection when the position dataset data changes
-    connect(&_positionDataset, &Dataset<Points>::dataSelectionChanged, this, &ScatterplotPlugin::updateSelection);
+    connect(&_positionDataset, &Dataset<Points>::dataSelectionChanged, this, &SpaceWalkerPlugin::updateSelection);
 
     // Update the window title when the GUI name of the position dataset changes
-    //connect(&_positionDataset, &Dataset<Points>::datasetTextChanged, this, &ScatterplotPlugin::updateWindowTitle);
+    //connect(&_positionDataset, &Dataset<Points>::datasetTextChanged, this, &SpaceWalkerPlugin::updateWindowTitle);
 
     // Do an initial update of the window title
     updateWindowTitle();
 }
 
-void ScatterplotPlugin::resetState()
+void SpaceWalkerPlugin::resetState()
 {
     _dataStore = DataStorage();
 
@@ -411,7 +411,7 @@ void ScatterplotPlugin::resetState()
     _overlayType = OverlayType::NONE;
 }
 
-void ScatterplotPlugin::positionDatasetChanged()
+void SpaceWalkerPlugin::positionDatasetChanged()
 {
     // Only proceed if we have a valid position dataset
     if (!_positionDataset.isValid())
@@ -450,7 +450,7 @@ void ScatterplotPlugin::positionDatasetChanged()
     _dataInitialized = true;
 }
 
-void ScatterplotPlugin::updateWindowTitle()
+void SpaceWalkerPlugin::updateWindowTitle()
 {
     if (!_positionDataset.isValid())
         getWidget().setWindowTitle(getGuiName());
@@ -458,7 +458,7 @@ void ScatterplotPlugin::updateWindowTitle()
         getWidget().setWindowTitle(QString("%1: %2").arg(getGuiName(), _positionDataset->getDataHierarchyItem().getLocation()));
 }
 
-void ScatterplotPlugin::computeStaticData()
+void SpaceWalkerPlugin::computeStaticData()
 {
     // Make sure the position dataset is valid
     if (!_positionDataset.isValid())
@@ -550,7 +550,7 @@ void ScatterplotPlugin::computeStaticData()
 }
 
 // Is called when the x, y dimensions chosen by the user change, as well as once when dropping new data into the view
-void ScatterplotPlugin::updateProjectionData()
+void SpaceWalkerPlugin::updateProjectionData()
 {
     // Check if the scatter plot is initialized, if not, don't do anything
     if (!_scatterPlotWidget->isInitialized())
@@ -588,7 +588,7 @@ void ScatterplotPlugin::updateProjectionData()
     std::cout << "Projection size: " << _dataStore.getProjectionSize() << std::endl;
 }
 
-void ScatterplotPlugin::updateViewData(std::vector<Vector2f>& positions)
+void SpaceWalkerPlugin::updateViewData(std::vector<Vector2f>& positions)
 {
     // TODO: Can save some time here only computing data bounds once
     // Pass the 2D points to the scatter plot widget
@@ -598,7 +598,7 @@ void ScatterplotPlugin::updateViewData(std::vector<Vector2f>& positions)
     _selectedView->setData(&positions);
 }
 
-void ScatterplotPlugin::updateColorMapActionScalarRange()
+void SpaceWalkerPlugin::updateColorMapActionScalarRange()
 {
     // Get the color map range from the scatter plot widget
     const auto colorMapRange = getScatterplotWidget().getColorMapRange();
@@ -612,7 +612,7 @@ void ScatterplotPlugin::updateColorMapActionScalarRange()
     _colorMapAction.getDataRangeAction(ColorMapAction::Axis::X).setRange({ colorMapRangeMin, colorMapRangeMax });
 }
 
-void ScatterplotPlugin::loadData(const Datasets& datasets)
+void SpaceWalkerPlugin::loadData(const Datasets& datasets)
 {
     // Exit if there is nothing to load
     if (datasets.isEmpty())
@@ -622,7 +622,7 @@ void ScatterplotPlugin::loadData(const Datasets& datasets)
     _positionDataset = datasets.first();
 }
 
-void ScatterplotPlugin::onDataEvent(hdps::DatasetEvent* dataEvent)
+void SpaceWalkerPlugin::onDataEvent(hdps::DatasetEvent* dataEvent)
 {
     if (dataEvent->getType() == EventType::DatasetDataSelectionChanged)
     {
@@ -636,7 +636,7 @@ void ScatterplotPlugin::onDataEvent(hdps::DatasetEvent* dataEvent)
     }
 }
 
-std::uint32_t ScatterplotPlugin::getNumberOfPoints() const
+std::uint32_t SpaceWalkerPlugin::getNumberOfPoints() const
 {
     if (!_positionDataset.isValid())
         return 0;
@@ -644,7 +644,7 @@ std::uint32_t ScatterplotPlugin::getNumberOfPoints() const
     return _positionDataset->getNumPoints();
 }
 
-void ScatterplotPlugin::createSubset(const bool& fromSourceData /*= false*/, const QString& name /*= ""*/)
+void SpaceWalkerPlugin::createSubset(const bool& fromSourceData /*= false*/, const QString& name /*= ""*/)
 {
     auto subsetPoints = fromSourceData ? _positionDataset->getSourceDataset<Points>() : _positionDataset;
 
@@ -658,7 +658,7 @@ void ScatterplotPlugin::createSubset(const bool& fromSourceData /*= false*/, con
     subset->getDataHierarchyItem().select();
 }
 
-void ScatterplotPlugin::onPointSelection()
+void SpaceWalkerPlugin::onPointSelection()
 {
     Timer timer;
 
@@ -852,7 +852,7 @@ timer.mark("Filter");
     }
 }
 
-void ScatterplotPlugin::onSliceIndexChanged()
+void SpaceWalkerPlugin::onSliceIndexChanged()
 {
     std::vector<uint32_t>& uindices = _sliceDataset->getClusters()[_currentSliceIndex].getIndices();
     std::vector<int> indices;
@@ -864,7 +864,7 @@ void ScatterplotPlugin::onSliceIndexChanged()
     useSelectionAsDataView(indices);
 }
 
-void ScatterplotPlugin::updateSelection()
+void SpaceWalkerPlugin::updateSelection()
 {
     if (!_positionDataset.isValid())
         return;
@@ -884,7 +884,7 @@ void ScatterplotPlugin::updateSelection()
     _scatterPlotWidget->setHighlights(highlights, static_cast<std::int32_t>(selection->indices.size()));
 }
 
-void ScatterplotPlugin::updateViewScalars()
+void SpaceWalkerPlugin::updateViewScalars()
 {
     _projectionViews[0]->selectView(false);
     _projectionViews[1]->selectView(false);
@@ -920,7 +920,7 @@ void ScatterplotPlugin::updateViewScalars()
     }
 }
 
-void ScatterplotPlugin::updateFloodScalarOutput(const std::vector<float>& scalars)
+void SpaceWalkerPlugin::updateFloodScalarOutput(const std::vector<float>& scalars)
 {
     std::cout << "Flood scalars: " << scalars[1000] << std::endl;
 
@@ -932,7 +932,7 @@ void ScatterplotPlugin::updateFloodScalarOutput(const std::vector<float>& scalar
  * Graphs
  ******************************************************************************/
 
-void ScatterplotPlugin::computeGraphs()
+void SpaceWalkerPlugin::computeGraphs()
 {
     // Binning
     int numBins = (int)_bins.size();
@@ -958,7 +958,7 @@ void ScatterplotPlugin::computeGraphs()
     _graphView->setBins(_bins);
 }
 
-void ScatterplotPlugin::onLineClicked(dint dim)
+void SpaceWalkerPlugin::onLineClicked(dint dim)
 {
     qDebug() << "Dim: " << dim;
     _selectedDimension = dim;
@@ -973,18 +973,18 @@ void ScatterplotPlugin::onLineClicked(dint dim)
  * Import / Export
  ******************************************************************************/
 
-void ScatterplotPlugin::exportDimRankings()
+void SpaceWalkerPlugin::exportDimRankings()
 {
     bool restrictToFloodNodes = _settingsAction.getFilterAction().getRestrictToFloodAction().isChecked();
     exportRankings(_dataStore, _floodFill, _knnGraph, _filterType, _spatialPeakFilter, _hdFloodPeakFilter, restrictToFloodNodes, _enabledDimNames);
 }
 
-void ScatterplotPlugin::exportFloodnodes()
+void SpaceWalkerPlugin::exportFloodnodes()
 {
     exportFloodNodes(_dataStore.getNumPoints(), _floodFill, _knnGraph);
 }
 
-void ScatterplotPlugin::importKnnGraph()
+void SpaceWalkerPlugin::importKnnGraph()
 {
     QString fileName = QFileDialog::getOpenFileName(&getWidget(),
         tr("Open Knn Graph"), "", tr("KNN Files (*.knn)"));
@@ -999,7 +999,7 @@ void ScatterplotPlugin::importKnnGraph()
  * Flooding
  ******************************************************************************/
 
-void ScatterplotPlugin::createKnnIndex()
+void SpaceWalkerPlugin::createKnnIndex()
 {
     qDebug() << "Creating index";
     if (_dataStore.getNumDimensions() <= 200)
@@ -1011,7 +1011,7 @@ void ScatterplotPlugin::createKnnIndex()
     qDebug() << "Done creating index";
 }
 
-void ScatterplotPlugin::computeKnnGraph()
+void SpaceWalkerPlugin::computeKnnGraph()
 {
     qDebug() << "Building KNN Graph..";
     if (!_preloadedKnnGraph)
@@ -1034,7 +1034,7 @@ void ScatterplotPlugin::computeKnnGraph()
  * Serialization
  ******************************************************************************/
 
-void ScatterplotPlugin::fromVariantMap(const QVariantMap& variantMap)
+void SpaceWalkerPlugin::fromVariantMap(const QVariantMap& variantMap)
 {
     _loadingFromProject = true;
 
@@ -1102,7 +1102,7 @@ void ScatterplotPlugin::fromVariantMap(const QVariantMap& variantMap)
     _loadingFromProject = false;
 }
 
-QVariantMap ScatterplotPlugin::toVariantMap() const
+QVariantMap SpaceWalkerPlugin::toVariantMap() const
 {
     QVariantMap variantMap = ViewPlugin::toVariantMap();
 
@@ -1156,12 +1156,12 @@ QVariantMap ScatterplotPlugin::toVariantMap() const
  * Mask
  ******************************************************************************/
 
-bool ScatterplotPlugin::hasMaskApplied()
+bool SpaceWalkerPlugin::hasMaskApplied()
 {
     return !_mask.empty();
 }
 
-void ScatterplotPlugin::clearMask()
+void SpaceWalkerPlugin::clearMask()
 {
     _mask.clear();
 
@@ -1170,7 +1170,7 @@ void ScatterplotPlugin::clearMask()
     getScatterplotWidget().setPointOpacityScalars(opacityScalars);
 }
 
-void ScatterplotPlugin::useSelectionAsMask()
+void SpaceWalkerPlugin::useSelectionAsMask()
 {
     // Get current selection
     // Compute the indices that are selected in this local dataset
@@ -1208,7 +1208,7 @@ void ScatterplotPlugin::useSelectionAsMask()
     }
 }
 
-void ScatterplotPlugin::useSelectionAsDataView(std::vector<int>& indices)
+void SpaceWalkerPlugin::useSelectionAsDataView(std::vector<int>& indices)
 {
     // Get current selection
     // Compute the indices that are selected in this local dataset
@@ -1251,22 +1251,22 @@ void ScatterplotPlugin::useSelectionAsDataView(std::vector<int>& indices)
  * Factory
  ******************************************************************************/
 
-QIcon ScatterplotPluginFactory::getIcon(const QColor& color /*= Qt::black*/) const
+QIcon SpaceWalkerPluginFactory::getIcon(const QColor& color /*= Qt::black*/) const
 {
     return Application::getIconFont("FontAwesome").getIcon("braille", color);
 }
 
-ViewPlugin* ScatterplotPluginFactory::produce()
+ViewPlugin* SpaceWalkerPluginFactory::produce()
 {
-    return new ScatterplotPlugin(this);
+    return new SpaceWalkerPlugin(this);
 }
 
-PluginTriggerActions ScatterplotPluginFactory::getPluginTriggerActions(const hdps::Datasets& datasets) const
+PluginTriggerActions SpaceWalkerPluginFactory::getPluginTriggerActions(const hdps::Datasets& datasets) const
 {
     PluginTriggerActions pluginTriggerActions;
 
-    const auto getInstance = [this]() -> ScatterplotPlugin* {
-        return dynamic_cast<ScatterplotPlugin*>(Application::core()->getPluginManager().requestViewPlugin(getKind()));
+    const auto getInstance = [this]() -> SpaceWalkerPlugin* {
+        return dynamic_cast<SpaceWalkerPlugin*>(Application::core()->getPluginManager().requestViewPlugin(getKind()));
     };
 
     const auto numberOfDatasets = datasets.count();

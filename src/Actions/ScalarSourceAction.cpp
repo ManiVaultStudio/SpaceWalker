@@ -1,5 +1,5 @@
 #include "ScalarSourceAction.h"
-#include "ScatterplotPlugin.h"
+#include "SpaceWalkerPlugin.h"
 
 #include <PointData/PointData.h>
 

@@ -1,12 +1,12 @@
 #include "PlotAction.h"
-#include "ScatterplotPlugin.h"
+#include "SpaceWalkerPlugin.h"
 #include "ScatterplotWidget.h"
 
 using namespace hdps::gui;
 
 PlotAction::PlotAction(QObject* parent, const QString& title) :
     VerticalGroupAction(parent, title),
-    _scatterplotPlugin(nullptr),
+    _spaceWalkerPlugin(nullptr),
     _pointPlotAction(this, "Point"),
     _densityPlotAction(this, "Density")
 {
@@ -22,19 +22,19 @@ PlotAction::PlotAction(QObject* parent, const QString& title) :
     addAction(&_densityPlotAction.getContinuousUpdatesAction());
 }
 
-void PlotAction::initialize(ScatterplotPlugin* scatterplotPlugin)
+void PlotAction::initialize(SpaceWalkerPlugin* spaceWalkerPlugin)
 {
-    Q_ASSERT(scatterplotPlugin != nullptr);
+    Q_ASSERT(spaceWalkerPlugin != nullptr);
 
-    if (scatterplotPlugin == nullptr)
+    if (spaceWalkerPlugin == nullptr)
         return;
 
-    _scatterplotPlugin = scatterplotPlugin;
+    _spaceWalkerPlugin = spaceWalkerPlugin;
 
-    _pointPlotAction.initialize(_scatterplotPlugin);
-    _densityPlotAction.initialize(_scatterplotPlugin);
+    _pointPlotAction.initialize(_spaceWalkerPlugin);
+    _densityPlotAction.initialize(_spaceWalkerPlugin);
 
-    auto& scatterplotWidget = _scatterplotPlugin->getScatterplotWidget();
+    auto& scatterplotWidget = _spaceWalkerPlugin->getScatterplotWidget();
 
     const auto updateRenderMode = [this, &scatterplotWidget]() -> void {
         _pointPlotAction.setVisible(scatterplotWidget.getRenderMode() == ScatterplotWidget::SCATTERPLOT);
@@ -48,10 +48,10 @@ void PlotAction::initialize(ScatterplotPlugin* scatterplotPlugin)
 
 QMenu* PlotAction::getContextMenu()
 {
-    if (_scatterplotPlugin == nullptr)
+    if (_spaceWalkerPlugin == nullptr)
         return nullptr;
 
-    switch (_scatterplotPlugin->getScatterplotWidget().getRenderMode())
+    switch (_spaceWalkerPlugin->getScatterplotWidget().getRenderMode())
     {
         case ScatterplotWidget::RenderMode::SCATTERPLOT:
             return _pointPlotAction.getContextMenu();

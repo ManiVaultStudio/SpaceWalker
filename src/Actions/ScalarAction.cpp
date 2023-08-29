@@ -1,6 +1,6 @@
 #include "ScalarAction.h"
 #include "Models/ScalarSourceModel.h"
-#include "ScatterplotPlugin.h"
+#include "SpaceWalkerPlugin.h"
 
 #include <QHBoxLayout>
 

@@ -1,6 +1,6 @@
 #include "SettingsAction.h"
 
-#include "ScatterplotPlugin.h"
+#include "SpaceWalkerPlugin.h"
 #include "ScatterplotWidget.h"
 #include "PointData/PointData.h"
 
@@ -10,7 +10,7 @@ using namespace hdps::gui;
 
 SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     GroupAction(parent, title),
-    _scatterplotPlugin(dynamic_cast<ScatterplotPlugin*>(parent)),
+    _spaceWalkerPlugin(dynamic_cast<SpaceWalkerPlugin*>(parent)),
     _currentDatasetAction(this, "Current dataset"),
     _renderModeAction(this, "Render Mode"),
     _positionAction(this, "Position"),
@@ -25,19 +25,19 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
 {
     setConnectionPermissionsToForceNone();
 
-    _currentDatasetAction.initialize(_scatterplotPlugin);
-    _renderModeAction.initialize(_scatterplotPlugin);
-    _plotAction.initialize(_scatterplotPlugin);
-    //_exportImageAction.initialize(_scatterplotPlugin);
+    _currentDatasetAction.initialize(_spaceWalkerPlugin);
+    _renderModeAction.initialize(_spaceWalkerPlugin);
+    _plotAction.initialize(_spaceWalkerPlugin);
+    //_exportImageAction.initialize(_spaceWalkerPlugin);
 
-    _filterAction.initialize(_scatterplotPlugin);
-    _overlayAction.initialize(_scatterplotPlugin);
-    _exportAction.initialize(_scatterplotPlugin);
+    _filterAction.initialize(_spaceWalkerPlugin);
+    _overlayAction.initialize(_spaceWalkerPlugin);
+    _exportAction.initialize(_spaceWalkerPlugin);
 
     //_exportImageAction.setEnabled(false);
 
     const auto updateEnabled = [this]() {
-        bool hasDataset = _scatterplotPlugin->getPositionDataset().isValid();
+        bool hasDataset = _spaceWalkerPlugin->getPositionDataset().isValid();
 
         _renderModeAction.setEnabled(hasDataset);
         _positionAction.setEnabled(hasDataset);
@@ -49,10 +49,10 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
         _exportAction.setEnabled(hasDataset);
         _selectionAsMaskAction.setEnabled(hasDataset);
         _clearMaskAction.setEnabled(hasDataset);
-        //setEnabled(_scatterplotPlugin->getPositionDataset().isValid());
+        //setEnabled(_spaceWalkerPlugin->getPositionDataset().isValid());
     };
 
-    connect(&_scatterplotPlugin->getPositionDataset(), &Dataset<Points>::changed, this, updateEnabled);
+    connect(&_spaceWalkerPlugin->getPositionDataset(), &Dataset<Points>::changed, this, updateEnabled);
 
     updateEnabled();
 
@@ -60,11 +60,11 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     //_exportImageAction.setDefaultWidgetFlags(TriggerAction::Icon);
 
     connect(&_selectionAsMaskAction, &TriggerAction::triggered, this, [this]() {
-        _scatterplotPlugin->useSelectionAsMask();
+        _spaceWalkerPlugin->useSelectionAsMask();
     });
 
     connect(&_clearMaskAction, &TriggerAction::triggered, this, [this]() {
-        _scatterplotPlugin->clearMask();
+        _spaceWalkerPlugin->clearMask();
     });
 }
 
