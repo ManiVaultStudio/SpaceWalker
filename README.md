@@ -34,3 +34,6 @@ smFISH           |  MERFISH
 [#]: #
 
 # License
+SpaceWalker is licensed under LGPL v3.0, refer to the LICENSE file in the top level directory.
+
+Copyright © 2023 BioVault (Biomedical Visual Analytics Unit LUMC)
