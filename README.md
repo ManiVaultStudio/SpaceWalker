@@ -23,7 +23,7 @@ smFISH           |  MERFISH
 <img src="https://github.com/ManiVaultStudio/SpaceWalker/assets/2978176/cc487851-6af5-41b5-98a8-c85a1d21d8e0" width="90%" /> [![Download Icon]][EELLink] | <img src="https://github.com/ManiVaultStudio/SpaceWalker/assets/2978176/e473439c-471d-4c9d-a4a6-b887f3e81838" width="90%" /> [![Download Icon]][ABCLink]
 
 <!---------------------------------------------------------------------------->
-[Link]: https://www.biorxiv.org/content/10.1101/2023.03.20.532934v1 'Download the Installer'
+[Link]: https://github.com/ManiVaultStudio/Installer/releases 'Download the Installer'
 [SMLink]: https://www.biorxiv.org/content/10.1101/2023.03.20.532934v1 'smFISH'
 [EELLink]: https://www.biorxiv.org/content/10.1101/2023.03.20.532934v1 'EEL FISH'
 [ABCLink]: https://www.biorxiv.org/content/10.1101/2023.03.20.532934v1 'EEL FISH'
