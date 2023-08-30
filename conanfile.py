@@ -8,7 +8,7 @@ import subprocess
 from rules_support import PluginBranchInfo
 
 
-class GradientViewPluginConan(ConanFile):
+class SpaceWalkerConan(ConanFile):
     """Class to package ImageLoaderPlugin using conan
 
     Packages both RELEASE and DEBUG.
@@ -17,10 +17,10 @@ class GradientViewPluginConan(ConanFile):
     as described in https://github.com/hdps/core/wiki/Branch-naming-rules
     """
 
-    name = "GradientView"
-    description = """View plugin for seeing gradients in projections"""
+    name = "SpaceWalker"
+    description = """SpaceWalker plugin"""
     topics = ("hdps", "plugin", "image data", "loading")
-    url = "https://github.com/hdps/GradientView"
+    url = "https://github.com/ManiVaultStudio/SpaceWalker"
     author = "B. van Lew b.van_lew@lumc.nl"  # conan recipe author
     license = "MIT"
 
@@ -36,7 +36,7 @@ class GradientViewPluginConan(ConanFile):
 
     scm = {
         "type": "git",
-        "subfolder": "hdps/GradientView",
+        "subfolder": "hdps/SpaceWalker",
         "url": "auto",
         "revision": "auto",
     }
@@ -98,7 +98,7 @@ class GradientViewPluginConan(ConanFile):
 
     def _configure_cmake(self):
         cmake = CMake(self)
-        cmake.configure(build_script_folder="hdps/GradientView")
+        cmake.configure(build_script_folder="hdps/SpaceWalker")
         cmake.verbose = True
         return cmake
 
