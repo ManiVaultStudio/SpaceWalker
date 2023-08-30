@@ -1129,8 +1129,8 @@ QVariantMap SpaceWalkerPlugin::toVariantMap() const
         QVariantMap qneighbours = rawDataToVariantMap((char*)linearNeighbours.data(), linearNeighbours.size() * sizeof(std::int32_t), true);
 
         variantMap.insert("largeKnnGraph", qneighbours);
-        variantMap.insert("numPoints", neighbours.size());
-        variantMap.insert("numNeighbours", neighbours[0].size());
+        variantMap.insert("numPoints", QVariant::fromValue(neighbours.size()));
+        variantMap.insert("numNeighbours", QVariant::fromValue(neighbours[0].size()));
     }
 
     // Store current slice in project, if slice dataset is valid
