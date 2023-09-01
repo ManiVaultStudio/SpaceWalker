@@ -1015,12 +1015,18 @@ void SpaceWalkerPlugin::computeKnnGraph()
 {
     qDebug() << "Building KNN Graph..";
     if (!_preloadedKnnGraph)
-        _largeKnnGraph.build(_dataStore.getBaseData(), _knnIndex, 30);
-
-    if (_useSharedDistances)
     {
-        _sourceKnnGraph.build(_dataStore.getBaseData(), _knnIndex, 100);
-        _knnGraph.build(_sourceKnnGraph, 10, true);
+        if (_useSharedDistances)
+        {
+            _sourceKnnGraph.build(_dataStore.getBaseData(), _knnIndex, 100);
+            _largeKnnGraph.build(_sourceKnnGraph, 30, true);
+            _knnGraph.build(_sourceKnnGraph, 10, true);
+        }
+        else
+        {
+            _largeKnnGraph.build(_dataStore.getBaseData(), _knnIndex, 30);
+            _knnGraph.build(_largeKnnGraph, 10);
+        }
     }
     else
         _knnGraph.build(_largeKnnGraph, 10);
