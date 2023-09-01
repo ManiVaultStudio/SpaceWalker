@@ -24,7 +24,7 @@ smFISH           |  HybISS
 
 <!---------------------------------------------------------------------------->
 [Link]: https://github.com/ManiVaultStudio/Installer/releases 'Download the Installer'
-[SMLink]: https://www.biorxiv.org/content/10.1101/2023.03.20.532934v1 'smFISH'
+[SMLink]: https://www.dropbox.com/scl/fo/18g5gmg7o54k48h6dvdhv/h/SpaceTx_smFish_MerFish.mv?rlkey=31e1jxw3tl2wqtdcw8u1ptd2v&dl=0 'smFISH'
 [HybLink]: https://www.dropbox.com/scl/fo/18g5gmg7o54k48h6dvdhv/h/HyBISS.mv?rlkey=31e1jxw3tl2wqtdcw8u1ptd2v&dl=0 'HybISS'
 [EELLink]: https://www.dropbox.com/scl/fo/18g5gmg7o54k48h6dvdhv/h/EELFISH.mv?rlkey=31e1jxw3tl2wqtdcw8u1ptd2v&dl=0 'EEL FISH'
 [ABCLink]: https://www.biorxiv.org/content/10.1101/2023.03.20.532934v1 'EEL FISH'
