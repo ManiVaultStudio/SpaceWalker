@@ -16,11 +16,11 @@ Currently, only a Windows installer is provided, Linux and Mac will follow in th
 # Example Datasets
 In the paper several datasets are discussed which are available here for exploring locally via downloading a ManiVault project file.
 
-smFISH           |  HybISS
+smFISH & MERFISH |  HybISS
 :-------------------------:|:-------------------------:
-<img src="https://github.com/ManiVaultStudio/SpaceWalker/assets/2978176/08e17665-0b0c-48aa-8e76-9a39b8093f69" width="90%" /> [![Download Icon]][SMLink] |  [![Download Icon]][HybLink]
+[![Download Icon]][SMLink] | [![Download Icon]][HybLink]
 **EEL FISH** | **ABC Atlas**
-<img src="https://github.com/ManiVaultStudio/SpaceWalker/assets/2978176/cc487851-6af5-41b5-98a8-c85a1d21d8e0" width="90%" /> [![Download Icon]][EELLink] | <img src="https://github.com/ManiVaultStudio/SpaceWalker/assets/2978176/e473439c-471d-4c9d-a4a6-b887f3e81838" width="90%" /> [![Download Icon]][ABCLink]
+[![Download Icon]][EELLink] | [![Download Icon]][ABCLink]
 
 <!---------------------------------------------------------------------------->
 [Link]: https://www.dropbox.com/scl/fo/18g5gmg7o54k48h6dvdhv/h/ManiVault_spacewalker_offline.exe?rlkey=31e1jxw3tl2wqtdcw8u1ptd2v&dl=0 'Download the Installer'
