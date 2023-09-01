@@ -16,15 +16,16 @@ Currently, only a Windows installer is provided, Linux and Mac will follow in th
 # Example Datasets
 In the paper several datasets are discussed which are available here for exploring locally via downloading a ManiVault project file.
 
-smFISH           |  MERFISH
+smFISH           |  HybISS
 :-------------------------:|:-------------------------:
-<img src="https://github.com/ManiVaultStudio/SpaceWalker/assets/2978176/08e17665-0b0c-48aa-8e76-9a39b8093f69" width="90%" /> [![Download Icon]][SMLink] |  TBA
+<img src="https://github.com/ManiVaultStudio/SpaceWalker/assets/2978176/08e17665-0b0c-48aa-8e76-9a39b8093f69" width="90%" /> [![Download Icon]][SMLink] |  [![Download Icon]][HybLink]
 **EEL FISH** | **ABC Atlas**
 <img src="https://github.com/ManiVaultStudio/SpaceWalker/assets/2978176/cc487851-6af5-41b5-98a8-c85a1d21d8e0" width="90%" /> [![Download Icon]][EELLink] | <img src="https://github.com/ManiVaultStudio/SpaceWalker/assets/2978176/e473439c-471d-4c9d-a4a6-b887f3e81838" width="90%" /> [![Download Icon]][ABCLink]
 
 <!---------------------------------------------------------------------------->
 [Link]: https://github.com/ManiVaultStudio/Installer/releases 'Download the Installer'
 [SMLink]: https://www.biorxiv.org/content/10.1101/2023.03.20.532934v1 'smFISH'
+[HybLink]: https://www.dropbox.com/scl/fo/18g5gmg7o54k48h6dvdhv/h/HyBISS.mv?rlkey=31e1jxw3tl2wqtdcw8u1ptd2v&dl=0 'HybISS'
 [EELLink]: https://www.dropbox.com/scl/fo/18g5gmg7o54k48h6dvdhv/h/EELFISH.mv?rlkey=31e1jxw3tl2wqtdcw8u1ptd2v&dl=0 'EEL FISH'
 [ABCLink]: https://www.biorxiv.org/content/10.1101/2023.03.20.532934v1 'EEL FISH'
 <!---------------------------------------------------------------------------->
