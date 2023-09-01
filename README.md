@@ -23,7 +23,7 @@ smFISH           |  HybISS
 <img src="https://github.com/ManiVaultStudio/SpaceWalker/assets/2978176/cc487851-6af5-41b5-98a8-c85a1d21d8e0" width="90%" /> [![Download Icon]][EELLink] | <img src="https://github.com/ManiVaultStudio/SpaceWalker/assets/2978176/e473439c-471d-4c9d-a4a6-b887f3e81838" width="90%" /> [![Download Icon]][ABCLink]
 
 <!---------------------------------------------------------------------------->
-[Link]: https://github.com/ManiVaultStudio/Installer/releases 'Download the Installer'
+[Link]: https://www.dropbox.com/scl/fo/18g5gmg7o54k48h6dvdhv/h/ManiVault_spacewalker_offline.exe?rlkey=31e1jxw3tl2wqtdcw8u1ptd2v&dl=0 'Download the Installer'
 [SMLink]: https://www.dropbox.com/scl/fo/18g5gmg7o54k48h6dvdhv/h/SpaceTx_smFish_MerFish.mv?rlkey=31e1jxw3tl2wqtdcw8u1ptd2v&dl=0 'smFISH'
 [HybLink]: https://www.dropbox.com/scl/fo/18g5gmg7o54k48h6dvdhv/h/HyBISS.mv?rlkey=31e1jxw3tl2wqtdcw8u1ptd2v&dl=0 'HybISS'
 [EELLink]: https://www.dropbox.com/scl/fo/18g5gmg7o54k48h6dvdhv/h/EELFISH.mv?rlkey=31e1jxw3tl2wqtdcw8u1ptd2v&dl=0 'EEL FISH'
