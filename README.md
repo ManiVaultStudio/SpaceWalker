@@ -18,9 +18,9 @@ In the paper several datasets are discussed which are available here for explori
 
 smFISH & MERFISH |  HybISS
 :-------------------------:|:-------------------------:
-[![Download Icon]][SMLink] | [![Download Icon]][HybLink]
+![image](https://github.com/ManiVaultStudio/SpaceWalker/assets/2978176/7b17e46c-177a-4b5d-9764-16627b36f46f) [![Download Icon]][SMLink] | ![image](https://github.com/ManiVaultStudio/SpaceWalker/assets/2978176/cf43ae47-25ad-48f4-b9a0-9c19a69a8eba) [![Download Icon]][HybLink]
 **EEL FISH** | **ABC Atlas**
-[![Download Icon]][EELLink] | [![Download Icon]][ABCLink]
+![image](https://github.com/ManiVaultStudio/SpaceWalker/assets/2978176/341c7bd6-4f7a-405e-8763-f049fa5b02f2) [![Download Icon]][EELLink] | ![image](https://github.com/ManiVaultStudio/SpaceWalker/assets/2978176/867a6724-dd5e-4738-8bee-f3351ae94639) [![Download Icon]][ABCLink]
 
 <!---------------------------------------------------------------------------->
 [Link]: https://www.dropbox.com/scl/fo/18g5gmg7o54k48h6dvdhv/h/ManiVault_spacewalker_offline.exe?rlkey=31e1jxw3tl2wqtdcw8u1ptd2v&dl=0 'Download the Installer'
