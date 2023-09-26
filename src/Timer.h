@@ -11,6 +11,7 @@ public:
     void mark(std::string name);
     void finish(std::string name);
 private:
-    std::vector<std::chrono::system_clock::time_point> _timePoints;
+    using vec_time_type = std::invoke_result<decltype(std::chrono::high_resolution_clock::now)>::type;
+    std::vector<vec_time_type> _timePoints;
     std::vector<std::string> _names;
 };
