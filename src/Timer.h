@@ -11,6 +11,6 @@ public:
     void mark(std::string name);
     void finish(std::string name);
 private:
-    std::vector<std::chrono::steady_clock::time_point> _timePoints;
+    std::vector<std::chrono::system_clock::time_point> _timePoints;
     std::vector<std::string> _names;
 };

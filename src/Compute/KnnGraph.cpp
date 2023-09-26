@@ -36,7 +36,7 @@ void printIndices(std::string name, std::vector<int>& indices, int k)
 
     for (int i = 0; i < 5; i++) {
         for (int j = 0; j < k + 1; j++)
-            printf("%5zd ", indices[i * (k + 1) + j]);
+            printf("%5d ", indices[i * (k + 1) + j]);
         printf("\n");
     }
 }
@@ -88,7 +88,7 @@ void KnnGraph::build(const DataMatrix& data, const knn::Index& index, int numNei
     _neighbours.clear();
     _neighbours.resize(data.rows(), std::vector<int>(_numNeighbours));
 
-    int progressTick = std::max(1LL, data.rows() / 100);
+    int progressTick = std::max(EIGEN_DEFAULT_DENSE_INDEX_TYPE(1), data.rows() / 100);
 #pragma omp parallel for
     for (int i = 0; i < data.rows(); i++)
     {

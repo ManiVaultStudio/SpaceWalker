@@ -2,7 +2,7 @@
 
 #include <actions/WidgetAction.h>
 
-#include <Actions/TriggerAction.h>
+#include <actions/TriggerAction.h>
 
 using namespace hdps::gui;
 

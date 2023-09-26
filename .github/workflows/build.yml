@@ -4,10 +4,16 @@ on:
   push:
   pull_request:
   workflow_dispatch:
+    inputs:
+      forceMacBuild:
+        description: 'If set true override the ENABLE_MACOS_BUILD to force a build'
+        type: boolean
+        default: false
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
+  MACENABLED: ${{ inputs.forceMacBuild }}
 
 # for matrix check https://docs.github.com/en/actions/reference/specifications-for-github-hosted-runners
 jobs:
@@ -28,13 +34,15 @@ jobs:
             build-runtime: MD
             build-config: Release
 
-          # - name: Linux_gcc9
-          #   os: ubuntu-18.04
-          #   build-compiler: gcc
-          #   build-cversion: 9
-          #   build-config: Release
-          #   build-os: Linux
-          #   build-libcxx: libstdc++
+          - name: Linux_gcc10
+            os: ubuntu-22.04
+            build-cc: gcc
+            build-cxx: g++
+            build-compiler: gcc
+            build-cversion: 10
+            build-config: Release
+            build-os: Linux
+            build-libcxx: libstdc++
 
           # - name: Macos_xcode12.4
           #  os: macos-11
@@ -85,9 +93,24 @@ jobs:
           conan-pem: ${{secrets.LKEB_UPLOAD_CERT_CHAIN}}
           rs_ssh_key: ${{ secrets.RULESSUPPORT_DEPLOY_KEY }}
 
-      - name: Linux Mac build
-        if: "!startsWith(runner.os, 'Windows')"
-        uses: hdps/github-actions/conan_linuxmac_build@main
+      - name: Linux build
+        if: startsWith(matrix.os, 'ubuntu')
+        uses: ManiVaultStudio/github-actions/conan_linuxmac_build@main
+        with:
+          conan-compiler: ${{matrix.build-compiler}}
+          conan-compiler-version: ${{matrix.build-cversion}}
+          conan-libcxx-version: ${{matrix.build-libcxx}}
+          conan-build-type: ${{matrix.build-config}}
+          conan-build-os: ${{matrix.build-os}}
+          conan-user: ${{secrets.LKEB_UPLOAD_USER}}
+          conan-password: ${{secrets.LKEB_UPLOAD_USER_PASSWORD}}
+          conan-pem: ${{secrets.LKEB_UPLOAD_CERT_CHAIN}}
+          conan-cc: gcc-${{matrix.build-cversion}}
+          conan-cxx: g++-${{matrix.build-cversion}}
+      
+      - name: Mac build
+        if: startsWith(matrix.os, 'macos') &&  (env.MACENABLED == 'true' || vars.ENABLE_MACOS_BUILD == 'True')
+        uses: ManiVaultStudio/github-actions/conan_linuxmac_build@main
         with:
           conan-compiler: ${{matrix.build-compiler}}
           conan-compiler-version: ${{matrix.build-cversion}}
