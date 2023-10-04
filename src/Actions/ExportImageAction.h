@@ -8,6 +8,8 @@
 #include <actions/ColorAction.h>
 #include <actions/StringAction.h>
 #include <actions/StatusAction.h>
+#include <actions/DecimalRangeAction.h>
+#include <actions/DirectoryPickerAction.h>
 
 #include <PointData/DimensionsPickerAction.h>
 
