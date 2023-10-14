@@ -2,7 +2,7 @@
 #include "SpaceWalkerPlugin.h"
 #include "ScatterplotWidget.h"
 
-using namespace hdps::gui;
+using namespace mv::gui;
 
 DensityPlotAction::DensityPlotAction(QObject* parent, const QString& title) :
     VerticalGroupAction(parent, title),

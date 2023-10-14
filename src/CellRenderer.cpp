@@ -328,7 +328,7 @@ namespace hdps
             _gpuPoints.destroy();
         }
 
-        hdps::Vector3f CellRenderer::getColorMapRange() const
+        mv::Vector3f CellRenderer::getColorMapRange() const
         {
             return _gpuPoints.getColorMapRange();
         }

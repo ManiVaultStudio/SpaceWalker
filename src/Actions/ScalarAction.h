@@ -4,7 +4,7 @@
 
 #include "ScalarSourceAction.h"
 
-using namespace hdps::gui;
+using namespace mv::gui;
 
 /**
  * Scalar action class
@@ -133,7 +133,7 @@ private:
     DecimalAction           _magnitudeAction;   /** Scalar magnitude action */
     ScalarSourceAction      _sourceAction;      /** Scalar source action */
 
-    friend class hdps::AbstractActionsManager;
+    friend class mv::AbstractActionsManager;
 };
 
 Q_DECLARE_METATYPE(ScalarAction)

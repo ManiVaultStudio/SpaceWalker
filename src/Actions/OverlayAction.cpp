@@ -18,7 +18,7 @@ OverlayAction::OverlayAction(QObject* parent, const QString& title) :
     _dimensionalityOverlayAction(this, "Local Dimensionality")
     //_overlayGroupAction(this, true)
 {
-    setIcon(hdps::Application::getIconFont("FontAwesome").getIcon("image"));
+    setIcon(mv::Application::getIconFont("FontAwesome").getIcon("image"));
 
     setConfigurationFlag(WidgetAction::ConfigurationFlag::ForceCollapsedInGroup);
 

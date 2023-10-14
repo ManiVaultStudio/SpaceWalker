@@ -2,7 +2,7 @@
 
 #include "PointData/DimensionsPickerAction.h"
 
-void convertToEigenMatrix(hdps::Dataset<Points> dataset, hdps::Dataset<Points> sourceDataset, DataMatrix& dataMatrix)
+void convertToEigenMatrix(mv::Dataset<Points> dataset, mv::Dataset<Points> sourceDataset, DataMatrix& dataMatrix)
 {
     // Compute num points
     std::vector<bool> enabledDims = sourceDataset->getDimensionsPickerAction().getEnabledDimensions();
@@ -45,9 +45,9 @@ void convertToEigenMatrix(hdps::Dataset<Points> dataset, hdps::Dataset<Points> s
         dataMatrix = fullDataMatrix;
 }
 
-void convertToEigenMatrixProjection(hdps::Dataset<Points> dataset, DataMatrix& dataMatrix)
+void convertToEigenMatrixProjection(mv::Dataset<Points> dataset, DataMatrix& dataMatrix)
 {
-    hdps::Dataset<Points> fullDataset = dataset->getFullDataset<Points>();
+    mv::Dataset<Points> fullDataset = dataset->getFullDataset<Points>();
 
     // Compute num points
     std::vector<bool> enabledDims = dataset->getDimensionsPickerAction().getEnabledDimensions();

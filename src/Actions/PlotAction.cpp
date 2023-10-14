@@ -2,7 +2,7 @@
 #include "SpaceWalkerPlugin.h"
 #include "ScatterplotWidget.h"
 
-using namespace hdps::gui;
+using namespace mv::gui;
 
 PlotAction::PlotAction(QObject* parent, const QString& title) :
     VerticalGroupAction(parent, title),
@@ -11,7 +11,7 @@ PlotAction::PlotAction(QObject* parent, const QString& title) :
     _densityPlotAction(this, "Density")
 {
     setToolTip("Plot settings");
-    setIcon(hdps::Application::getIconFont("FontAwesome").getIcon("paint-brush"));
+    setIcon(mv::Application::getIconFont("FontAwesome").getIcon("paint-brush"));
     setLabelSizingType(LabelSizingType::Auto);
 
     addAction(&_pointPlotAction.getSizeAction());

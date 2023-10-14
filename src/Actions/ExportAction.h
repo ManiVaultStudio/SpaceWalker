@@ -4,7 +4,7 @@
 
 #include <actions/TriggerAction.h>
 
-using namespace hdps::gui;
+using namespace mv::gui;
 
 class SpaceWalkerPlugin;
 

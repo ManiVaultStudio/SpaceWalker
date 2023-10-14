@@ -3,7 +3,7 @@
 #include "FloodFill.h"
 #include "graphics/Vector2f.h"
 
-void computeDirection(DataMatrix& dataMatrix, DataMatrix& projMatrix, KnnGraph& knnGraph, int numSteps, std::vector<hdps::Vector2f>& directions)
+void computeDirection(DataMatrix& dataMatrix, DataMatrix& projMatrix, KnnGraph& knnGraph, int numSteps, std::vector<mv::Vector2f>& directions)
 {
     for (int p = 0; p < dataMatrix.rows(); p++)
     {
@@ -41,13 +41,13 @@ void computeDirection(DataMatrix& dataMatrix, DataMatrix& projMatrix, KnnGraph& 
         // Normalize eigenvalues to make them represent percentages.
         Eigen::MatrixXf evecs = eig.eigenvectors();
         // Get the two major eigenvectors and omit the others.
-        hdps::Vector2f majorEigenVector;
+        mv::Vector2f majorEigenVector;
         if (eig.eigenvalues()(0) > eig.eigenvalues()(1))
             majorEigenVector.set(evecs(0, 0), evecs(1, 0));
         else
             majorEigenVector.set(evecs(0, 1), evecs(1, 1));
 
-        directions.push_back(hdps::Vector2f(projMatrix(p, 0), projMatrix(p, 1)));
+        directions.push_back(mv::Vector2f(projMatrix(p, 0), projMatrix(p, 1)));
         directions.push_back(majorEigenVector);
     }
 }

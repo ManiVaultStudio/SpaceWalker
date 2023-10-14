@@ -38,14 +38,14 @@ private:
     dint _topDimension2 = -1;
     dint _selectedDimension = -1;
 
-    hdps::gui::ColorMap1DAction _colorMapAction;
+    mv::gui::ColorMap1DAction _colorMapAction;
 
 private: // Rendering stuff
     GLuint _lineVao;
     GLuint _lineVbo;
     GLuint _colorIdVbo;
 
-    std::vector<hdps::Vector2f> _lineVertices;
+    std::vector<mv::Vector2f> _lineVertices;
     uint _numLineVertices;
     uint _numVerticesPerLine = 1;
     int _lineHover = -1;
@@ -53,10 +53,10 @@ private: // Rendering stuff
 
     QMatrix4x4 _projMatrix;
 
-    hdps::Vector2f _xRange;
-    hdps::Vector2f _yRange;
+    mv::Vector2f _xRange;
+    mv::Vector2f _yRange;
 
-    hdps::ShaderProgram _graphShader;
+    mv::ShaderProgram _graphShader;
 
-    hdps::Texture2D _colormap;
+    mv::Texture2D _colormap;
 };

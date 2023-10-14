@@ -25,8 +25,8 @@
 
 #include <QPoint>
 
-using namespace hdps::plugin;
-using namespace hdps::util;
+using namespace mv::plugin;
+using namespace mv::util;
 
 class Points;
 class Clusters;
@@ -65,7 +65,7 @@ public:
     void init() override;
     void resetState();
 
-    void onDataEvent(hdps::DatasetEvent* dataEvent);
+    void onDataEvent(mv::DatasetEvent* dataEvent);
     void onPointSelection();
 
     void computeGraphs();
@@ -263,7 +263,7 @@ protected:
     std::vector<ProjectionView*>    _projectionViews;
     ProjectionView*                 _selectedView;
 
-    hdps::gui::DropWidget*      _dropWidget;
+    mv::gui::DropWidget*      _dropWidget;
     SettingsAction              _settingsAction;
     ColorMap1DAction            _colorMapAction;            /** Color map action */
     HorizontalToolbarAction     _primaryToolbarAction;      /** Horizontal toolbar for primary content */
@@ -276,7 +276,7 @@ protected:
 
 class SpaceWalkerPluginFactory : public ViewPluginFactory
 {
-    Q_INTERFACES(hdps::plugin::ViewPluginFactory hdps::plugin::PluginFactory)
+    Q_INTERFACES(mv::plugin::ViewPluginFactory mv::plugin::PluginFactory)
     Q_OBJECT
     Q_PLUGIN_METADATA(IID   "nl.biovault.SpaceWalkerPlugin"
                       FILE  "SpaceWalkerPlugin.json")
@@ -299,5 +299,5 @@ public:
      * @param datasets Vector of input datasets
      * @return Vector of plugin trigger actions
      */
-    PluginTriggerActions getPluginTriggerActions(const hdps::Datasets& datasets) const override;
+    PluginTriggerActions getPluginTriggerActions(const mv::Datasets& datasets) const override;
 };

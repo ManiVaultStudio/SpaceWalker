@@ -52,7 +52,7 @@ namespace hdps
                 return _colorScalarsRange;
             }
 
-            void setColorMapRange(const hdps::Vector3f& colorMapRange) {
+            void setColorMapRange(const mv::Vector3f& colorMapRange) {
                 _colorScalarsRange = colorMapRange;
             }
 

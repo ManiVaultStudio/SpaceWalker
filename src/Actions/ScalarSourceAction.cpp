@@ -6,7 +6,7 @@
 #include <QGridLayout>
 #include <QHBoxLayout>
 
-using namespace hdps::gui;
+using namespace mv::gui;
 
 ScalarSourceAction::ScalarSourceAction(QObject* parent, const QString& title) :
     GroupAction(parent, title),

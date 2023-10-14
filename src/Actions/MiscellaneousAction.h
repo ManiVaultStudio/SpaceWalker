@@ -3,7 +3,7 @@
 #include <actions/VerticalGroupAction.h>
 #include <actions/ColorAction.h>
 
-using namespace hdps::gui;
+using namespace mv::gui;
 
 class QMenu;
 
@@ -72,7 +72,7 @@ private:
 
     static const QColor DEFAULT_BACKGROUND_COLOR;
 
-    friend class hdps::AbstractActionsManager;
+    friend class mv::AbstractActionsManager;
 };
 
 Q_DECLARE_METATYPE(MiscellaneousAction)

@@ -6,7 +6,7 @@
 
 class SpaceWalkerPlugin;
 
-using namespace hdps::gui;
+using namespace mv::gui;
 
 class PointPlotAction : public VerticalGroupAction
 {
@@ -110,7 +110,7 @@ private:
     static constexpr double DEFAULT_POINT_OPACITY   = 100.0;    /** Default point opacity */
 
     friend class SpaceWalkerPlugin;
-    friend class hdps::AbstractActionsManager;
+    friend class mv::AbstractActionsManager;
 };
 
 Q_DECLARE_METATYPE(PointPlotAction)

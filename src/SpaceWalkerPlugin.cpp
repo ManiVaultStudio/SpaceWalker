@@ -49,7 +49,7 @@
 Q_PLUGIN_METADATA(IID "nl.biovault.SpaceWalkerPlugin")
 
 using namespace hdps;
-using namespace hdps::util;
+using namespace mv::util;
 
 namespace
 {
@@ -622,7 +622,7 @@ void SpaceWalkerPlugin::loadData(const Datasets& datasets)
     _positionDataset = datasets.first();
 }
 
-void SpaceWalkerPlugin::onDataEvent(hdps::DatasetEvent* dataEvent)
+void SpaceWalkerPlugin::onDataEvent(mv::DatasetEvent* dataEvent)
 {
     if (dataEvent->getType() == EventType::DatasetDataSelectionChanged)
     {
@@ -665,7 +665,7 @@ void SpaceWalkerPlugin::onPointSelection()
     if (!_positionDataset.isValid() || !_positionSourceDataset.isValid() || !_dataInitialized)
         return;
 
-    hdps::Dataset<Points> selection = _positionSourceDataset->getSelection();
+    mv::Dataset<Points> selection = _positionSourceDataset->getSelection();
 
     if (selection->indices.size() > 0)
     {
@@ -1267,7 +1267,7 @@ ViewPlugin* SpaceWalkerPluginFactory::produce()
     return new SpaceWalkerPlugin(this);
 }
 
-PluginTriggerActions SpaceWalkerPluginFactory::getPluginTriggerActions(const hdps::Datasets& datasets) const
+PluginTriggerActions SpaceWalkerPluginFactory::getPluginTriggerActions(const mv::Datasets& datasets) const
 {
     PluginTriggerActions pluginTriggerActions;
 

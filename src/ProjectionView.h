@@ -12,7 +12,7 @@
 #include <QOpenGLFunctions_3_3_Core>
 
 using namespace hdps;
-using namespace hdps::gui;
+using namespace mv::gui;
 
 /**
  * Projection view class

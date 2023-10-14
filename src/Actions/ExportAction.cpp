@@ -6,7 +6,7 @@
 #include <QMenu>
 #include <QGroupBox>
 
-using namespace hdps::gui;
+using namespace mv::gui;
 
 ExportAction::ExportAction(QObject* parent, const QString& title) :
     WidgetAction(parent, "Export Settings"),
@@ -14,7 +14,7 @@ ExportAction::ExportAction(QObject* parent, const QString& title) :
     _exportFloodnodesAction(this, "Export floodnodes"),
     _importKnnGraphAction(this, "Import KNN Graph")
 {
-    setIcon(hdps::Application::getIconFont("FontAwesome").getIcon("file-export"));
+    setIcon(mv::Application::getIconFont("FontAwesome").getIcon("file-export"));
 
     setConfigurationFlag(WidgetAction::ConfigurationFlag::ForceCollapsedInGroup);
 }

@@ -13,7 +13,7 @@
 
 #include <PointData/DimensionsPickerAction.h>
 
-using namespace hdps::gui;
+using namespace mv::gui;
 
 class SpaceWalkerPlugin;
 
