@@ -160,7 +160,7 @@ target_include_directories(${PROJECT} PRIVATE "${MV_INSTALL_DIR}/$<CONFIGURATION
 include(InstallArtifactoryPackage)
 set(LIBRARY_INSTALL_DIR ${PROJECT_BINARY_DIR})
 if (USE_ARTIFACTORY_LIBS)
-	if (NOT ARTIFACTORY_LIBS_INSTALLED) 
+	if (NOT FAISS_ARTIFACTORY_LIBS_INSTALLED) 
 		message(STATUS "Installing artifactory packages to: ${LIBRARY_INSTALL_DIR}")
 		# Both HDILib and flann are available prebuilt in the lkeb-artifactory as combined Debug/Release packages
 		# lz4 is also available in the lkb-artifactory in separate Debug and |Release packages
@@ -177,7 +177,7 @@ if (USE_ARTIFACTORY_LIBS)
 	#		message(STATUS "${_variableName}=${${_variableName}}")
 	#endforeach()
 	message(STATUS "Include for faiss at ${faiss_INCLUDE_DIR} - version ${faiss_VERSION_STRING}")
-	set(ARTIFACTORY_LIBS_INSTALLED TRUE CACHE BOOL "Use the prebuilt libraries from artifactory" FORCE)
+	set(FAISS_ARTIFACTORY_LIBS_INSTALLED TRUE CACHE BOOL "Use the prebuilt libraries from artifactory" FORCE)
 	target_include_directories(${PROJECT} PRIVATE ${HDF5_INCLUDE_DIR})
 	message(status "faiss include ${faiss_INCLUDE_DIR}")
 else()    
