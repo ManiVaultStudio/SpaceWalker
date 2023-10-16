@@ -12,7 +12,7 @@
 #include <iomanip>
 #include <ctime>
 
-using namespace hdps;
+using namespace mv;
 
 void findPointsInRadius(Vector2f center, float radius, const DataMatrix& projMatrix, std::vector<int>& indices)
 {

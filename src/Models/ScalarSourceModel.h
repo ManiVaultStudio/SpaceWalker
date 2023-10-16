@@ -4,7 +4,7 @@
 
 #include <QAbstractListModel>
 
-using namespace hdps;
+using namespace mv;
 
 /**
  * Scalar source model class

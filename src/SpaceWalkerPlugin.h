@@ -34,7 +34,7 @@ class Clusters;
 class ScatterplotWidget;
 class ProjectionView;
 
-namespace hdps
+namespace mv
 {
     class CoreInterface;
     class Vector2f;

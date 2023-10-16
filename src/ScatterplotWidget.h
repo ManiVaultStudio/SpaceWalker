@@ -17,7 +17,7 @@
 #include <QMouseEvent>
 #include <QMenu>
 
-using namespace hdps;
+using namespace mv;
 using namespace mv::gui;
 using namespace mv::util;
 

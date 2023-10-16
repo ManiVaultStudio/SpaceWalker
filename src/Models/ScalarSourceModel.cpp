@@ -4,7 +4,7 @@
 #include <Application.h>
 #include <Set.h>
 
-using namespace hdps;
+using namespace mv;
 
 ScalarSourceModel::ScalarSourceModel(QObject* parent /*= nullptr*/) :
     QAbstractListModel(parent),

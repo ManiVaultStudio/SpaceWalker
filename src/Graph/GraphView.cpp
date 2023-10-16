@@ -2,8 +2,6 @@
 
 #include "Timer.h"
 
-#define mv hdps
-
 using namespace mv;
 
 namespace

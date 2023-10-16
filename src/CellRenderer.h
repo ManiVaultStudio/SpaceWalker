@@ -12,7 +12,7 @@
 
 #include <QRectF>
 
-namespace hdps
+namespace mv
 {
     namespace gui
     {
@@ -128,4 +128,4 @@ namespace hdps
 
     } // namespace gui
 
-} // namespace hdps
+} // namespace mv

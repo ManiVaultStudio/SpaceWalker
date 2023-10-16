@@ -48,7 +48,7 @@
 
 Q_PLUGIN_METADATA(IID "nl.biovault.SpaceWalkerPlugin")
 
-using namespace hdps;
+using namespace mv;
 using namespace mv::util;
 
 namespace

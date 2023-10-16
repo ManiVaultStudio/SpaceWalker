@@ -4,7 +4,7 @@
 
 #include <QDebug>
 
-namespace hdps
+namespace mv
 {
     namespace compute
     {

@@ -7,7 +7,7 @@
 
 #include <QMenu>
 
-using namespace hdps;
+using namespace mv;
 using namespace mv::gui;
 
 LoadedDatasetsAction::LoadedDatasetsAction(QObject* parent, const QString& title) :
