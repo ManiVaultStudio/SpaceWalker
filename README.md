@@ -1,4 +1,5 @@
 # SpaceWalker
+[![DOI](https://zenodo.org/badge/684539908.svg)](https://zenodo.org/doi/10.5281/zenodo.10017489)
 
 Here, we present SpaceWalker, an interactive visual analytics tool for exploration of large patches of Spatial Transcriptomic data. SpaceWalker consists of two key innovations: a real-time spatial exploration of the HD gene expression space, and a gradient gene detector for on-the-fly retrieval of locally varying genes from the full gene set. We complement this with a suite of user-defined visualization options to inspect and query the data, and to project analysis results on the spatial data.
 
