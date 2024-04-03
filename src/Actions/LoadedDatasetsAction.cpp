@@ -83,7 +83,7 @@ void LoadedDatasetsAction::fromVariantMap(const QVariantMap& variantMap)
     auto positionDataset = _positionDatasetPickerAction.getCurrentDataset();
     if (positionDataset.isValid())
     {
-        Dataset pickedDataset = core()->getDataManager().getSet(positionDataset.getDatasetId());
+        Dataset pickedDataset = mv::data().createDataset<Points>("Points", positionDataset.getDatasetId());
         _spaceWalkerPlugin->getPositionDataset() = pickedDataset;
     }
 
@@ -92,7 +92,7 @@ void LoadedDatasetsAction::fromVariantMap(const QVariantMap& variantMap)
     if (sliceDataset.isValid())
     {
         qDebug() << ">>>>> Found a slice dataset " << sliceDataset->getGuiName();
-        Dataset pickedDataset = core()->getDataManager().getSet(sliceDataset.getDatasetId());
+        Dataset pickedDataset = mv::data().createDataset<Clusters>("Cluster", sliceDataset.getDatasetId());
         _spaceWalkerPlugin->getSliceDataset() = pickedDataset;
     }
 
