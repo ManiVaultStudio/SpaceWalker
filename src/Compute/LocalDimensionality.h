@@ -6,7 +6,7 @@
 
 class KnnGraph;
 
-namespace hdps
+namespace mv
 {
     namespace compute
     {

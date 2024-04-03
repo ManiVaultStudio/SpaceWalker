@@ -6,7 +6,7 @@
 
 #include <QMenu>
 
-using namespace hdps::gui;
+using namespace mv::gui;
 
 SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     GroupAction(parent, title),
@@ -56,7 +56,7 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
 
     updateEnabled();
 
-    //_exportImageAction.setIcon(hdps::Application::getIconFont("FontAwesome").getIcon("camera"));
+    //_exportImageAction.setIcon(mv::Application::getIconFont("FontAwesome").getIcon("camera"));
     //_exportImageAction.setDefaultWidgetFlags(TriggerAction::Icon);
 
     connect(&_selectionAsMaskAction, &TriggerAction::triggered, this, [this]() {

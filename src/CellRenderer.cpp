@@ -6,7 +6,7 @@
 
 #include <QDebug>
 
-namespace hdps
+namespace mv
 {
     namespace gui
     {
@@ -328,7 +328,7 @@ namespace hdps
             _gpuPoints.destroy();
         }
 
-        hdps::Vector3f CellRenderer::getColorMapRange() const
+        mv::Vector3f CellRenderer::getColorMapRange() const
         {
             return _gpuPoints.getColorMapRange();
         }
@@ -340,4 +340,4 @@ namespace hdps
 
     } // namespace gui
 
-} // namespace hdps
+} // namespace mv

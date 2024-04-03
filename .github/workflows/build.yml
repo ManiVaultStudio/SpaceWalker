@@ -68,7 +68,7 @@ jobs:
       - name: Setup python version
         uses: actions/setup-python@v1
         with:
-          python-version: "3.7"
+          python-version: "3.11"
 
       - name: Start ssh key agent
         uses: webfactory/ssh-agent@v0.7.0

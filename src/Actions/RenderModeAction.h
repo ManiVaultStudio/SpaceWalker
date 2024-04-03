@@ -3,7 +3,7 @@
 #include <actions/OptionAction.h>
 #include <actions/ToggleAction.h>
 
-using namespace hdps::gui;
+using namespace mv::gui;
 
 class SpaceWalkerPlugin;
 
@@ -90,7 +90,7 @@ private:
     ToggleAction        _contourPlotAction;     /** Trigger action for activating the contour plot render mode */
     ToggleAction        _cellPlotAction;        /** Trigger action for activating the cell plot render mode */
 
-    friend class hdps::AbstractActionsManager;
+    friend class mv::AbstractActionsManager;
 };
 
 Q_DECLARE_METATYPE(RenderModeAction)

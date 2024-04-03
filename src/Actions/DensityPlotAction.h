@@ -4,7 +4,7 @@
 #include <actions/DecimalAction.h>
 #include <actions/ToggleAction.h>
 
-using namespace hdps::gui;
+using namespace mv::gui;
 
 class SpaceWalkerPlugin;
 
@@ -89,7 +89,7 @@ private:
     static constexpr bool DEFAULT_CONTINUOUS_UPDATES = true;
 
     friend class PlotAction;
-    friend class hdps::AbstractActionsManager;
+    friend class mv::AbstractActionsManager;
 };
 
 Q_DECLARE_METATYPE(DensityPlotAction)

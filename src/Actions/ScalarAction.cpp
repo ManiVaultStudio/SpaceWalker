@@ -4,7 +4,7 @@
 
 #include <QHBoxLayout>
 
-using namespace hdps::gui;
+using namespace mv::gui;
 
 ScalarAction::ScalarAction(QObject* parent, const QString& title, const float& minimum /*= 0.0f*/, const float& maximum /*= 100.0f*/, const float& value /*= 0.0f*/) :
     GroupAction(parent, title),

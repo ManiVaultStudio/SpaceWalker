@@ -7,7 +7,7 @@
 
 class SpaceWalkerPlugin;
 
-using namespace hdps::gui;
+using namespace mv::gui;
 
 /**
  * Plot action class
@@ -80,7 +80,7 @@ private:
     PointPlotAction     _pointPlotAction;       /** Point plot action */
     DensityPlotAction   _densityPlotAction;     /** Density plot action */
 
-    friend class hdps::AbstractActionsManager;
+    friend class mv::AbstractActionsManager;
 };
 
 Q_DECLARE_METATYPE(PlotAction)

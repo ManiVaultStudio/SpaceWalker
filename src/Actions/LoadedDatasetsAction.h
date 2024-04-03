@@ -4,7 +4,7 @@
 
 #include "actions/DatasetPickerAction.h"
 
-using namespace hdps::gui;
+using namespace mv::gui;
 
 class SpaceWalkerPlugin;
 
@@ -47,7 +47,7 @@ private:
     DatasetPickerAction     _colorDatasetPickerAction;
     DatasetPickerAction     _sliceDatasetPickerAction;
 
-    friend class hdps::AbstractActionsManager;
+    friend class mv::AbstractActionsManager;
 };
 
 Q_DECLARE_METATYPE(LoadedDatasetsAction)

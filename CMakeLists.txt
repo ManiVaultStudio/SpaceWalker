@@ -19,7 +19,12 @@ endif(MSVC)
 SET(faiss_VERSION "1.7.3" CACHE STRING "Version of faiss Library")
 SET_PROPERTY(CACHE faiss_VERSION PROPERTY STRINGS 1.73)
 
-file(TO_CMAKE_PATH $ENV{HDPS_INSTALL_DIR} INSTALL_DIR)
+# Check if the directory to the ManiVault installation has been provided
+if(NOT DEFINED MV_INSTALL_DIR)
+    set(MV_INSTALL_DIR "" CACHE PATH "Directory where ManiVault is installed")
+    message(FATAL_ERROR "Please set MV_INSTALL_DIR to the directory where ManiVault is installed")
+endif()
+file(TO_CMAKE_PATH ${MV_INSTALL_DIR} MV_INSTALL_DIR)
 
 find_package(Qt6 COMPONENTS Widgets WebEngineWidgets OpenGL OpenGLWidgets REQUIRED)
 
@@ -150,12 +155,12 @@ target_compile_definitions(${PROJECT} PRIVATE NOGDI)
 
 # Include directories, SYSTEM included to suppress warnings from external libraries
 target_include_directories(${PROJECT} PRIVATE ${PROJECT_SOURCE_DIR}/src)
-target_include_directories(${PROJECT} PRIVATE "${INSTALL_DIR}/$<CONFIGURATION>/include/")
+target_include_directories(${PROJECT} PRIVATE "${MV_INSTALL_DIR}/$<CONFIGURATION>/include/")
 
 include(InstallArtifactoryPackage)
 set(LIBRARY_INSTALL_DIR ${PROJECT_BINARY_DIR})
 if (USE_ARTIFACTORY_LIBS)
-	if (NOT ARTIFACTORY_LIBS_INSTALLED) 
+	if (NOT FAISS_ARTIFACTORY_LIBS_INSTALLED) 
 		message(STATUS "Installing artifactory packages to: ${LIBRARY_INSTALL_DIR}")
 		# Both HDILib and flann are available prebuilt in the lkeb-artifactory as combined Debug/Release packages
 		# lz4 is also available in the lkb-artifactory in separate Debug and |Release packages
@@ -172,7 +177,7 @@ if (USE_ARTIFACTORY_LIBS)
 	#		message(STATUS "${_variableName}=${${_variableName}}")
 	#endforeach()
 	message(STATUS "Include for faiss at ${faiss_INCLUDE_DIR} - version ${faiss_VERSION_STRING}")
-	set(ARTIFACTORY_LIBS_INSTALLED TRUE CACHE BOOL "Use the prebuilt libraries from artifactory" FORCE)
+	set(FAISS_ARTIFACTORY_LIBS_INSTALLED TRUE CACHE BOOL "Use the prebuilt libraries from artifactory" FORCE)
 	target_include_directories(${PROJECT} PRIVATE ${HDF5_INCLUDE_DIR})
 	message(status "faiss include ${faiss_INCLUDE_DIR}")
 else()    
@@ -187,13 +192,13 @@ target_include_directories(${PROJECT} SYSTEM PRIVATE ${PROJECT_SOURCE_DIR}/third
 
 target_compile_features(${PROJECT} PRIVATE cxx_std_17)
 
-set(HDPS_LINK_PATH "${INSTALL_DIR}/$<CONFIGURATION>/lib")
-set(PLUGIN_LINK_PATH "${INSTALL_DIR}/$<CONFIGURATION>/$<IF:$<CXX_COMPILER_ID:MSVC>,lib,Plugins>")
-set(HDPS_LINK_SUFFIX $<IF:$<CXX_COMPILER_ID:MSVC>,${CMAKE_LINK_LIBRARY_SUFFIX},${CMAKE_SHARED_LIBRARY_SUFFIX}>)
+set(MV_LINK_PATH "${MV_INSTALL_DIR}/$<CONFIGURATION>/lib")
+set(PLUGIN_LINK_PATH "${MV_INSTALL_DIR}/$<CONFIGURATION>/$<IF:$<CXX_COMPILER_ID:MSVC>,lib,Plugins>")
+set(MV_LINK_SUFFIX $<IF:$<CXX_COMPILER_ID:MSVC>,${CMAKE_LINK_LIBRARY_SUFFIX},${CMAKE_SHARED_LIBRARY_SUFFIX}>)
 
-set(HDPS_LINK_LIBRARY "${HDPS_LINK_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}HDPS_Public${HDPS_LINK_SUFFIX}")
-set(POINTDATA_LINK_LIBRARY "${PLUGIN_LINK_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}PointData${HDPS_LINK_SUFFIX}") 
-set(CLUSTERDATA_LINK_LIBRARY "${PLUGIN_LINK_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}ClusterData${HDPS_LINK_SUFFIX}") 
+set(MV_LINK_LIBRARY "${MV_LINK_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}MV_Public${MV_LINK_SUFFIX}")
+set(POINTDATA_LINK_LIBRARY "${PLUGIN_LINK_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}PointData${MV_LINK_SUFFIX}") 
+set(CLUSTERDATA_LINK_LIBRARY "${PLUGIN_LINK_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}ClusterData${MV_LINK_SUFFIX}") 
 
 message(STATUS "${MKL_LIBRARIES}")
 target_link_libraries(${PROJECT} PRIVATE Qt6::Widgets)
@@ -209,7 +214,7 @@ else()
     target_link_libraries(${PROJECT} PRIVATE ${PROJECT_SOURCE_DIR}/thirdparty/MKL/lib/mkl_intel_thread_dll.lib)
 endif()
 
-target_link_libraries(${PROJECT} PRIVATE "${HDPS_LINK_LIBRARY}")
+target_link_libraries(${PROJECT} PRIVATE "${MV_LINK_LIBRARY}")
 target_link_libraries(${PROJECT} PRIVATE "${POINTDATA_LINK_LIBRARY}")
 target_link_libraries(${PROJECT} PRIVATE "${CLUSTERDATA_LINK_LIBRARY}")
 
@@ -233,22 +238,22 @@ add_custom_command(TARGET ${PROJECT} POST_BUILD
     COMMAND "${CMAKE_COMMAND}"
         --install ${CMAKE_CURRENT_BINARY_DIR}
         --config $<CONFIGURATION>
-        --prefix ${INSTALL_DIR}/$<CONFIGURATION>
+        --prefix ${MV_INSTALL_DIR}/$<CONFIGURATION>
 )
 
 # Copy faiss DLLs
 add_custom_command(TARGET ${PROJECT} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
         "${PROJECT_SOURCE_DIR}/thirdparty/faiss/bin/"
-        ${INSTALL_DIR}/$<CONFIGURATION>)
+        ${MV_INSTALL_DIR}/$<CONFIGURATION>)
         
 add_custom_command(TARGET ${PROJECT} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
         "${PROJECT_SOURCE_DIR}/thirdparty/MKL/bin"
-        ${INSTALL_DIR}/$<CONFIGURATION>)
+        ${MV_INSTALL_DIR}/$<CONFIGURATION>)
 
 # Automatically set the debug environment (command + working directory) for MSVC
 if(MSVC)
-    set_property(TARGET ${PROJECT} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY $<IF:$<CONFIG:DEBUG>,${INSTALL_DIR}/debug,${INSTALL_DIR}/release>)
-    set_property(TARGET ${PROJECT} PROPERTY VS_DEBUGGER_COMMAND $<IF:$<CONFIG:DEBUG>,${INSTALL_DIR}/debug/HDPS.exe,${INSTALL_DIR}/release/HDPS.exe>)
+    set_property(TARGET ${PROJECT} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY $<IF:$<CONFIG:DEBUG>,${MV_INSTALL_DIR}/debug,${MV_INSTALL_DIR}/release>)
+    set_property(TARGET ${PROJECT} PROPERTY VS_DEBUGGER_COMMAND $<IF:$<CONFIG:DEBUG>,"${MV_INSTALL_DIR}/debug/ManiVault Studio.exe","${MV_INSTALL_DIR}/release/ManiVault Studio.exe">)
 endif()

@@ -8,7 +8,7 @@
 std::default_random_engine generator;
 std::uniform_real_distribution<float> distribution(0, 1);
 
-namespace hdps
+namespace mv
 {
     namespace compute
     {

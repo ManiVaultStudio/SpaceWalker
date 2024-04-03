@@ -102,7 +102,7 @@ void SpaceWalkerPlugin::notifyNewSelectedPoint()
 
 void SpaceWalkerPlugin::mousePositionChanged(Vector2f mousePos)
 {
-    hdps::Bounds bounds = _scatterPlotWidget->getBounds();
+    mv::Bounds bounds = _scatterPlotWidget->getBounds();
 
     // Loop over either all points or only the masked points and establish whether they are selected or not
     std::vector<int> full(_dataStore.getNumPoints());

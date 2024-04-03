@@ -7,7 +7,7 @@
 #include <QHBoxLayout>
 #include <QLabel>
 
-using namespace hdps::gui;
+using namespace mv::gui;
 
 /**
  * Position action class
@@ -80,7 +80,7 @@ private:
     DimensionPickerAction    _xDimensionPickerAction;   /** X-dimension picker action */
     DimensionPickerAction    _yDimensionPickerAction;   /** Y-dimension picker action */
 
-    friend class hdps::AbstractActionsManager;
+    friend class mv::AbstractActionsManager;
 };
 
 Q_DECLARE_METATYPE(PositionAction)

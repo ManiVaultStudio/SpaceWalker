@@ -17,7 +17,7 @@ FilterAction::FilterAction(QObject* parent, const QString& title) :
     _hdInnerFilterSizeAction(this, "HD Inner Filter Size", 1, 10, 5)
     //_hdOuterFilterSizeAction(this, "HD Outer Filter Size", 2, 10, 10)
 {
-    setIcon(hdps::Application::getIconFont("FontAwesome").getIcon("bullseye"));
+    setIcon(mv::Application::getIconFont("FontAwesome").getIcon("bullseye"));
 
     setConfigurationFlag(WidgetAction::ConfigurationFlag::ForceCollapsedInGroup);
 }

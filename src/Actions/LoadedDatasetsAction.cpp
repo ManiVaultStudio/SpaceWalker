@@ -7,8 +7,8 @@
 
 #include <QMenu>
 
-using namespace hdps;
-using namespace hdps::gui;
+using namespace mv;
+using namespace mv::gui;
 
 LoadedDatasetsAction::LoadedDatasetsAction(QObject* parent, const QString& title) :
     VerticalGroupAction(parent, "Loaded datasets"),
@@ -16,10 +16,10 @@ LoadedDatasetsAction::LoadedDatasetsAction(QObject* parent, const QString& title
     _colorDatasetPickerAction(this, "Color"),
     _sliceDatasetPickerAction(this, "Cluster")
 {
-    setIcon(hdps::Application::getIconFont("FontAwesome").getIcon("database"));
+    setIcon(mv::Application::getIconFont("FontAwesome").getIcon("database"));
     setToolTip("Manage loaded datasets for position and/or color");
 
-    _positionDatasetPickerAction.setDatasetsFilterFunction([](const hdps::Datasets& datasets) -> Datasets {
+    _positionDatasetPickerAction.setDatasetsFilterFunction([](const mv::Datasets& datasets) -> Datasets {
         Datasets pointDatasets;
 
         for (auto dataset : datasets)
@@ -29,7 +29,7 @@ LoadedDatasetsAction::LoadedDatasetsAction(QObject* parent, const QString& title
         return pointDatasets;
     });
 
-    _colorDatasetPickerAction.setDatasetsFilterFunction([](const hdps::Datasets& datasets) -> Datasets {
+    _colorDatasetPickerAction.setDatasetsFilterFunction([](const mv::Datasets& datasets) -> Datasets {
         Datasets colorDatasets;
 
         for (auto dataset : datasets)
@@ -83,7 +83,7 @@ void LoadedDatasetsAction::fromVariantMap(const QVariantMap& variantMap)
     auto positionDataset = _positionDatasetPickerAction.getCurrentDataset();
     if (positionDataset.isValid())
     {
-        Dataset pickedDataset = core()->getDataManager().getSet(positionDataset.getDatasetId());
+        Dataset pickedDataset = mv::data().createDataset<Points>("Points", positionDataset.getDatasetId());
         _spaceWalkerPlugin->getPositionDataset() = pickedDataset;
     }
 
@@ -92,7 +92,7 @@ void LoadedDatasetsAction::fromVariantMap(const QVariantMap& variantMap)
     if (sliceDataset.isValid())
     {
         qDebug() << ">>>>> Found a slice dataset " << sliceDataset->getGuiName();
-        Dataset pickedDataset = core()->getDataManager().getSet(sliceDataset.getDatasetId());
+        Dataset pickedDataset = mv::data().createDataset<Clusters>("Cluster", sliceDataset.getDatasetId());
         _spaceWalkerPlugin->getSliceDataset() = pickedDataset;
     }
 

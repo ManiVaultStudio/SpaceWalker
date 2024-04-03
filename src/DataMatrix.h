@@ -9,6 +9,6 @@
 
 using DataMatrix = Eigen::Matrix<float, -1, -1, Eigen::ColMajor>;
 
-void convertToEigenMatrix(hdps::Dataset<Points> dataset, hdps::Dataset<Points> sourceDataset, DataMatrix& dataMatrix);
+void convertToEigenMatrix(mv::Dataset<Points> dataset, mv::Dataset<Points> sourceDataset, DataMatrix& dataMatrix);
 
-void convertToEigenMatrixProjection(hdps::Dataset<Points> dataset, DataMatrix& dataMatrix);
+void convertToEigenMatrixProjection(mv::Dataset<Points> dataset, DataMatrix& dataMatrix);

@@ -284,10 +284,10 @@ void ProjectionView::paintGL()
     }
     catch (std::exception& e)
     {
-        hdps::util::exceptionMessageBox("Rendering failed", e);
+        mv::util::exceptionMessageBox("Rendering failed", e);
     }
     catch (...) {
-        hdps::util::exceptionMessageBox("Rendering failed");
+        mv::util::exceptionMessageBox("Rendering failed");
     }
 }
 

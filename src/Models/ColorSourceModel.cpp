@@ -4,7 +4,7 @@
 #include <Application.h>
 #include <Set.h>
 
-using namespace hdps;
+using namespace mv;
 
 ColorSourceModel::ColorSourceModel(QObject* parent /*= nullptr*/) :
     QAbstractListModel(parent),

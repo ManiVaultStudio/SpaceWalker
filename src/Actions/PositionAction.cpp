@@ -3,14 +3,14 @@
 
 #include <QMenu>
 
-using namespace hdps::gui;
+using namespace mv::gui;
 
 PositionAction::PositionAction(QObject* parent, const QString& title) :
     VerticalGroupAction(parent, title),
     _xDimensionPickerAction(this, "X"),
     _yDimensionPickerAction(this, "Y")
 {
-    setIcon(hdps::Application::getIconFont("FontAwesome").getIcon("ruler-combined"));
+    setIcon(mv::Application::getIconFont("FontAwesome").getIcon("ruler-combined"));
     setLabelSizingType(LabelSizingType::Auto);
 
     addAction(&_xDimensionPickerAction);

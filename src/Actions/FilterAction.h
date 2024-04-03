@@ -7,7 +7,7 @@
 #include <actions/DecimalAction.h>
 #include <actions/IntegralAction.h>
 
-using namespace hdps::gui;
+using namespace mv::gui;
 
 class SpaceWalkerPlugin;
 

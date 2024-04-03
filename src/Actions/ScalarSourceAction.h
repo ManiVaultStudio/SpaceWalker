@@ -7,7 +7,7 @@
 
 #include "Models/ScalarSourceModel.h"
 
-using namespace hdps::gui;
+using namespace mv::gui;
 
 /**
  * Scalar source action class
@@ -89,7 +89,7 @@ private:
     DecimalAction           _offsetAction;              /** Scalar source offset action */
     DecimalRangeAction      _rangeAction;               /** Range action */
 
-    friend class hdps::AbstractActionsManager;
+    friend class mv::AbstractActionsManager;
 };
 
 Q_DECLARE_METATYPE(ScalarSourceAction)

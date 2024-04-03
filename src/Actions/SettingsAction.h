@@ -13,7 +13,7 @@
 #include "OverlayAction.h"
 #include "ExportAction.h"
 
-using namespace hdps::gui;
+using namespace mv::gui;
 
 class SpaceWalkerPlugin;
 
