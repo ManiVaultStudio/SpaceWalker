@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+using namespace utils;
+
 void Timer::start()
 {
     _timePoints.push_back(std::chrono::high_resolution_clock::now());

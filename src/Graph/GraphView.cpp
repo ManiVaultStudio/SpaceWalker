@@ -36,7 +36,7 @@ void GraphView::setTopDimensions(int d1, int d2)
 
 void GraphView::setBins(const std::vector<std::vector<int>>& bins)
 {
-    Timer timer;
+    utils::Timer timer;
     timer.start();
 
     Q_ASSERT(!bins.empty());

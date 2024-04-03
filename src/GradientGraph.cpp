@@ -148,7 +148,7 @@ void GradientGraph::setValues(const std::vector<std::vector<float>>& values)
 
 void GradientGraph::setBins(const std::vector<std::vector<int>>& bins)
 {
-    Timer timer;
+    util::Timer timer;
     timer.start();
 
     // Store values in a QList<QPointF>

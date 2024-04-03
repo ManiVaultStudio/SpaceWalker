@@ -4,6 +4,8 @@
 #include <vector>
 #include <string>
 
+namespace utils {
+
 class Timer
 {
 public:
@@ -15,3 +17,5 @@ private:
     std::vector<vec_time_type> _timePoints;
     std::vector<std::string> _names;
 };
+
+}
