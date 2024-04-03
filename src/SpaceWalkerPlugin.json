@@ -1,5 +1,5 @@
 {
     "name" : "SpaceWalker View",
-    "version" : "1",
+    "version" : "0.2",
     "dependencies" : ["Points"]
 }
