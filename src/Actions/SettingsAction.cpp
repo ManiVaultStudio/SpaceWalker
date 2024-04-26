@@ -1,6 +1,6 @@
 #include "SettingsAction.h"
 
-#include "GradientExplorerPlugin.h"
+#include "SpaceWalkerPlugin.h"
 #include "Widgets/MainView.h"
 #include "PointData/PointData.h"
 
@@ -10,7 +10,7 @@ using namespace mv::gui;
 
 SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     GroupAction(parent, title),
-    _plugin(dynamic_cast<GradientExplorerPlugin*>(parent)),
+    _plugin(dynamic_cast<SpaceWalkerPlugin*>(parent)),
     _currentDatasetAction(this, "Current dataset"),
     _renderModeAction(this, "Render Mode"),
     _positionAction(this, "Position"),

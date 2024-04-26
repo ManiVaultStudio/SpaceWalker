@@ -9,7 +9,7 @@
 
 using namespace mv::gui;
 
-class GradientExplorerPlugin;
+class SpaceWalkerPlugin;
 
 class FilterAction : public WidgetAction
 {
@@ -29,7 +29,7 @@ protected: // Widget
 public:
     Q_INVOKABLE FilterAction(QObject* parent, const QString& title);
 
-    void initialize(GradientExplorerPlugin* scatterplotPlugin);
+    void initialize(SpaceWalkerPlugin* scatterplotPlugin);
 
     QMenu* getContextMenu();
 
@@ -66,7 +66,7 @@ public: // Action getters
     //IntegralAction& getHDOuterFilterSizeAction() { return _hdOuterFilterSizeAction; }
 
 protected:
-    GradientExplorerPlugin* _plugin;             /** Pointer to scatterplot plugin */
+    SpaceWalkerPlugin* _plugin;             /** Pointer to scatterplot plugin */
     TriggerAction           _spatialPeakFilterAction;
     TriggerAction           _hdPeakFilterAction;
 

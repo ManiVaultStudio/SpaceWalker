@@ -6,7 +6,7 @@
 
 using namespace mv::gui;
 
-class GradientExplorerPlugin;
+class SpaceWalkerPlugin;
 
 class ExportAction : public WidgetAction
 {
@@ -26,7 +26,7 @@ protected: // Widget
 public:
     Q_INVOKABLE ExportAction(QObject* parent, const QString& title);
 
-    void initialize(GradientExplorerPlugin* scatterplotPlugin);
+    void initialize(SpaceWalkerPlugin* scatterplotPlugin);
 
     QMenu* getContextMenu();
 

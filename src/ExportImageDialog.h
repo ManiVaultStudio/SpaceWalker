@@ -4,7 +4,7 @@
 
 #include <QDialog>
 
-class GradientExplorerPlugin;
+class SpaceWalkerPlugin;
 
 /**
  * Export image dialog class
@@ -22,7 +22,7 @@ public:
      * @param parent Pointer to parent widget
      * @param scatterplotPlugin Reference to scatterplot plugin
      */
-    ExportImageDialog(QWidget* parent, GradientExplorerPlugin& scatterplotPlugin);
+    ExportImageDialog(QWidget* parent, SpaceWalkerPlugin& scatterplotPlugin);
 
     /** Get preferred size */
     QSize sizeHint() const override {
@@ -35,6 +35,6 @@ public:
     }
 
 protected:
-    GradientExplorerPlugin& _plugin;                /** Reference to scatterplot plugin */
+    SpaceWalkerPlugin& _plugin;                /** Reference to scatterplot plugin */
     ExportImageAction       _exportImageAction;     /** Export to image action */
 };

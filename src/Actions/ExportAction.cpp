@@ -1,6 +1,6 @@
 #include "ExportAction.h"
 
-#include "GradientExplorerPlugin.h"
+#include "SpaceWalkerPlugin.h"
 #include "Widgets/MainView.h"
 
 #include <QMenu>
@@ -19,7 +19,7 @@ ExportAction::ExportAction(QObject* parent, const QString& title) :
     setConfigurationFlag(WidgetAction::ConfigurationFlag::ForceCollapsedInGroup);
 }
 
-void ExportAction::initialize(GradientExplorerPlugin* scatterplotPlugin)
+void ExportAction::initialize(SpaceWalkerPlugin* scatterplotPlugin)
 {
     connect(&_exportRankingsAction, &TriggerAction::triggered, this, [scatterplotPlugin]() {
         scatterplotPlugin->exportDimRankings();

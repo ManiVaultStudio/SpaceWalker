@@ -1,5 +1,5 @@
 #include "ExportImageAction.h"
-#include "GradientExplorerPlugin.h"
+#include "SpaceWalkerPlugin.h"
 #include "Widgets/MainView.h"
 
 const QMap<ExportImageAction::Scale, TriggersAction::Trigger> ExportImageAction::triggers = QMap<ExportImageAction::Scale, TriggersAction::Trigger>({
@@ -68,7 +68,7 @@ ExportImageAction::ExportImageAction(QObject* parent, const QString& title) :
     _targetHeightAction.setSuffix("px");
 }
 
-void ExportImageAction::initialize(GradientExplorerPlugin* scatterplotPlugin)
+void ExportImageAction::initialize(SpaceWalkerPlugin* scatterplotPlugin)
 {
     Q_ASSERT(scatterplotPlugin != nullptr);
 

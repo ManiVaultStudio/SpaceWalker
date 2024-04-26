@@ -1,5 +1,5 @@
 #include "PositionAction.h"
-#include "GradientExplorerPlugin.h"
+#include "SpaceWalkerPlugin.h"
 
 #include <QMenu>
 
@@ -19,7 +19,7 @@ PositionAction::PositionAction(QObject* parent, const QString& title) :
     _xDimensionPickerAction.setToolTip("X dimension");
     _yDimensionPickerAction.setToolTip("Y dimension");
 
-    auto scatterplotPlugin = dynamic_cast<GradientExplorerPlugin*>(parent->parent());
+    auto scatterplotPlugin = dynamic_cast<SpaceWalkerPlugin*>(parent->parent());
 
     if (scatterplotPlugin == nullptr)
         return;

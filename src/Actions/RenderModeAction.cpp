@@ -1,5 +1,5 @@
 #include "RenderModeAction.h"
-#include "GradientExplorerPlugin.h"
+#include "SpaceWalkerPlugin.h"
 #include "Widgets/MainView.h"
 
 using namespace mv::gui;
@@ -37,7 +37,7 @@ RenderModeAction::RenderModeAction(QObject* parent, const QString& title) :
     _cellPlotAction.setToolTip("Set render mode to cell plot (V)");
 }
 
-void RenderModeAction::initialize(GradientExplorerPlugin* scatterplotPlugin)
+void RenderModeAction::initialize(SpaceWalkerPlugin* scatterplotPlugin)
 {
     Q_ASSERT(scatterplotPlugin != nullptr);
 

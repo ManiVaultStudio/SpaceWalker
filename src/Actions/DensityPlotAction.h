@@ -6,7 +6,7 @@
 
 using namespace mv::gui;
 
-class GradientExplorerPlugin;
+class SpaceWalkerPlugin;
 
 /**
  * Density plot action class
@@ -32,7 +32,7 @@ public:
      * Initialize the selection action with \p scatterplotPlugin
      * @param scatterplotPlugin Pointer to scatterplot plugin
      */
-    void initialize(GradientExplorerPlugin* scatterplotPlugin);
+    void initialize(SpaceWalkerPlugin* scatterplotPlugin);
 
     /**
      * Get action context menu
@@ -81,7 +81,7 @@ public: // Action getters
     ToggleAction& getContinuousUpdatesAction() { return _continuousUpdatesAction; }
 
 private:
-    GradientExplorerPlugin* _plugin;                    /** Pointer to scatterplot plugin */
+    SpaceWalkerPlugin* _plugin;                    /** Pointer to scatterplot plugin */
     DecimalAction           _sigmaAction;               /** Density sigma action */
     ToggleAction            _continuousUpdatesAction;   /** Live updates action */
 

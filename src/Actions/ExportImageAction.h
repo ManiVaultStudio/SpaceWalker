@@ -15,7 +15,7 @@
 
 using namespace mv::gui;
 
-class GradientExplorerPlugin;
+class SpaceWalkerPlugin;
 
 /**
  * Export action class
@@ -58,7 +58,7 @@ public:
      * Initialize the selection action with \p scatterplotPlugin
      * @param scatterplotPlugin Pointer to scatterplot plugin
      */
-    void initialize(GradientExplorerPlugin* scatterplotPlugin);
+    void initialize(SpaceWalkerPlugin* scatterplotPlugin);
 
     /** Grab target size from scatter plot widget */
     void initializeTargetSize();
@@ -114,7 +114,7 @@ public: // Action getters
     TriggersAction& getExportCancelAction() { return _exportCancelAction; }
 
 private:
-    GradientExplorerPlugin*     _plugin;                        /** Pointer to scatterplot plugin */
+    SpaceWalkerPlugin*     _plugin;                        /** Pointer to scatterplot plugin */
     DimensionsPickerAction      _dimensionSelectionAction;      /** Dimension selection picker action */
     IntegralAction              _targetWidthAction;             /** Screenshot target width action */
     IntegralAction              _targetHeightAction;            /** Screenshot target height action */

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.17)
 
-set(PROJECT "GradientExplorer")
+set(PROJECT "SpaceWalker")
 
 PROJECT(${PROJECT})
 
@@ -29,8 +29,8 @@ file(TO_CMAKE_PATH ${MV_INSTALL_DIR} MV_INSTALL_DIR)
 find_package(Qt6 COMPONENTS Widgets WebEngineWidgets OpenGL OpenGLWidgets REQUIRED)
 
 set(PLUGIN
-    src/GradientExplorerPlugin.h
-    src/GradientExplorerPlugin.cpp
+    src/SpaceWalkerPlugin.h
+    src/SpaceWalkerPlugin.cpp
     src/PluginMouseListener.cpp
     src/Timer.h
     src/Timer.cpp
@@ -137,7 +137,7 @@ set(SHADERS
 
 set(AUX
     res/Resources.qrc
-    src/GradientExplorerPlugin.json
+    src/SpaceWalkerPlugin.json
 )
 
 set(SOURCES ${PLUGIN} ${UI} ${Actions} ${Models} ${Compute} ${IO})

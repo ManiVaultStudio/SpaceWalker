@@ -8,7 +8,7 @@
 
 using namespace mv::gui;
 
-class GradientExplorerPlugin;
+class SpaceWalkerPlugin;
 
 class OverlayAction : public WidgetAction
 {
@@ -28,7 +28,7 @@ protected: // Widget
 public:
     Q_INVOKABLE OverlayAction(QObject* parent, const QString& title);
 
-    void initialize(GradientExplorerPlugin* scatterplotPlugin);
+    void initialize(SpaceWalkerPlugin* scatterplotPlugin);
 
     QMenu* getContextMenu();
 
@@ -64,7 +64,7 @@ public: // Action getters
     //GroupAction& getOverlayGroupAction() { return _overlayGroupAction; }
 
 private:
-    GradientExplorerPlugin* _plugin;             /** Pointer to scatterplot plugin */
+    SpaceWalkerPlugin* _plugin;             /** Pointer to scatterplot plugin */
     TriggerAction           _computeKnnGraphAction;
 
     IntegralAction          _floodDecimal;

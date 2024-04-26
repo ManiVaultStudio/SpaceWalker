@@ -1,6 +1,6 @@
 #include "ScalarAction.h"
 #include "Models/ScalarSourceModel.h"
-#include "GradientExplorerPlugin.h"
+#include "SpaceWalkerPlugin.h"
 
 #include <QHBoxLayout>
 

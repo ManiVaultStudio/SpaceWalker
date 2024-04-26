@@ -15,7 +15,7 @@
 
 using namespace mv::gui;
 
-class GradientExplorerPlugin;
+class SpaceWalkerPlugin;
 
 class SettingsAction : public GroupAction
 {
@@ -63,7 +63,7 @@ public: // Action getters
     TriggerAction& getClearMaskAction() { return _clearMaskAction; }
 
 protected:
-    GradientExplorerPlugin*     _plugin;                    /** Pointer to scatter plot plugin */
+    SpaceWalkerPlugin*     _plugin;                    /** Pointer to scatter plot plugin */
     LoadedDatasetsAction        _currentDatasetAction;
     RenderModeAction            _renderModeAction;          /** Action for configuring render mode */
     PositionAction              _positionAction;            /** Action for configuring point positions */

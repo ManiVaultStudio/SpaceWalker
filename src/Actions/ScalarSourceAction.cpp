@@ -1,5 +1,5 @@
 #include "ScalarSourceAction.h"
-#include "GradientExplorerPlugin.h"
+#include "SpaceWalkerPlugin.h"
 
 #include <PointData/PointData.h>
 

@@ -1,5 +1,5 @@
 #include "LoadedDatasetsAction.h"
-#include "GradientExplorerPlugin.h"
+#include "SpaceWalkerPlugin.h"
 
 #include "PointData/PointData.h"
 #include "ColorData/ColorData.h"
@@ -37,7 +37,7 @@ LoadedDatasetsAction::LoadedDatasetsAction(QObject* parent, const QString& title
     //});
 }
 
-void LoadedDatasetsAction::initialize(GradientExplorerPlugin* scatterplotPlugin)
+void LoadedDatasetsAction::initialize(SpaceWalkerPlugin* scatterplotPlugin)
 {
     Q_ASSERT(scatterplotPlugin != nullptr);
 

@@ -45,13 +45,13 @@ enum class OverlayType
     DIRECTIONS
 };
 
-class GradientExplorerPlugin : public ViewPlugin
+class SpaceWalkerPlugin : public ViewPlugin
 {
     Q_OBJECT
     
 public:
-    GradientExplorerPlugin(const PluginFactory* factory);
-    ~GradientExplorerPlugin() override;
+    SpaceWalkerPlugin(const PluginFactory* factory);
+    ~SpaceWalkerPlugin() override;
 
     bool isDataInitialized() { return _dataInitialized; }
 
@@ -264,16 +264,16 @@ private:
 // Factory
 // =============================================================================
 
-class GradientExplorerPluginFactory : public ViewPluginFactory
+class SpaceWalkerPluginFactory : public ViewPluginFactory
 {
     Q_INTERFACES(mv::plugin::ViewPluginFactory mv::plugin::PluginFactory)
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID   "nl.biovault.GradientExplorerPlugin"
-                      FILE  "GradientExplorerPlugin.json")
+    Q_PLUGIN_METADATA(IID   "nl.biovault.SpaceWalkerPlugin"
+                      FILE  "SpaceWalkerPlugin.json")
     
 public:
-    GradientExplorerPluginFactory(void) {}
-    ~GradientExplorerPluginFactory(void) override {}
+    SpaceWalkerPluginFactory(void) {}
+    ~SpaceWalkerPluginFactory(void) override {}
 
     /**
      * Get plugin icon

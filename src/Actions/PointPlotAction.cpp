@@ -1,6 +1,6 @@
 #include "PointPlotAction.h"
 #include "ScalarSourceAction.h"
-#include "GradientExplorerPlugin.h"
+#include "SpaceWalkerPlugin.h"
 #include "Widgets/MainView.h"
 #include "Widgets/ProjectionView.h"
 
@@ -111,7 +111,7 @@ PointPlotAction::PointPlotAction(QObject* parent, const QString& title) :
     });
 }
 
-void PointPlotAction::initialize(GradientExplorerPlugin* scatterplotPlugin)
+void PointPlotAction::initialize(SpaceWalkerPlugin* scatterplotPlugin)
 {
     Q_ASSERT(scatterplotPlugin != nullptr);
 

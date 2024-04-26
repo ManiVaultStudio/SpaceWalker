@@ -1,4 +1,4 @@
-#include "GradientExplorerPlugin.h"
+#include "SpaceWalkerPlugin.h"
 #include "Widgets/MainView.h"
 #include "Widgets/ProjectionView.h"
 #include "DataHierarchyItem.h"
@@ -39,7 +39,7 @@
 #include <iostream>
 #include <chrono>
 
-Q_PLUGIN_METADATA(IID "nl.biovault.GradientExplorerPlugin")
+Q_PLUGIN_METADATA(IID "nl.biovault.SpaceWalkerPlugin")
 
 using namespace mv;
 using namespace mv::util;
@@ -73,7 +73,7 @@ namespace
     }
 }
 
-GradientExplorerPlugin::GradientExplorerPlugin(const PluginFactory* factory) :
+SpaceWalkerPlugin::SpaceWalkerPlugin(const PluginFactory* factory) :
     ViewPlugin(factory),
     _positionDataset(),
     _positionSourceDataset(),
@@ -85,7 +85,7 @@ GradientExplorerPlugin::GradientExplorerPlugin(const PluginFactory* factory) :
     _overlayType(OverlayType::NONE),
     _graphTimer(new QTimer(this))
 {
-    setObjectName("GradientExplorer");
+    setObjectName("SpaceWalker");
 
     getWidget().setFocusPolicy(Qt::ClickFocus);
 
@@ -105,9 +105,9 @@ GradientExplorerPlugin::GradientExplorerPlugin(const PluginFactory* factory) :
     connect(getUI().getProjectionViews()[1], &ProjectionView::initialized, this, [this]() {getUI().getProjectionViews()[1]->setColorMap(getUI().getColorMapAction().getColorMapImage().mirrored(false, true)); });
     connect(&getUI().getSelectedView(), &ProjectionView::initialized, this, [this]() {getUI().getSelectedView().setColorMap(getUI().getColorMapAction().getColorMapImage().mirrored(false, true)); });
 
-    connect(_graphView, &GraphView::lineClicked, this, &GradientExplorerPlugin::onLineClicked);
+    connect(_graphView, &GraphView::lineClicked, this, &SpaceWalkerPlugin::onLineClicked);
     _graphTimer->setSingleShot(true);
-    connect(_graphTimer, &QTimer::timeout, this, &GradientExplorerPlugin::computeGraphs);
+    connect(_graphTimer, &QTimer::timeout, this, &SpaceWalkerPlugin::computeGraphs);
 
     connect(&getUI().getMainView(), &MainView::customContextMenuRequested, this, [this](const QPoint& point) {
         if (!_positionDataset.isValid())
@@ -228,12 +228,12 @@ GradientExplorerPlugin::GradientExplorerPlugin(const PluginFactory* factory) :
     getUI().getMainView().installEventFilter(this);
 }
 
-GradientExplorerPlugin::~GradientExplorerPlugin()
+SpaceWalkerPlugin::~SpaceWalkerPlugin()
 {
 
 }
 
-void GradientExplorerPlugin::init()
+void SpaceWalkerPlugin::init()
 {
     auto layout = new QVBoxLayout();
     auto gradientViewLayout = new QVBoxLayout();
@@ -294,7 +294,7 @@ void GradientExplorerPlugin::init()
 
     //_eventListener.setEventCore(Application::core());
     _eventListener.addSupportedEventType(static_cast<std::uint32_t>(EventType::DatasetDataSelectionChanged));
-    _eventListener.registerDataEventByType(PointType, std::bind(&GradientExplorerPlugin::onDataEvent, this, std::placeholders::_1));
+    _eventListener.registerDataEventByType(PointType, std::bind(&SpaceWalkerPlugin::onDataEvent, this, std::placeholders::_1));
 
     // Load points when the pointer to the position dataset changes
     //connect(&_positionDataset, &Dataset<Points>::changed, this, &ScatterplotPlugin::positionDatasetChanged);
@@ -303,7 +303,7 @@ void GradientExplorerPlugin::init()
     //connect(&_positionDataset, &Dataset<Points>::dataChanged, this, &ScatterplotPlugin::updateData);
 
     // Update point selection when the position dataset data changes
-    connect(&_positionDataset, &Dataset<Points>::dataSelectionChanged, this, &GradientExplorerPlugin::updateSelection);
+    connect(&_positionDataset, &Dataset<Points>::dataSelectionChanged, this, &SpaceWalkerPlugin::updateSelection);
 
     // Update the window title when the GUI name of the position dataset changes
     //connect(&_positionDataset, &Dataset<Points>::datasetTextChanged, this, &ScatterplotPlugin::updateWindowTitle);
@@ -312,7 +312,7 @@ void GradientExplorerPlugin::init()
     updateWindowTitle();
 }
 
-void GradientExplorerPlugin::resetState()
+void SpaceWalkerPlugin::resetState()
 {
     _dataStore = DataStorage();
 
@@ -375,7 +375,7 @@ void GradientExplorerPlugin::resetState()
     _overlayType = OverlayType::NONE;
 }
 
-void GradientExplorerPlugin::positionDatasetChanged()
+void SpaceWalkerPlugin::positionDatasetChanged()
 {
     // Only proceed if we have a valid position dataset
     if (!_positionDataset.isValid())
@@ -447,7 +447,7 @@ void GradientExplorerPlugin::positionDatasetChanged()
     _dataInitialized = true;
 }
 
-void GradientExplorerPlugin::updateWindowTitle()
+void SpaceWalkerPlugin::updateWindowTitle()
 {
     if (!_positionDataset.isValid())
         getWidget().setWindowTitle(getGuiName());
@@ -455,7 +455,7 @@ void GradientExplorerPlugin::updateWindowTitle()
         getWidget().setWindowTitle(QString("%1: %2").arg(getGuiName(), _positionDataset->getDataHierarchyItem().getLocation()));
 }
 
-void GradientExplorerPlugin::computeStaticData()
+void SpaceWalkerPlugin::computeStaticData()
 {
     // Make sure the position dataset is valid
     if (!_positionDataset.isValid())
@@ -547,7 +547,7 @@ void GradientExplorerPlugin::computeStaticData()
 }
 
 // Is called when the x, y dimensions chosen by the user change, as well as once when dropping new data into the view
-void GradientExplorerPlugin::updateProjectionData()
+void SpaceWalkerPlugin::updateProjectionData()
 {
     // Check if the scatter plot is initialized, if not, don't do anything
     if (!getUI().getMainView().isInitialized())
@@ -585,7 +585,7 @@ void GradientExplorerPlugin::updateProjectionData()
     std::cout << "Projection size: " << _dataStore.getProjectionSize() << std::endl;
 }
 
-void GradientExplorerPlugin::updateViewData(std::vector<Vector2f>& positions)
+void SpaceWalkerPlugin::updateViewData(std::vector<Vector2f>& positions)
 {
     // TODO: Can save some time here only computing data bounds once
     // Pass the 2D points to the scatter plot widget
@@ -595,7 +595,7 @@ void GradientExplorerPlugin::updateViewData(std::vector<Vector2f>& positions)
     getUI().getSelectedView().setData(&positions);
 }
 
-void GradientExplorerPlugin::updateColorMapActionScalarRange()
+void SpaceWalkerPlugin::updateColorMapActionScalarRange()
 {
     // Get the color map range from the scatter plot widget
     const auto colorMapRange = getUI().getMainView().getColorMapRange();
@@ -609,7 +609,7 @@ void GradientExplorerPlugin::updateColorMapActionScalarRange()
     getUI().getColorMapAction().getDataRangeAction(ColorMapAction::Axis::X).setRange({colorMapRangeMin, colorMapRangeMax});
 }
 
-void GradientExplorerPlugin::loadData(const Datasets& datasets)
+void SpaceWalkerPlugin::loadData(const Datasets& datasets)
 {
     // Exit if there is nothing to load
     if (datasets.isEmpty())
@@ -619,7 +619,7 @@ void GradientExplorerPlugin::loadData(const Datasets& datasets)
     _positionDataset = datasets.first();
 }
 
-void GradientExplorerPlugin::onDataEvent(mv::DatasetEvent* dataEvent)
+void SpaceWalkerPlugin::onDataEvent(mv::DatasetEvent* dataEvent)
 {
     if (dataEvent->getType() == EventType::DatasetDataSelectionChanged)
     {
@@ -633,7 +633,7 @@ void GradientExplorerPlugin::onDataEvent(mv::DatasetEvent* dataEvent)
     }
 }
 
-std::uint32_t GradientExplorerPlugin::getNumberOfPoints() const
+std::uint32_t SpaceWalkerPlugin::getNumberOfPoints() const
 {
     if (!_positionDataset.isValid())
         return 0;
@@ -641,7 +641,7 @@ std::uint32_t GradientExplorerPlugin::getNumberOfPoints() const
     return _positionDataset->getNumPoints();
 }
 
-void GradientExplorerPlugin::createSubset(const bool& fromSourceData /*= false*/, const QString& name /*= ""*/)
+void SpaceWalkerPlugin::createSubset(const bool& fromSourceData /*= false*/, const QString& name /*= ""*/)
 {
     auto subsetPoints = fromSourceData ? _positionDataset->getSourceDataset<Points>() : _positionDataset;
 
@@ -655,7 +655,7 @@ void GradientExplorerPlugin::createSubset(const bool& fromSourceData /*= false*/
     subset->getDataHierarchyItem().select();
 }
 
-void GradientExplorerPlugin::onPointSelection()
+void SpaceWalkerPlugin::onPointSelection()
 {
     ge::util::Timer timer;
 
@@ -852,7 +852,7 @@ timer.mark("Filter");
     }
 }
 
-void GradientExplorerPlugin::onSliceIndexChanged()
+void SpaceWalkerPlugin::onSliceIndexChanged()
 {
     std::vector<uint32_t>& uindices = _sliceDataset->getClusters()[_currentSliceIndex].getIndices();
     std::vector<int> indices;
@@ -864,7 +864,7 @@ void GradientExplorerPlugin::onSliceIndexChanged()
     useSelectionAsDataView(indices);
 }
 
-void GradientExplorerPlugin::onMetadataChanged()
+void SpaceWalkerPlugin::onMetadataChanged()
 {
     _colors.clear();
     _colors.resize(_positionDataset->getNumPoints(), 0);
@@ -880,7 +880,7 @@ void GradientExplorerPlugin::onMetadataChanged()
     getUI().getMainView().setColors(_colors);
 }
 
-void GradientExplorerPlugin::computeCellMetadata()
+void SpaceWalkerPlugin::computeCellMetadata()
 {
     int selectedCell = _globalSelectedPoint;
 
@@ -900,7 +900,7 @@ void GradientExplorerPlugin::computeCellMetadata()
     qDebug() << metadataList;
 }
 
-void GradientExplorerPlugin::updateSelection()
+void SpaceWalkerPlugin::updateSelection()
 {
     if (!_positionDataset.isValid())
         return;
@@ -937,7 +937,7 @@ void GradientExplorerPlugin::updateSelection()
     getUI().getMainView().setHighlights(highlights, static_cast<std::int32_t>(selection->indices.size()));
 }
 
-void GradientExplorerPlugin::updateViewScalars()
+void SpaceWalkerPlugin::updateViewScalars()
 {
     getUI().getProjectionViews()[0]->selectView(false);
     getUI().getProjectionViews()[1]->selectView(false);
@@ -973,7 +973,7 @@ void GradientExplorerPlugin::updateViewScalars()
     }
 }
 
-void GradientExplorerPlugin::updateFloodScalarOutput(const std::vector<float>& scalars)
+void SpaceWalkerPlugin::updateFloodScalarOutput(const std::vector<float>& scalars)
 {
     std::cout << "Flood scalars: " << scalars[1000] << std::endl;
 
@@ -985,7 +985,7 @@ void GradientExplorerPlugin::updateFloodScalarOutput(const std::vector<float>& s
  * Graphs
  ******************************************************************************/
 
-void GradientExplorerPlugin::computeGraphs()
+void SpaceWalkerPlugin::computeGraphs()
 {
     // Binning
     int numBins = (int)_bins.size();
@@ -1011,7 +1011,7 @@ void GradientExplorerPlugin::computeGraphs()
     _graphView->setBins(_bins);
 }
 
-void GradientExplorerPlugin::onLineClicked(dint dim)
+void SpaceWalkerPlugin::onLineClicked(dint dim)
 {
     qDebug() << "Dim: " << dim;
     _selectedDimension = dim;
@@ -1026,18 +1026,18 @@ void GradientExplorerPlugin::onLineClicked(dint dim)
  * Import / Export
  ******************************************************************************/
 
-void GradientExplorerPlugin::exportDimRankings()
+void SpaceWalkerPlugin::exportDimRankings()
 {
     bool restrictToFloodNodes = getUI().getSettingsAction().getFilterAction().getRestrictToFloodAction().isChecked();
     exportRankings(_dataStore, _floodFill, _knnGraph, _filters, restrictToFloodNodes, _enabledDimNames);
 }
 
-void GradientExplorerPlugin::exportFloodnodes()
+void SpaceWalkerPlugin::exportFloodnodes()
 {
     exportFloodNodes(_dataStore.getNumPoints(), _floodFill, _knnGraph);
 }
 
-void GradientExplorerPlugin::importKnnGraph()
+void SpaceWalkerPlugin::importKnnGraph()
 {
     QString fileName = QFileDialog::getOpenFileName(&getWidget(),
         tr("Open Knn Graph"), "", tr("KNN Files (*.knn)"));
@@ -1052,7 +1052,7 @@ void GradientExplorerPlugin::importKnnGraph()
  * Flooding
  ******************************************************************************/
 
-void GradientExplorerPlugin::createKnnIndex()
+void SpaceWalkerPlugin::createKnnIndex()
 {
     qDebug() << "Creating index";
     if (_dataStore.getNumDimensions() <= 200)
@@ -1064,7 +1064,7 @@ void GradientExplorerPlugin::createKnnIndex()
     qDebug() << "Done creating index";
 }
 
-void GradientExplorerPlugin::computeKnnGraph()
+void SpaceWalkerPlugin::computeKnnGraph()
 {
     qDebug() << "Building KNN Graph..";
     if (!_preloadedKnnGraph)
@@ -1095,7 +1095,7 @@ void GradientExplorerPlugin::computeKnnGraph()
  * Serialization
  ******************************************************************************/
 
-void GradientExplorerPlugin::fromVariantMap(const QVariantMap& variantMap)
+void SpaceWalkerPlugin::fromVariantMap(const QVariantMap& variantMap)
 {
     _loadingFromProject = true;
 
@@ -1163,7 +1163,7 @@ void GradientExplorerPlugin::fromVariantMap(const QVariantMap& variantMap)
     _loadingFromProject = false;
 }
 
-QVariantMap GradientExplorerPlugin::toVariantMap() const
+QVariantMap SpaceWalkerPlugin::toVariantMap() const
 {
     QVariantMap variantMap = ViewPlugin::toVariantMap();
 
@@ -1218,12 +1218,12 @@ QVariantMap GradientExplorerPlugin::toVariantMap() const
  * Mask
  ******************************************************************************/
 
-bool GradientExplorerPlugin::hasMaskApplied()
+bool SpaceWalkerPlugin::hasMaskApplied()
 {
     return !_mask.empty();
 }
 
-void GradientExplorerPlugin::clearMask()
+void SpaceWalkerPlugin::clearMask()
 {
     _mask.clear();
 
@@ -1232,7 +1232,7 @@ void GradientExplorerPlugin::clearMask()
     getUI().getMainView().setPointOpacityScalars(opacityScalars);
 }
 
-void GradientExplorerPlugin::useSelectionAsMask()
+void SpaceWalkerPlugin::useSelectionAsMask()
 {
     // Get current selection
     // Compute the indices that are selected in this local dataset
@@ -1270,7 +1270,7 @@ void GradientExplorerPlugin::useSelectionAsMask()
     }
 }
 
-void GradientExplorerPlugin::useSelectionAsDataView(std::vector<int>& indices)
+void SpaceWalkerPlugin::useSelectionAsDataView(std::vector<int>& indices)
 {
     // Get current selection
     // Compute the indices that are selected in this local dataset
@@ -1323,22 +1323,22 @@ void GradientExplorerPlugin::useSelectionAsDataView(std::vector<int>& indices)
  * Factory
  ******************************************************************************/
 
-QIcon GradientExplorerPluginFactory::getIcon(const QColor& color /*= Qt::black*/) const
+QIcon SpaceWalkerPluginFactory::getIcon(const QColor& color /*= Qt::black*/) const
 {
     return Application::getIconFont("FontAwesome").getIcon("braille", color);
 }
 
-ViewPlugin* GradientExplorerPluginFactory::produce()
+ViewPlugin* SpaceWalkerPluginFactory::produce()
 {
-    return new GradientExplorerPlugin(this);
+    return new SpaceWalkerPlugin(this);
 }
 
-PluginTriggerActions GradientExplorerPluginFactory::getPluginTriggerActions(const mv::Datasets& datasets) const
+PluginTriggerActions SpaceWalkerPluginFactory::getPluginTriggerActions(const mv::Datasets& datasets) const
 {
     PluginTriggerActions pluginTriggerActions;
 
-    const auto getInstance = [this]() -> GradientExplorerPlugin* {
-        return dynamic_cast<GradientExplorerPlugin*>(Application::core()->getPluginManager().requestViewPlugin(getKind()));
+    const auto getInstance = [this]() -> SpaceWalkerPlugin* {
+        return dynamic_cast<SpaceWalkerPlugin*>(Application::core()->getPluginManager().requestViewPlugin(getKind()));
     };
 
     const auto numberOfDatasets = datasets.count();

@@ -1,4 +1,4 @@
-#include "GradientExplorerPlugin.h"
+#include "SpaceWalkerPlugin.h"
 
 #include "Widgets/MainView.h"
 
@@ -81,7 +81,7 @@ int findClosestPointToMouse(const DataMatrix& projection, const Bounds& bounds, 
     return closestIndex;
 }
 
-void GradientExplorerPlugin::notifyNewSelectedPoint()
+void SpaceWalkerPlugin::notifyNewSelectedPoint()
 {
     int selectedPoint = _globalSelectedPoint;
 
@@ -100,7 +100,7 @@ void GradientExplorerPlugin::notifyNewSelectedPoint()
     events().notifyDatasetDataSelectionChanged(_positionDataset);
 }
 
-void GradientExplorerPlugin::mousePositionChanged(Vector2f mousePos)
+void SpaceWalkerPlugin::mousePositionChanged(Vector2f mousePos)
 {
     mv::Bounds bounds = getUI().getMainView().getBounds();
 
@@ -123,7 +123,7 @@ void GradientExplorerPlugin::mousePositionChanged(Vector2f mousePos)
     notifyNewSelectedPoint();
 }
 
-void GradientExplorerPlugin::onKeyPressed(QKeyEvent* event)
+void SpaceWalkerPlugin::onKeyPressed(QKeyEvent* event)
 {
     if (event->key() == Qt::Key_Control)
     {
@@ -133,7 +133,7 @@ void GradientExplorerPlugin::onKeyPressed(QKeyEvent* event)
     }
 }
 
-void GradientExplorerPlugin::onKeyReleased(QKeyEvent* event)
+void SpaceWalkerPlugin::onKeyReleased(QKeyEvent* event)
 {
     if (event->key() == Qt::Key_Control)
     {
@@ -142,7 +142,7 @@ void GradientExplorerPlugin::onKeyReleased(QKeyEvent* event)
     }
 }
 
-bool GradientExplorerPlugin::eventFilter(QObject* target, QEvent* event)
+bool SpaceWalkerPlugin::eventFilter(QObject* target, QEvent* event)
 {
     auto shouldPaint = false;
 

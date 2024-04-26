@@ -6,7 +6,7 @@
 
 using namespace mv::gui;
 
-class GradientExplorerPlugin;
+class SpaceWalkerPlugin;
 
 class LoadedDatasetsAction : public GroupAction
 {
@@ -25,7 +25,7 @@ class LoadedDatasetsAction : public GroupAction
 public:
     Q_INVOKABLE LoadedDatasetsAction(QObject* parent, const QString& title);
 
-    void initialize(GradientExplorerPlugin* scatterplotPlugin);
+    void initialize(SpaceWalkerPlugin* scatterplotPlugin);
 
 public: // Serialization
 
@@ -42,7 +42,7 @@ public: // Serialization
     QVariantMap toVariantMap() const override;
 
 private:
-    GradientExplorerPlugin* _plugin;                        /** Pointer to scatterplot plugin */
+    SpaceWalkerPlugin* _plugin;                        /** Pointer to scatterplot plugin */
     DatasetPickerAction     _positionDatasetPickerAction;
     DatasetPickerAction     _colorDatasetPickerAction;
     DatasetPickerAction     _sliceDatasetPickerAction;

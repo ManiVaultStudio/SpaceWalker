@@ -1,5 +1,5 @@
 #include "ExportImageDialog.h"
-#include "GradientExplorerPlugin.h"
+#include "SpaceWalkerPlugin.h"
 
 #include <Application.h>
 
@@ -7,7 +7,7 @@
 
 using namespace mv;
 
-ExportImageDialog::ExportImageDialog(QWidget* parent, GradientExplorerPlugin& scatterplotPlugin) :
+ExportImageDialog::ExportImageDialog(QWidget* parent, SpaceWalkerPlugin& scatterplotPlugin) :
     QDialog(parent),
     _plugin(scatterplotPlugin),
     _exportImageAction(&scatterplotPlugin, "ExportImageAction")

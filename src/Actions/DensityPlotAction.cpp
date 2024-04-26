@@ -1,5 +1,5 @@
 #include "DensityPlotAction.h"
-#include "GradientExplorerPlugin.h"
+#include "SpaceWalkerPlugin.h"
 #include "Widgets/MainView.h"
 
 using namespace mv::gui;
@@ -17,7 +17,7 @@ DensityPlotAction::DensityPlotAction(QObject* parent, const QString& title) :
     addAction(&_continuousUpdatesAction);
 }
 
-void DensityPlotAction::initialize(GradientExplorerPlugin* scatterplotPlugin)
+void DensityPlotAction::initialize(SpaceWalkerPlugin* scatterplotPlugin)
 {
     Q_ASSERT(scatterplotPlugin != nullptr);
 

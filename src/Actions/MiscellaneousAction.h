@@ -7,7 +7,7 @@ using namespace mv::gui;
 
 class QMenu;
 
-class GradientExplorerPlugin;
+class SpaceWalkerPlugin;
 
 /**
  * Miscellaneous action class
@@ -67,7 +67,7 @@ public: // Action getters
     ColorAction& getBackgroundColorAction() { return _backgroundColorAction; }
 
 private:
-    GradientExplorerPlugin* _plugin;                    /** Pointer to scatter plot plugin */
+    SpaceWalkerPlugin* _plugin;                    /** Pointer to scatter plot plugin */
     ColorAction             _backgroundColorAction;     /** Color action for settings the background color action */
 
     static const QColor DEFAULT_BACKGROUND_COLOR;

@@ -5,7 +5,7 @@
 
 using namespace mv::gui;
 
-class GradientExplorerPlugin;
+class SpaceWalkerPlugin;
 
 /**
  * Render mode action class
@@ -38,7 +38,7 @@ public:
      * Initialize the selection action with \p scatterplotPlugin
      * @param scatterplotPlugin Pointer to scatterplot plugin
      */
-    void initialize(GradientExplorerPlugin* scatterplotPlugin);
+    void initialize(SpaceWalkerPlugin* scatterplotPlugin);
 
     /**
      * Get action context menu
@@ -84,7 +84,7 @@ public: // Action getters
     ToggleAction& getCellPlotAction() { return _cellPlotAction; }
 
 private:
-    GradientExplorerPlugin* _plugin;                /** Pointer to scatterplot plugin */
+    SpaceWalkerPlugin* _plugin;                /** Pointer to scatterplot plugin */
     ToggleAction            _scatterPlotAction;     /** Trigger action for activating the scatter plot render mode */
     ToggleAction            _densityPlotAction;     /** Trigger action for activating the density plot render mode */
     ToggleAction            _contourPlotAction;     /** Trigger action for activating the contour plot render mode */

@@ -5,7 +5,7 @@
 #include "PointPlotAction.h"
 #include "DensityPlotAction.h"
 
-class GradientExplorerPlugin;
+class SpaceWalkerPlugin;
 
 using namespace mv::gui;
 
@@ -33,7 +33,7 @@ public:
      * Initialize the selection action with \p scatterplotPlugin
      * @param scatterplotPlugin Pointer to scatterplot plugin
      */
-    void initialize(GradientExplorerPlugin* scatterplotPlugin);
+    void initialize(SpaceWalkerPlugin* scatterplotPlugin);
 
     /**
      * Get action context menu
@@ -76,7 +76,7 @@ public: // Action getters
     DensityPlotAction& getDensityPlotAction() { return _densityPlotAction; }
 
 private:
-    GradientExplorerPlugin* _plugin;                /** Pointer to scatterplot plugin */
+    SpaceWalkerPlugin* _plugin;                /** Pointer to scatterplot plugin */
     PointPlotAction         _pointPlotAction;       /** Point plot action */
     DensityPlotAction       _densityPlotAction;     /** Density plot action */
 

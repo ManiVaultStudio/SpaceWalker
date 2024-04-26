@@ -1,5 +1,5 @@
 #include "MiscellaneousAction.h"
-#include "GradientExplorerPlugin.h"
+#include "SpaceWalkerPlugin.h"
 #include "Widgets/MainView.h"
 
 using namespace mv::gui;
@@ -8,7 +8,7 @@ const QColor MiscellaneousAction::DEFAULT_BACKGROUND_COLOR = qRgb(22, 22, 22);
 
 MiscellaneousAction::MiscellaneousAction(QObject* parent, const QString& title) :
     VerticalGroupAction(parent, title),
-    _plugin(dynamic_cast<GradientExplorerPlugin*>(parent->parent())),
+    _plugin(dynamic_cast<SpaceWalkerPlugin*>(parent->parent())),
     _backgroundColorAction(this, "Background color")
 {
     setIcon(Application::getIconFont("FontAwesome").getIcon("cog"));

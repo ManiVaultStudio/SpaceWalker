@@ -27,7 +27,7 @@ private:
     std::vector<std::vector<nint>> _neighbours;
     int _numNeighbours;
 
-    friend class GradientExplorerPlugin;
+    friend class SpaceWalkerPlugin;
     friend class KnnGraphImporter;
     friend class KnnGraphExporter;
 };

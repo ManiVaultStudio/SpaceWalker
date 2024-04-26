@@ -1,6 +1,6 @@
 #include "FilterAction.h"
 
-#include "GradientExplorerPlugin.h"
+#include "SpaceWalkerPlugin.h"
 #include "Widgets/MainView.h"
 
 #include <QMenu>
@@ -22,7 +22,7 @@ FilterAction::FilterAction(QObject* parent, const QString& title) :
     setConfigurationFlag(WidgetAction::ConfigurationFlag::ForceCollapsedInGroup);
 }
 
-void FilterAction::initialize(GradientExplorerPlugin* plugin)
+void FilterAction::initialize(SpaceWalkerPlugin* plugin)
 {
     filters::Filters& filters = plugin->getFilters();
 

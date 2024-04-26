@@ -1,6 +1,6 @@
 #include "OverlayAction.h"
 
-#include "GradientExplorerPlugin.h"
+#include "SpaceWalkerPlugin.h"
 #include "Widgets/MainView.h"
 
 #include <QMenu>
@@ -22,7 +22,7 @@ OverlayAction::OverlayAction(QObject* parent, const QString& title) :
     setConfigurationFlag(WidgetAction::ConfigurationFlag::ForceCollapsedInGroup);
 }
 
-void OverlayAction::initialize(GradientExplorerPlugin* scatterplotPlugin)
+void OverlayAction::initialize(SpaceWalkerPlugin* scatterplotPlugin)
 {
     connect(&_computeKnnGraphAction, &TriggerAction::triggered, this, [scatterplotPlugin](bool enabled)
     {
