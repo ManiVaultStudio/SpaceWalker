@@ -189,6 +189,23 @@ bool SpaceWalkerPlugin::eventFilter(QObject* target, QEvent* event)
 
         _mousePressed = false;
 
+        // adding floodfill data for GeneSurfer
+        const std::vector<std::vector<nint>> waves = _floodFill.getWaves();
+        if (!_allFloodNodes.isValid()) {
+            _allFloodNodes = mv::data().createDataset<Points>("Points", "allFloodNodesIndices");
+        }
+        std::vector<float> allNodesWave;// with -1 as marker between waves
+        for (const auto& wave : waves) {
+            if (!allNodesWave.empty()) {
+                allNodesWave.push_back(-1.0f);
+            }
+            for (nint node : wave) {
+                allNodesWave.push_back(node);
+            }
+        }
+        _allFloodNodes->setData<float>(allNodesWave.data(), allNodesWave.size(), 1);
+        events().notifyDatasetDataChanged(_allFloodNodes);
+
         break;
     }
 

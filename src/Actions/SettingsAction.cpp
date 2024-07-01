@@ -21,7 +21,8 @@ SettingsAction::SettingsAction(QObject* parent, const QString& title) :
     _overlayAction(this, "Overlay"),
     _exportAction(this, "Export"),
     _selectionAsMaskAction(this, "Selection As Mask"),
-    _clearMaskAction(this, "Clear Mask")
+    _clearMaskAction(this, "Clear Mask"),
+    _sectionAction(this, "Section")
 {
     setConnectionPermissionsToForceNone();
 
@@ -96,6 +97,7 @@ void SettingsAction::fromVariantMap(const QVariantMap& variantMap)
     _filterAction.fromParentVariantMap(variantMap);
     _overlayAction.fromParentVariantMap(variantMap);
     _miscellaneousAction.fromParentVariantMap(variantMap);
+    _sectionAction.fromParentVariantMap(variantMap);
 }
 
 QVariantMap SettingsAction::toVariantMap() const
@@ -108,6 +110,7 @@ QVariantMap SettingsAction::toVariantMap() const
     _filterAction.insertIntoVariantMap(variantMap);
     _overlayAction.insertIntoVariantMap(variantMap);
     _miscellaneousAction.insertIntoVariantMap(variantMap);
+    _sectionAction.insertIntoVariantMap(variantMap);
 
     return variantMap;
 }

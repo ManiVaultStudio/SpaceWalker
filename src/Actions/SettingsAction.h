@@ -1,6 +1,7 @@
 #pragma once
 
 #include <actions/GroupAction.h>
+#include <actions/IntegralAction.h>
 
 #include "LoadedDatasetsAction.h"
 #include "RenderModeAction.h"
@@ -61,6 +62,7 @@ public: // Action getters
     ExportAction& getExportAction() { return _exportAction; }
     TriggerAction& getSelectionAsMaskAction() { return _selectionAsMaskAction; }
     TriggerAction& getClearMaskAction() { return _clearMaskAction; }
+    IntegralAction& getSectionAction() { return _sectionAction; }
 
 protected:
     SpaceWalkerPlugin*     _plugin;                    /** Pointer to scatter plot plugin */
@@ -76,4 +78,5 @@ protected:
     ExportAction                _exportAction;
     TriggerAction               _selectionAsMaskAction;
     TriggerAction               _clearMaskAction;
+    IntegralAction              _sectionAction;            /** Action for the slice/section in 3D dataset */
 };

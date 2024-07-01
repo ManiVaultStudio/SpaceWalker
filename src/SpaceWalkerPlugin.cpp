@@ -442,6 +442,16 @@ void SpaceWalkerPlugin::positionDatasetChanged()
         }
     }
     
+    // Create all flood nodes dataset if it doesn't exist yet
+    if (!_allFloodNodes.isValid())
+    {
+        if (!_loadingFromProject)
+        {
+            _allFloodNodes = mv::data().createDataset<Points>("Points", "allFloodNodesIndices");
+            events().notifyDatasetAdded(_allFloodNodes);
+        }
+    }
+
     computeStaticData();
 
     _dataInitialized = true;
@@ -553,7 +563,7 @@ void SpaceWalkerPlugin::updateProjectionData()
     if (!getUI().getMainView().isInitialized())
     {
         qCritical() << "Tried to update projection data while view widgets are uninitialized";
-        exit(1);
+        return;
     }
 
     // Subset the new projection matrix from the one with all the dimensions
@@ -862,6 +872,9 @@ void SpaceWalkerPlugin::onSliceIndexChanged()
     getUI().getMainView().setClusterName(QString::number(_currentSliceIndex) + ": " + clusterName);
 
     useSelectionAsDataView(indices);
+
+    // for sharing slice with GeneSurfer
+    getUI().getSettingsAction().getSectionAction().setValue(_currentSliceIndex);
 }
 
 void SpaceWalkerPlugin::onMetadataChanged()
@@ -1113,6 +1126,10 @@ void SpaceWalkerPlugin::fromVariantMap(const QVariantMap& variantMap)
     QString floodNodeId = variantMap["floodNodeGuid"].toString();
     _floodScalars = mv::data().getDataset<Points>(floodNodeId);
 
+    // Load all flood nodes
+    QString allFloodNodesId = variantMap["allFloodNodes"].toString();
+    _allFloodNodes = mv::data().getDataset<Points>(allFloodNodesId);
+
     // Load potential kNN graph from project
     bool knnAvailable = static_cast<bool>(variantMap["knnAvailable"].toBool());
     if (knnAvailable)
@@ -1209,6 +1226,9 @@ QVariantMap SpaceWalkerPlugin::toVariantMap() const
 
     // Store floodnode guid
     variantMap.insert("floodNodeGuid", _floodScalars.getDatasetId());
+
+    // Store allFloodNodes 
+    variantMap.insert("allFloodNodes", _allFloodNodes.getDatasetId());
 
     return variantMap;
 }
