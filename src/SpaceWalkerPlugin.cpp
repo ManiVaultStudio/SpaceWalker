@@ -3,6 +3,7 @@
 #include "ProjectionView.h"
 #include "DataHierarchyItem.h"
 #include "Application.h"
+#include "event/Event.h"
 #include "actions/GroupsAction.h"
 
 #include "util/PixelSelectionTool.h"
@@ -179,7 +180,7 @@ SpaceWalkerPlugin::SpaceWalkerPlugin(const PluginFactory* factory) :
         if (dataType == PointType) {
 
             // Get points dataset from the core
-            auto candidateDataset = _core->requestDataset<Points>(datasetId);
+            auto candidateDataset = mv::data().getDataset<Points>(datasetId);
 
             // Establish drop region description
             const auto description = QString("Visualize %1 as points or density/contour map").arg(datasetGuiName);
@@ -231,7 +232,7 @@ SpaceWalkerPlugin::SpaceWalkerPlugin(const PluginFactory* factory) :
         if (dataType == ClusterType) {
 
             // Get clusters dataset from the core
-            auto candidateDataset = _core->requestDataset<Clusters>(datasetId);
+            auto candidateDataset = mv::data().getDataset<Clusters>(datasetId);
 
             // Establish drop region description
             const auto description = QString("Use %1 as mask clusters").arg(candidateDataset->getGuiName());
@@ -439,7 +440,7 @@ void SpaceWalkerPlugin::positionDatasetChanged()
     {
         if (!_loadingFromProject)
         {
-            _floodScalars = _core->addDataset<Points>("Points", "Flood Nodes");
+            _floodScalars = mv::data().createDataset<Points>("Points", "Flood Nodes");
 
             events().notifyDatasetAdded(_floodScalars);
         }
@@ -1056,7 +1057,7 @@ void SpaceWalkerPlugin::fromVariantMap(const QVariantMap& variantMap)
 
     // Load flood nodes
     QString floodNodeId = variantMap["floodNodeGuid"].toString();
-    _floodScalars = _core->requestDataset(floodNodeId);
+    _floodScalars = mv::data().getDataset<Points>(floodNodeId);
 
     // Load potential kNN graph from project
     bool knnAvailable = static_cast<bool>(variantMap["knnAvailable"].toBool());
