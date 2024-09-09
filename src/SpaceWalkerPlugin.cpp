@@ -896,7 +896,7 @@ void SpaceWalkerPlugin::updateViewScalars()
     else if (_selectedViewIndex == 2) selectedView = _projectionViews[1];
     else if (_selectedViewIndex == 3) selectedView = _selectedView;
 
-    if (selectedView != nullptr)
+    if (_positionDataset.isValid() && _dataStore.hasData() && selectedView != nullptr)
     {
         selectedView->selectView(true);
 
