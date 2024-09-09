@@ -111,6 +111,10 @@ class SpaceWalkerConan(ConanFile):
         self.install_dir = pathlib.Path(os.environ["MV_INSTALL_DIR"]).as_posix()
         # Give the installation directory to CMake
         tc.variables["MV_INSTALL_DIR"] = self.install_dir
+
+        # Find ManiVault with find_package
+        self.manivault_dir = self.install_dir + '/cmake/mv/'
+        tc.variables["ManiVault_DIR"] = self.manivault_dir
         
         tc.generate()
 
