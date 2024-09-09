@@ -77,9 +77,7 @@ set(PLUGIN
     src/DataMatrix.h
     src/DataMatrix.cpp
     src/DataStore.h
-    src/DataStore.cpp
     src/Logging.h
-    src/Logging.cpp
     src/Graph/GraphView.h
     src/Graph/GraphView.cpp
 )
