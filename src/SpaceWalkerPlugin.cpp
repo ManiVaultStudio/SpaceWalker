@@ -472,7 +472,7 @@ void SpaceWalkerPlugin::computeStaticData()
         qWarning() << "!!! Shown dimension names may not be correct.";
     }
 
-    Timer timer;
+    SpaceWalker::Timer timer;
     timer.start();
 
     {
@@ -661,7 +661,7 @@ void SpaceWalkerPlugin::createSubset(const bool& fromSourceData /*= false*/, con
 
 void SpaceWalkerPlugin::onPointSelection()
 {
-    Timer timer;
+    SpaceWalker::Timer timer;
 
     if (!_positionDataset.isValid() || !_positionSourceDataset.isValid() || !_dataInitialized)
         return;
@@ -670,7 +670,7 @@ void SpaceWalkerPlugin::onPointSelection()
 
     if (selection->indices.size() > 0)
     {
-timer.start();
+        timer.start();
         Vector2f center = Vector2f(_dataStore.getProjectionView()(_selectedPoint, 0), _dataStore.getProjectionView()(_selectedPoint, 1));
 
         KnnGraph& knnGraph = !_maskedKnn ? _knnGraph : _maskedKnnGraph;
