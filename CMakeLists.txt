@@ -219,7 +219,6 @@ target_include_directories(${PROJECT} SYSTEM PRIVATE ${PROJECT_SOURCE_DIR}/third
 # Target library linking
 # -----------------------------------------------------------------------------
 
-message(STATUS "${MKL_LIBRARIES}")
 target_link_libraries(${PROJECT} PRIVATE Qt6::Widgets)
 target_link_libraries(${PROJECT} PRIVATE Qt6::WebEngineWidgets)
 target_link_libraries(${PROJECT} PRIVATE Qt6::OpenGL)
