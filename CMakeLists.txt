@@ -1,9 +1,15 @@
 cmake_minimum_required(VERSION 3.17)
 
+# -----------------------------------------------------------------------------
+# SpaceWalker Viewer Plugin
+# -----------------------------------------------------------------------------
 set(PROJECT "SpaceWalker")
 
 PROJECT(${PROJECT})
 
+# -----------------------------------------------------------------------------
+# CMake Options
+# -----------------------------------------------------------------------------
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTORCC ON)
@@ -16,18 +22,50 @@ if(MSVC)
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
 endif(MSVC)
 
+if(DEFINED CMAKE_TOOLCHAIN_FILE AND CMAKE_TOOLCHAIN_FILE MATCHES "vcpkg")
+    set(MV_GRV_USE_VCPKG ON)
+endif()
+
+# -----------------------------------------------------------------------------
+# Dependencies
+# -----------------------------------------------------------------------------
 SET(faiss_VERSION "1.7.3" CACHE STRING "Version of faiss Library")
 SET_PROPERTY(CACHE faiss_VERSION PROPERTY STRINGS 1.73)
 
-# Check if the directory to the ManiVault installation has been provided
-if(NOT DEFINED MV_INSTALL_DIR)
-    set(MV_INSTALL_DIR "" CACHE PATH "Directory where ManiVault is installed")
-    message(FATAL_ERROR "Please set MV_INSTALL_DIR to the directory where ManiVault is installed")
-endif()
-file(TO_CMAKE_PATH ${MV_INSTALL_DIR} MV_INSTALL_DIR)
+find_package(ManiVault COMPONENTS Core PointData ClusterData CONFIG)
 
 find_package(Qt6 COMPONENTS Widgets WebEngineWidgets OpenGL OpenGLWidgets REQUIRED)
 
+find_package(OpenMP)
+
+if(MV_GRV_USE_VCPKG)
+	find_package(faiss CONFIG REQUIRED)
+	message(STATUS "Found faiss with version ${faiss_VERSION}")
+else ()
+	include(InstallArtifactoryPackage)
+	set(LIBRARY_INSTALL_DIR ${PROJECT_BINARY_DIR})
+
+	if (NOT MV_GRAD_ARTIFACTORY_LIBS_INSTALLED) 
+		message(STATUS "Installing artifactory packages to: ${LIBRARY_INSTALL_DIR}")
+		# Both HDILib and flann are available prebuilt in the lkeb-artifactory as combined Debug/Release packages
+		# lz4 is also available in the lkb-artifactory in separate Debug and |Release packages
+		install_artifactory_package(PACKAGE_NAME faiss PACKAGE_VERSION ${faiss_VERSION} PACKAGE_BUILDER lkeb COMBINED_PACKAGE TRUE) 
+
+		message(STATUS "faiss root path ${faiss_ROOT}")
+	endif()
+
+	set(faiss_ROOT ${LIBRARY_INSTALL_DIR}/${package_name})
+	set(faiss_USE_STATIC_LIBRARIES TRUE)
+
+	find_package(faiss COMPONENTS CXX C static REQUIRED NO_MODULE)
+
+	message(STATUS "Include for faiss at ${faiss_INCLUDE_DIR} - version ${faiss_VERSION_STRING}")
+	set(MV_GRAD_ARTIFACTORY_LIBS_INSTALLED TRUE CACHE BOOL "Use the prebuilt libraries from artifactory" FORCE)
+endif()
+
+# -----------------------------------------------------------------------------
+# Source files
+# -----------------------------------------------------------------------------
 set(PLUGIN
     src/Common.h
     src/SpaceWalkerPlugin.h
@@ -39,9 +77,7 @@ set(PLUGIN
     src/DataMatrix.h
     src/DataMatrix.cpp
     src/DataStore.h
-    src/DataStore.cpp
     src/Logging.h
-    src/Logging.cpp
     src/Graph/GraphView.h
     src/Graph/GraphView.cpp
 )
@@ -148,75 +184,59 @@ source_group(IO FILES ${IO})
 source_group(Shaders FILES ${SHADERS})
 source_group(Aux FILES ${AUX})
 
+# -----------------------------------------------------------------------------
+# CMake Target
+# -----------------------------------------------------------------------------
 add_library(${PROJECT} SHARED ${SOURCES} ${SHADERS} ${AUX})
 
+# -----------------------------------------------------------------------------
+# Target properties
+# -----------------------------------------------------------------------------
 # Disable Windows GDI to avoid FloodFill name conflict
 target_compile_definitions(${PROJECT} PRIVATE NOGDI)
 
+target_compile_features(${PROJECT} PRIVATE cxx_std_17)
+
+# -----------------------------------------------------------------------------
+# Target include directories
+# -----------------------------------------------------------------------------
 # Include directories, SYSTEM included to suppress warnings from external libraries
 target_include_directories(${PROJECT} PRIVATE ${PROJECT_SOURCE_DIR}/src)
-target_include_directories(${PROJECT} PRIVATE "${MV_INSTALL_DIR}/$<CONFIGURATION>/include/")
+target_include_directories(${PROJECT} PRIVATE "${ManiVault_INCLUDE_DIR}")
 
-include(InstallArtifactoryPackage)
-set(LIBRARY_INSTALL_DIR ${PROJECT_BINARY_DIR})
-if (USE_ARTIFACTORY_LIBS)
-	if (NOT FAISS_ARTIFACTORY_LIBS_INSTALLED) 
-		message(STATUS "Installing artifactory packages to: ${LIBRARY_INSTALL_DIR}")
-		# Both HDILib and flann are available prebuilt in the lkeb-artifactory as combined Debug/Release packages
-		# lz4 is also available in the lkb-artifactory in separate Debug and |Release packages
-		install_artifactory_package(PACKAGE_NAME faiss PACKAGE_VERSION ${faiss_VERSION} PACKAGE_BUILDER lkeb COMBINED_PACKAGE TRUE) 
-
-		message(STATUS "faiss root path ${faiss_ROOT}")
-	endif()
-	set(faiss_ROOT ${LIBRARY_INSTALL_DIR}/${package_name})
-	set(faiss_USE_STATIC_LIBRARIES TRUE)
-	find_package(faiss COMPONENTS CXX C static REQUIRED NO_MODULE)
-	#get_cmake_property(_variableNames VARIABLES)
-	#list (SORT _variableNames)
-	#foreach (_variableName ${_variableNames})
-	#		message(STATUS "${_variableName}=${${_variableName}}")
-	#endforeach()
-	message(STATUS "Include for faiss at ${faiss_INCLUDE_DIR} - version ${faiss_VERSION_STRING}")
-	set(FAISS_ARTIFACTORY_LIBS_INSTALLED TRUE CACHE BOOL "Use the prebuilt libraries from artifactory" FORCE)
-	target_include_directories(${PROJECT} PRIVATE ${HDF5_INCLUDE_DIR})
-	message(status "faiss include ${faiss_INCLUDE_DIR}")
-else()    
+if(NOT MV_GRV_USE_VCPKG)
     target_include_directories(${PROJECT} SYSTEM PRIVATE ${PROJECT_SOURCE_DIR}/thirdparty/faiss/include)
     target_include_directories(${PROJECT} SYSTEM PRIVATE ${CUDA_INCLUDE_DIRS})
-
 endif()
 
 target_include_directories(${PROJECT} SYSTEM PRIVATE ${PROJECT_SOURCE_DIR}/thirdparty/Eigen/include)
 target_include_directories(${PROJECT} SYSTEM PRIVATE ${PROJECT_SOURCE_DIR}/thirdparty/jcv/include)
 target_include_directories(${PROJECT} SYSTEM PRIVATE ${PROJECT_SOURCE_DIR}/thirdparty/annoy/include)
 
-target_compile_features(${PROJECT} PRIVATE cxx_std_17)
+# -----------------------------------------------------------------------------
+# Target library linking
+# -----------------------------------------------------------------------------
 
-set(MV_LINK_PATH "${MV_INSTALL_DIR}/$<CONFIGURATION>/lib")
-set(PLUGIN_LINK_PATH "${MV_INSTALL_DIR}/$<CONFIGURATION>/$<IF:$<CXX_COMPILER_ID:MSVC>,lib,Plugins>")
-set(MV_LINK_SUFFIX $<IF:$<CXX_COMPILER_ID:MSVC>,${CMAKE_LINK_LIBRARY_SUFFIX},${CMAKE_SHARED_LIBRARY_SUFFIX}>)
-
-set(MV_LINK_LIBRARY "${MV_LINK_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}MV_Public${MV_LINK_SUFFIX}")
-set(POINTDATA_LINK_LIBRARY "${PLUGIN_LINK_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}PointData${MV_LINK_SUFFIX}") 
-set(CLUSTERDATA_LINK_LIBRARY "${PLUGIN_LINK_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}ClusterData${MV_LINK_SUFFIX}") 
-
-message(STATUS "${MKL_LIBRARIES}")
 target_link_libraries(${PROJECT} PRIVATE Qt6::Widgets)
 target_link_libraries(${PROJECT} PRIVATE Qt6::WebEngineWidgets)
 target_link_libraries(${PROJECT} PRIVATE Qt6::OpenGL)
 target_link_libraries(${PROJECT} PRIVATE Qt6::OpenGLWidgets)
-if (USE_ARTIFACTORY_LIBS)
+
+if (MV_GRV_USE_VCPKG OR USE_ARTIFACTORY_LIBS)
+    message(STATUS "Link to faiss")
     target_link_libraries(${PROJECT} PRIVATE faiss)
 else()
+    message(STATUS "Link to faiss and MKL")
+    message(STATUS "${MKL_LIBRARIES}")
     target_link_libraries(${PROJECT} PRIVATE ${PROJECT_SOURCE_DIR}/thirdparty/faiss/lib/$<CONFIGURATION>/faiss.lib)
     target_link_libraries(${PROJECT} PRIVATE ${PROJECT_SOURCE_DIR}/thirdparty/MKL/lib/mkl_core_dll.lib)
     target_link_libraries(${PROJECT} PRIVATE ${PROJECT_SOURCE_DIR}/thirdparty/MKL/lib/mkl_intel_lp64_dll.lib)
     target_link_libraries(${PROJECT} PRIVATE ${PROJECT_SOURCE_DIR}/thirdparty/MKL/lib/mkl_intel_thread_dll.lib)
 endif()
 
-target_link_libraries(${PROJECT} PRIVATE "${MV_LINK_LIBRARY}")
-target_link_libraries(${PROJECT} PRIVATE "${POINTDATA_LINK_LIBRARY}")
-target_link_libraries(${PROJECT} PRIVATE "${CLUSTERDATA_LINK_LIBRARY}")
+target_link_libraries(${PROJECT} PRIVATE ManiVault::Core)
+target_link_libraries(${PROJECT} PRIVATE ManiVault::PointData)
+target_link_libraries(${PROJECT} PRIVATE ManiVault::ClusterData)
 
 # find_package(MKL CONFIG REQUIRED)
 # if(MKL_FOUND)
@@ -224,7 +244,6 @@ target_link_libraries(${PROJECT} PRIVATE "${CLUSTERDATA_LINK_LIBRARY}")
   # target_link_libraries(${PROJECT} PRIVATE MKL::MKL)
 # endif()
 
-find_package(OpenMP)
 if(OpenMP_CXX_FOUND)
     target_link_libraries(${PROJECT} PRIVATE OpenMP::OpenMP_CXX)
 endif()
@@ -238,22 +257,27 @@ add_custom_command(TARGET ${PROJECT} POST_BUILD
     COMMAND "${CMAKE_COMMAND}"
         --install ${CMAKE_CURRENT_BINARY_DIR}
         --config $<CONFIGURATION>
-        --prefix ${MV_INSTALL_DIR}/$<CONFIGURATION>
+        --prefix ${ManiVault_INSTALL_DIR}/$<CONFIGURATION>
 )
 
-# Copy faiss DLLs
-add_custom_command(TARGET ${PROJECT} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${PROJECT_SOURCE_DIR}/thirdparty/faiss/bin/"
-        ${MV_INSTALL_DIR}/$<CONFIGURATION>)
-        
-add_custom_command(TARGET ${PROJECT} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${PROJECT_SOURCE_DIR}/thirdparty/MKL/bin"
-        ${MV_INSTALL_DIR}/$<CONFIGURATION>)
+if(NOT MV_GRV_USE_VCPKG)
+    # Copy faiss DLLs
+    add_custom_command(TARGET ${PROJECT} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "${PROJECT_SOURCE_DIR}/thirdparty/faiss/bin/"
+            ${ManiVault_INSTALL_DIR}/$<CONFIGURATION>)
+            
+    add_custom_command(TARGET ${PROJECT} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "${PROJECT_SOURCE_DIR}/thirdparty/MKL/bin"
+            ${ManiVault_INSTALL_DIR}/$<CONFIGURATION>)
+endif()
 
+# -----------------------------------------------------------------------------
+# Miscellaneous
+# -----------------------------------------------------------------------------
 # Automatically set the debug environment (command + working directory) for MSVC
 if(MSVC)
-    set_property(TARGET ${PROJECT} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY $<IF:$<CONFIG:DEBUG>,${MV_INSTALL_DIR}/debug,${MV_INSTALL_DIR}/release>)
-    set_property(TARGET ${PROJECT} PROPERTY VS_DEBUGGER_COMMAND $<IF:$<CONFIG:DEBUG>,"${MV_INSTALL_DIR}/debug/ManiVault Studio.exe","${MV_INSTALL_DIR}/release/ManiVault Studio.exe">)
+    set_property(TARGET ${PROJECT} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY $<IF:$<CONFIG:DEBUG>,${ManiVault_INSTALL_DIR}/debug,${ManiVault_INSTALL_DIR}/release>)
+    set_property(TARGET ${PROJECT} PROPERTY VS_DEBUGGER_COMMAND $<IF:$<CONFIG:DEBUG>,"${ManiVault_INSTALL_DIR}/debug/ManiVault Studio.exe","${ManiVault_INSTALL_DIR}/release/ManiVault Studio.exe">)
 endif()
