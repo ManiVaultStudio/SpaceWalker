@@ -828,6 +828,21 @@ timer.mark("Filter");
             }
             }
         }
+        else // When no graph available, can choose dim value color option
+        {
+            switch (_overlayType)
+            {
+            case OverlayType::DIM_VALUES:
+            {
+                getUI().getMainView().setColoredBy("Colored by - Dim: " + _enabledDimNames[dimRanking[0]]);
+                const auto dimValues = _normalizedData[dimRanking[0]];
+                std::vector<float> dimV(dimValues.data(), dimValues.data() + dimValues.size());
+                _colorScalars.assign(dimV.begin(), dimV.end());
+                break;
+            }
+            }
+        }
+
 
         // Set color scalars in the main view, if we are looking at a data view, subset the scalars first
         if (viewIndices.size() > 0)
