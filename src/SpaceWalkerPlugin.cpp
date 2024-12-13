@@ -182,6 +182,12 @@ SpaceWalkerPlugin::SpaceWalkerPlugin(const PluginFactory* factory) :
             // Get points dataset from the core
             auto candidateDataset = mv::data().getDataset<Points>(datasetId);
 
+            if(!candidateDataset->isDerivedData())
+            {
+                dropRegions << new DropWidget::DropRegion(this, "Incompatible data", "Data must be derived from expression data", "exclamation-circle", false);
+                return dropRegions;
+            }
+
             // Establish drop region description
             const auto description = QString("Visualize %1 as points or density/contour map").arg(datasetGuiName);
 
