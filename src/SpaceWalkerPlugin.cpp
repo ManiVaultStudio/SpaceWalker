@@ -174,7 +174,10 @@ SpaceWalkerPlugin::SpaceWalkerPlugin(const PluginFactory* factory) :
 
         // Check if the data type can be dropped
         if (!dataTypes.contains(dataType))
+        {
             dropRegions << new DropWidget::DropRegion(this, "Incompatible data", "This type of data is not supported", "exclamation-circle", false);
+            return dropRegions;
+        }
 
         // Points dataset is about to be dropped
         if (dataType == PointType) {
@@ -233,9 +236,8 @@ SpaceWalkerPlugin::SpaceWalkerPlugin(const PluginFactory* factory) :
                 }
             }
         }
-
         // Cluster dataset is about to be dropped
-        if (dataType == ClusterType) {
+        else if (dataType == ClusterType) {
 
             // Get clusters dataset from the core
             auto candidateDataset = mv::data().getDataset<Clusters>(datasetId);
