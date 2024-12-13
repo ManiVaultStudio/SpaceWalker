@@ -170,7 +170,7 @@ SpaceWalkerPlugin::SpaceWalkerPlugin(const PluginFactory* factory) :
         const auto datasetGuiName = dataset->text();
         const auto datasetId = dataset->getId();
         const auto dataType = dataset->getDataType();
-        const auto dataTypes = DataTypes({ PointType , ColorType, ClusterType });
+        const auto dataTypes = DataTypes({ PointType , ClusterType });
 
         // Check if the data type can be dropped
         if (!dataTypes.contains(dataType))
