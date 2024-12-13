@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.21)
 
 # -----------------------------------------------------------------------------
 # SpaceWalker Viewer Plugin
@@ -39,28 +39,23 @@ find_package(Qt6 COMPONENTS Widgets WebEngineWidgets OpenGL OpenGLWidgets REQUIR
 find_package(OpenMP)
 
 if(MV_GRV_USE_VCPKG)
-	find_package(faiss CONFIG REQUIRED)
-	message(STATUS "Found faiss with version ${faiss_VERSION}")
-else ()
-	include(InstallArtifactoryPackage)
-	set(LIBRARY_INSTALL_DIR ${PROJECT_BINARY_DIR})
+    find_package(faiss CONFIG REQUIRED)
+    message(STATUS "Found faiss with version ${faiss_VERSION}")
+else()
+    include(InstallArtifactoryPackage)
+    set(LIBRARY_INSTALL_DIR ${PROJECT_BINARY_DIR})
 
-	if (NOT MV_GRAD_ARTIFACTORY_LIBS_INSTALLED) 
-		message(STATUS "Installing artifactory packages to: ${LIBRARY_INSTALL_DIR}")
-		# Both HDILib and flann are available prebuilt in the lkeb-artifactory as combined Debug/Release packages
-		# lz4 is also available in the lkb-artifactory in separate Debug and |Release packages
-		install_artifactory_package(PACKAGE_NAME faiss PACKAGE_VERSION ${faiss_VERSION} PACKAGE_BUILDER lkeb COMBINED_PACKAGE TRUE) 
+    if (NOT MV_GRAD_ARTIFACTORY_LIBS_INSTALLED) 
+        message(STATUS "Installing artifactory packages to: ${LIBRARY_INSTALL_DIR}")
+        install_artifactory_package(PACKAGE_NAME faiss PACKAGE_VERSION ${faiss_VERSION} PACKAGE_BUILDER lkeb COMBINED_PACKAGE TRUE) 
 
-		message(STATUS "faiss root path ${faiss_ROOT}")
-	endif()
+        message(STATUS "faiss root path ${faiss_ROOT}")
+    endif()
 
-	set(faiss_ROOT ${LIBRARY_INSTALL_DIR}/${package_name})
-	set(faiss_USE_STATIC_LIBRARIES TRUE)
+    set(faiss_ROOT ${LIBRARY_INSTALL_DIR}/${package_name})
+    find_package(faiss COMPONENTS CXX C static REQUIRED NO_MODULE)
 
-	find_package(faiss COMPONENTS CXX C static REQUIRED NO_MODULE)
-
-	message(STATUS "Include for faiss at ${faiss_INCLUDE_DIR} - version ${faiss_VERSION_STRING}")
-	set(MV_GRAD_ARTIFACTORY_LIBS_INSTALLED TRUE CACHE BOOL "Use the prebuilt libraries from artifactory" FORCE)
+    set(MV_GRAD_ARTIFACTORY_LIBS_INSTALLED TRUE CACHE BOOL "Use the prebuilt libraries from artifactory" FORCE)
 endif()
 
 # -----------------------------------------------------------------------------
@@ -205,8 +200,11 @@ target_include_directories(${PROJECT} PRIVATE ${PROJECT_SOURCE_DIR}/src)
 target_include_directories(${PROJECT} PRIVATE "${ManiVault_INCLUDE_DIR}")
 
 if(NOT MV_GRV_USE_VCPKG)
-    target_include_directories(${PROJECT} SYSTEM PRIVATE ${PROJECT_SOURCE_DIR}/thirdparty/faiss/include)
-    target_include_directories(${PROJECT} SYSTEM PRIVATE ${CUDA_INCLUDE_DIRS})
+    if(MV_GRAD_ARTIFACTORY_LIBS_INSTALLED)
+        target_include_directories(${PROJECT} SYSTEM PRIVATE ${faiss_ROOT}/include)
+    else()
+        target_include_directories(${PROJECT} SYSTEM PRIVATE ${PROJECT_SOURCE_DIR}/thirdparty/faiss/include)
+    endif()
 endif()
 
 target_include_directories(${PROJECT} SYSTEM PRIVATE ${PROJECT_SOURCE_DIR}/thirdparty/Eigen/include)
@@ -222,12 +220,11 @@ target_link_libraries(${PROJECT} PRIVATE Qt6::WebEngineWidgets)
 target_link_libraries(${PROJECT} PRIVATE Qt6::OpenGL)
 target_link_libraries(${PROJECT} PRIVATE Qt6::OpenGLWidgets)
 
-if (MV_GRV_USE_VCPKG OR USE_ARTIFACTORY_LIBS)
+if (MV_GRV_USE_VCPKG OR MV_GRAD_ARTIFACTORY_LIBS_INSTALLED)
     message(STATUS "Link to faiss")
     target_link_libraries(${PROJECT} PRIVATE faiss)
 else()
-    message(STATUS "Link to faiss and MKL")
-    message(STATUS "${MKL_LIBRARIES}")
+    message(STATUS "Link to faiss and MKL from thirdparty folder")
     target_link_libraries(${PROJECT} PRIVATE ${PROJECT_SOURCE_DIR}/thirdparty/faiss/lib/$<CONFIGURATION>/faiss.lib)
     target_link_libraries(${PROJECT} PRIVATE ${PROJECT_SOURCE_DIR}/thirdparty/MKL/lib/mkl_core_dll.lib)
     target_link_libraries(${PROJECT} PRIVATE ${PROJECT_SOURCE_DIR}/thirdparty/MKL/lib/mkl_intel_lp64_dll.lib)
@@ -248,6 +245,10 @@ if(OpenMP_CXX_FOUND)
     target_link_libraries(${PROJECT} PRIVATE OpenMP::OpenMP_CXX)
 endif()
 
+# -----------------------------------------------------------------------------
+# Target installation
+# -----------------------------------------------------------------------------
+
 install(TARGETS ${PROJECT}
     RUNTIME DESTINATION Plugins COMPONENT PLUGINS # Windows .dll
     LIBRARY DESTINATION Plugins COMPONENT PLUGINS # Linux/Mac .so
@@ -260,17 +261,19 @@ add_custom_command(TARGET ${PROJECT} POST_BUILD
         --prefix ${ManiVault_INSTALL_DIR}/$<CONFIGURATION>
 )
 
-if(NOT MV_GRV_USE_VCPKG)
+if (MV_GRV_USE_VCPKG OR MV_GRAD_ARTIFACTORY_LIBS_INSTALLED)
+    mv_install_dependencies(${PROJECT} "faiss")
+else()
     # Copy faiss DLLs
     add_custom_command(TARGET ${PROJECT} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
             "${PROJECT_SOURCE_DIR}/thirdparty/faiss/bin/"
-            ${ManiVault_INSTALL_DIR}/$<CONFIGURATION>)
+            ${ManiVault_INSTALL_DIR}/$<CONFIGURATION>/PluginDependencies/${PROJECT})
             
     add_custom_command(TARGET ${PROJECT} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
             "${PROJECT_SOURCE_DIR}/thirdparty/MKL/bin"
-            ${ManiVault_INSTALL_DIR}/$<CONFIGURATION>)
+            ${ManiVault_INSTALL_DIR}/$<CONFIGURATION>/PluginDependencies/${PROJECT})
 endif()
 
 # -----------------------------------------------------------------------------
