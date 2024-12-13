@@ -170,17 +170,26 @@ SpaceWalkerPlugin::SpaceWalkerPlugin(const PluginFactory* factory) :
         const auto datasetGuiName = dataset->text();
         const auto datasetId = dataset->getId();
         const auto dataType = dataset->getDataType();
-        const auto dataTypes = DataTypes({ PointType , ColorType, ClusterType });
+        const auto dataTypes = DataTypes({ PointType , ClusterType });
 
         // Check if the data type can be dropped
         if (!dataTypes.contains(dataType))
+        {
             dropRegions << new DropWidget::DropRegion(this, "Incompatible data", "This type of data is not supported", "exclamation-circle", false);
+            return dropRegions;
+        }
 
         // Points dataset is about to be dropped
         if (dataType == PointType) {
 
             // Get points dataset from the core
             auto candidateDataset = mv::data().getDataset<Points>(datasetId);
+
+            if(!candidateDataset->isDerivedData())
+            {
+                dropRegions << new DropWidget::DropRegion(this, "Incompatible data", "Data must be derived from expression data", "exclamation-circle", false);
+                return dropRegions;
+            }
 
             // Establish drop region description
             const auto description = QString("Visualize %1 as points or density/contour map").arg(datasetGuiName);
@@ -227,9 +236,8 @@ SpaceWalkerPlugin::SpaceWalkerPlugin(const PluginFactory* factory) :
                 }
             }
         }
-
         // Cluster dataset is about to be dropped
-        if (dataType == ClusterType) {
+        else if (dataType == ClusterType) {
 
             // Get clusters dataset from the core
             auto candidateDataset = mv::data().getDataset<Clusters>(datasetId);
