@@ -87,9 +87,15 @@ namespace knn
     {
         _metric = metric;
         if (_preciseKnn)
+        {
+            std::cout << "Knn index is precise" << std::endl;
             createFaissIndex(_faissIndex, numDimensions, metric);
+        }
         else
+        {
+            std::cout << "Knn index is approximate" << std::endl;
             createAnnoyIndex(_annoyIndex, numDimensions);
+        }
     }
 
     void Index::addData(const DataMatrix& data)

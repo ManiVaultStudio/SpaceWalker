@@ -131,7 +131,7 @@ public:
     float getProjectionSize()                           { return _dataStore.getProjectionSize(); }
 
 public: // Flood fill
-    void createKnnIndex();
+    void createKnnIndex(bool precise = true);
     void computeKnnGraph();
     void rebuildKnnGraph(int floodNeighbours) { _knnGraph.build(_dataStore.getBaseData(), _knnIndex, floodNeighbours); }
 
@@ -263,7 +263,7 @@ protected:
     std::vector<ProjectionView*>    _projectionViews;
     ProjectionView*                 _selectedView;
 
-    mv::gui::DropWidget*      _dropWidget;
+    mv::gui::DropWidget*        _dropWidget;
     SettingsAction              _settingsAction;
     ColorMap1DAction            _colorMapAction;            /** Color map action */
     HorizontalToolbarAction     _primaryToolbarAction;      /** Horizontal toolbar for primary content */

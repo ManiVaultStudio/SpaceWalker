@@ -52,6 +52,7 @@ public: // Serialization
 
 public: // Action getters
     TriggerAction& getComputeKnnGraphAction() { return _computeKnnGraphAction; }
+    ToggleAction& getApproximateKnnAction() { return _approximateKnnAction; }
 
     IntegralAction& getFloodDecimalAction() { return _floodDecimal; }
     IntegralAction& getFloodStepsAction() { return _floodStepsAction; }
@@ -66,6 +67,7 @@ public: // Action getters
 private:
     SpaceWalkerPlugin*  _spaceWalkerPlugin;             /** Pointer to scatterplot plugin */
     TriggerAction       _computeKnnGraphAction;
+    ToggleAction        _approximateKnnAction;
 
     IntegralAction      _floodDecimal;
     IntegralAction      _floodStepsAction;
