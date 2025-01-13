@@ -99,25 +99,19 @@ namespace knn
         std::vector<float> indexData;
         linearizeData(data, indexData);
 
+        std::cout << "Adding items to index..." << std::endl;
         if (_preciseKnn)
         {
             _faissIndex->add(numPoints, indexData.data());
         }
         else
         {
-            //_annoyIndex->load("test.ann");
-            //writeDataMatrixToDisk(data);
-            //_annoyIndex->on_disk_build("test.ann");
-            for (size_t i = 0; i < numPoints; ++i) {
-                if (i % 10000 == 0) qDebug() << "Add Progress: " << i;
+            for (size_t i = 0; i < numPoints; ++i)
                 _annoyIndex->add_item((int) i, indexData.data() + (i * numDimensions));
-                if (i % 100 == 0)
-                    std::cout << "Loading objects ...\t object: " << i + 1 << "\tProgress:" << std::fixed << std::setprecision(2) << (double)i / (double)(numPoints + 1) * 100 << "%\r";
-            }
 
-            std::cout << "Building index.." << std::endl;
-            _annoyIndex->build((int) (10 * numDimensions));
-            //_annoyIndex->save("test.ann");
+            std::cout << "Building index..." << std::endl;
+            int n_trees = std::clamp(static_cast<int>(10 * numDimensions), 100, 10000);
+            _annoyIndex->build(n_trees);
         }
     }
 
@@ -134,6 +128,8 @@ namespace knn
         size_t resultSize = numPoints * k;
         indices.resize(resultSize);
         distances.resize(resultSize);
+
+        std::cout << "Searching items in knn index..." << std::endl;
 
         if (_preciseKnn)
         {
