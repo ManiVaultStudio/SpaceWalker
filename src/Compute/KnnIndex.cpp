@@ -147,22 +147,23 @@ namespace knn
         }
         else
         {
-            std::vector<std::vector<int>> tempIndices(numPoints, std::vector<int>(k));
-            std::vector<std::vector<float>> tempDistances(numPoints, std::vector<float>(k));
 
-            int totalCount = 0;
+            int search_k = -1; // defaults to n_trees * k
 #pragma omp parallel for
-            for (int i = 0; i < data.rows(); i++)
+            for (int i = 0; i < numPoints; i++)
             {
-                _annoyIndex->get_nns_by_item(i, k, -1, &tempIndices[i], &tempDistances[i]);
-                
-                if (i % 1000 == 0) std::cout << "Querying neighbours: " << i << "/" << data.rows() << std::endl;
-//#pragma omp critical
-//                {
-//                    totalCount += 1;
-//                    if (totalCount % 1000 == 0) std::cout << "Querying neighbours: " << totalCount << "/" << data.rows() << std::endl;
-//                }
+                std::vector<int> tempIndices;
+                std::vector<float> tempDistances;
+
+                _annoyIndex->get_nns_by_item(i, k, -1, &tempIndices, &tempDistances);
+
+                for (unsigned int m = 0; m < static_cast<unsigned int>(k); m++) {
+                    indices[i * k + m] = tempIndices[m];
+                    distances[i * k + m] = tempDistances[m];
+                }
+
             }
+
         }
     }
 
