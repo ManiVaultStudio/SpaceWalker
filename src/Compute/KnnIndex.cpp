@@ -1,10 +1,11 @@
 #include "KnnIndex.h"
 
 #include <QDebug>
-#include <iostream>
-#include <iomanip>
 
+#include <algorithm>
 #include <fstream>
+#include <iomanip>
+#include <iostream>
 #include <sstream>
 
 void writeDataMatrixToDisk(const DataMatrix& dataMatrix)
@@ -15,9 +16,9 @@ void writeDataMatrixToDisk(const DataMatrix& dataMatrix)
     // Linearize data
     std::vector<float> linearData(numPoints * numDimensions);
     int c = 0;
-    for (int i = 0; i < numPoints; i++)
+    for (int i = 0; i < static_cast<int>(numPoints); i++)
     {
-        for (int j = 0; j < numDimensions; j++)
+        for (int j = 0; j < static_cast<int>(numDimensions); j++)
             linearData[c++] = dataMatrix(i, j);
     }
     std::cout << "Linearized data for export" << std::endl;
