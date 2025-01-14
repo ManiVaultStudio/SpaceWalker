@@ -102,7 +102,7 @@ SpaceWalkerPlugin::SpaceWalkerPlugin(const PluginFactory* factory) :
     _graphTimer(new QTimer(this)),
     _filterLabel(nullptr)
 {
-    setObjectName("GradientExplorer");
+    setObjectName("SpaceWalker");
 
     getWidget().setFocusPolicy(Qt::ClickFocus);
 
