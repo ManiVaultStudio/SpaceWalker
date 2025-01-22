@@ -102,7 +102,7 @@ SpaceWalkerPlugin::SpaceWalkerPlugin(const PluginFactory* factory) :
     _graphTimer(new QTimer(this)),
     _filterLabel(nullptr)
 {
-    setObjectName("GradientExplorer");
+    setObjectName("SpaceWalker");
 
     getWidget().setFocusPolicy(Qt::ClickFocus);
 
@@ -1008,9 +1008,10 @@ void SpaceWalkerPlugin::importKnnGraph()
  * Flooding
  ******************************************************************************/
 
-void SpaceWalkerPlugin::createKnnIndex()
+void SpaceWalkerPlugin::createKnnIndex(bool precise)
 {
     qDebug() << "Creating index";
+    _knnIndex.setPrecise(precise);
     if (_dataStore.getNumDimensions() <= 200)
         _knnIndex.create(_dataStore.getNumDimensions(), knn::Metric::MANHATTAN);
     else
@@ -1202,6 +1203,9 @@ void SpaceWalkerPlugin::useSelectionAsMask()
 
     _maskedDataMatrix = _dataStore.getDataView()(_mask, Eigen::all);
     _maskedProjMatrix = _dataStore.getProjectionView()(_mask, Eigen::all);
+
+    const bool preciseKnn = _settingsAction.getOverlayAction().getApproximateKnnAction().isChecked();
+    _maskedKnnIndex.setPrecise(preciseKnn);
 
     if (_maskedKnn)
     {

@@ -28,6 +28,8 @@ namespace knn
         Index();
         ~Index();
 
+        void setPrecise(bool precise) { _preciseKnn = precise; }
+
         void create(int numDimensions, Metric metric);
         void addData(const DataMatrix& data);
         void search(const DataMatrix& data, int numNeighbours, std::vector<int>& indices, std::vector<float>& distances) const;

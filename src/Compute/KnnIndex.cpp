@@ -1,10 +1,11 @@
 #include "KnnIndex.h"
 
 #include <QDebug>
-#include <iostream>
-#include <iomanip>
 
+#include <algorithm>
 #include <fstream>
+#include <iomanip>
+#include <iostream>
 #include <sstream>
 
 void writeDataMatrixToDisk(const DataMatrix& dataMatrix)
@@ -15,9 +16,9 @@ void writeDataMatrixToDisk(const DataMatrix& dataMatrix)
     // Linearize data
     std::vector<float> linearData(numPoints * numDimensions);
     int c = 0;
-    for (int i = 0; i < numPoints; i++)
+    for (int i = 0; i < static_cast<int>(numPoints); i++)
     {
-        for (int j = 0; j < numDimensions; j++)
+        for (int j = 0; j < static_cast<int>(numDimensions); j++)
             linearData[c++] = dataMatrix(i, j);
     }
     std::cout << "Linearized data for export" << std::endl;
@@ -86,9 +87,15 @@ namespace knn
     {
         _metric = metric;
         if (_preciseKnn)
+        {
+            std::cout << "Knn index is precise" << std::endl;
             createFaissIndex(_faissIndex, numDimensions, metric);
+        }
         else
+        {
+            std::cout << "Knn index is approximate" << std::endl;
             createAnnoyIndex(_annoyIndex, numDimensions);
+        }
     }
 
     void Index::addData(const DataMatrix& data)
@@ -99,25 +106,19 @@ namespace knn
         std::vector<float> indexData;
         linearizeData(data, indexData);
 
+        std::cout << "Adding items to index..." << std::endl;
         if (_preciseKnn)
         {
             _faissIndex->add(numPoints, indexData.data());
         }
         else
         {
-            //_annoyIndex->load("test.ann");
-            //writeDataMatrixToDisk(data);
-            //_annoyIndex->on_disk_build("test.ann");
-            for (size_t i = 0; i < numPoints; ++i) {
-                if (i % 10000 == 0) qDebug() << "Add Progress: " << i;
+            for (size_t i = 0; i < numPoints; ++i)
                 _annoyIndex->add_item((int) i, indexData.data() + (i * numDimensions));
-                if (i % 100 == 0)
-                    std::cout << "Loading objects ...\t object: " << i + 1 << "\tProgress:" << std::fixed << std::setprecision(2) << (double)i / (double)(numPoints + 1) * 100 << "%\r";
-            }
 
-            std::cout << "Building index.." << std::endl;
-            _annoyIndex->build((int) (10 * numDimensions));
-            //_annoyIndex->save("test.ann");
+            std::cout << "Building index..." << std::endl;
+            int n_trees = std::clamp(static_cast<int>(10 * numDimensions), 100, 10000);
+            _annoyIndex->build(n_trees);
         }
     }
 
@@ -135,6 +136,8 @@ namespace knn
         indices.resize(resultSize);
         distances.resize(resultSize);
 
+        std::cout << "Searching items in knn index..." << std::endl;
+
         if (_preciseKnn)
         {
             idx_t* I = new idx_t[resultSize];
@@ -147,22 +150,23 @@ namespace knn
         }
         else
         {
-            std::vector<std::vector<int>> tempIndices(numPoints, std::vector<int>(k));
-            std::vector<std::vector<float>> tempDistances(numPoints, std::vector<float>(k));
 
-            int totalCount = 0;
+            int search_k = -1; // defaults to n_trees * k
 #pragma omp parallel for
-            for (int i = 0; i < data.rows(); i++)
+            for (int i = 0; i < numPoints; i++)
             {
-                _annoyIndex->get_nns_by_item(i, k, -1, &tempIndices[i], &tempDistances[i]);
-                
-                if (i % 1000 == 0) std::cout << "Querying neighbours: " << i << "/" << data.rows() << std::endl;
-//#pragma omp critical
-//                {
-//                    totalCount += 1;
-//                    if (totalCount % 1000 == 0) std::cout << "Querying neighbours: " << totalCount << "/" << data.rows() << std::endl;
-//                }
+                std::vector<int> tempIndices;
+                std::vector<float> tempDistances;
+
+                _annoyIndex->get_nns_by_item(i, k, -1, &tempIndices, &tempDistances);
+
+                for (unsigned int m = 0; m < static_cast<unsigned int>(k); m++) {
+                    indices[i * k + m] = tempIndices[m];
+                    distances[i * k + m] = tempDistances[m];
+                }
+
             }
+
         }
     }
 
