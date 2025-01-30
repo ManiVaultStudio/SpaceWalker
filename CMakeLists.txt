@@ -22,8 +22,10 @@ if(MSVC)
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
 endif(MSVC)
 
-if(DEFINED CMAKE_TOOLCHAIN_FILE AND CMAKE_TOOLCHAIN_FILE MATCHES "vcpkg")
-    set(MV_GRV_USE_VCPKG ON)
+if(NOT DEFINED MV_GRV_USE_VCPKG)
+    set(MV_GRV_USE_VCPKG OFF)
+elseif(MV_GRV_USE_VCPKG)
+    message(STATUS "SpaceWalker: Using vcpkg to install dependencies")
 endif()
 
 # -----------------------------------------------------------------------------
