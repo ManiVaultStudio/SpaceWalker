@@ -76,6 +76,7 @@ class SpaceWalkerConan(ConanFile):
             subprocess.run(f"ln {proc.stdout.decode('UTF-8').strip()}/lib/libomp.dylib /usr/local/lib/libomp.dylib", shell=True)
         if os_info.is_linux:
             self.run("sudo apt update && sudo apt install -y libtbb-dev")
+            self.run("sudo ./cmake/install-lkeb-artifactory-cert.sh")
 
     def config_options(self):
         if self.settings.os == "Windows":
