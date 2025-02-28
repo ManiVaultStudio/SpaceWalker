@@ -76,8 +76,13 @@ class SpaceWalkerConan(ConanFile):
             subprocess.run(f"ln {proc.stdout.decode('UTF-8').strip()}/lib/libomp.dylib /usr/local/lib/libomp.dylib", shell=True)
         if os_info.is_linux:
             self.run("sudo apt update && sudo apt install -y libtbb-dev")
-            self.run("sudo ./cmake/install-lkeb-artifactory-cert.sh")
-
+            cwd = pathlib.Path().resolve()
+            self.run("sudo apt update && sudo apt install -y libtbb-dev")
+            print(f"current working directory: {cwd}")
+            self.run("sudo ls cmake/")
+            self.run("sudo cp cmake/lkeb-artifactory-lumc-nl-chain.crt /usr/local/share/ca-certificates/")
+            self.run("sudo update-ca-certificates")
+            
     def config_options(self):
         if self.settings.os == "Windows":
             del self.options.fPIC
