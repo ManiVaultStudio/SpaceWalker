@@ -19,7 +19,7 @@ OverlayAction::OverlayAction(QObject* parent, const QString& title) :
     _dimensionalityOverlayAction(this, "Local Dimensionality")
     //_overlayGroupAction(this, true)
 {
-    setIcon(mv::Application::getIconFont("FontAwesome").getIcon("image"));
+    setIcon(mv::util::StyledIcon("image"));
 
     setConfigurationFlag(WidgetAction::ConfigurationFlag::ForceCollapsedInGroup);
 

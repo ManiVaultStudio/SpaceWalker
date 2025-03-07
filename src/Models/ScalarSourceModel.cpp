@@ -3,6 +3,7 @@
 #include <DataHierarchyItem.h>
 #include <Application.h>
 #include <Set.h>
+#include <util/StyledIcon.h>
 
 using namespace mv;
 
@@ -47,13 +48,13 @@ QVariant ScalarSourceModel::data(const QModelIndex& index, int role) const
         case Qt::DecorationRole:
         {
             if (row == DefaultRow::Constant)
-                return Application::getIconFont("FontAwesome").getIcon("ruler");
+                return mv::util::StyledIcon("ruler");
 
             if (row == DefaultRow::Selection)
-                return Application::getIconFont("FontAwesome").getIcon("mouse-pointer");
+                return mv::util::StyledIcon("mouse-pointer");
 
             if (row >= DefaultRow::DatasetStart)
-                return scalarDataset->getIcon();
+                return scalarDataset->icon();
 
             break;
         }

@@ -1270,9 +1270,9 @@ void SpaceWalkerPlugin::useSelectionAsDataView(std::vector<int>& indices)
  * Factory
  ******************************************************************************/
 
-QIcon SpaceWalkerPluginFactory::getIcon(const QColor& color /*= Qt::black*/) const
+SpaceWalkerPluginFactory::SpaceWalkerPluginFactory()
 {
-    return Application::getIconFont("FontAwesome").getIcon("braille", color);
+    setIconByName("braille");
 }
 
 ViewPlugin* SpaceWalkerPluginFactory::produce()

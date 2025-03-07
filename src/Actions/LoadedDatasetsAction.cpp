@@ -16,7 +16,7 @@ LoadedDatasetsAction::LoadedDatasetsAction(QObject* parent, const QString& title
     _colorDatasetPickerAction(this, "Color"),
     _sliceDatasetPickerAction(this, "Cluster")
 {
-    setIcon(mv::Application::getIconFont("FontAwesome").getIcon("database"));
+    setIcon(mv::util::StyledIcon("database"));
     setToolTip("Manage loaded datasets for position and/or color");
 
     _positionDatasetPickerAction.setFilterFunction([](const mv::Dataset<DatasetImpl>& dataset) -> bool {

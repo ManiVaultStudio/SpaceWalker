@@ -10,7 +10,7 @@ PositionAction::PositionAction(QObject* parent, const QString& title) :
     _xDimensionPickerAction(this, "X"),
     _yDimensionPickerAction(this, "Y")
 {
-    setIcon(mv::Application::getIconFont("FontAwesome").getIcon("ruler-combined"));
+    setIcon(mv::util::StyledIcon("ruler-combined"));
     setLabelSizingType(LabelSizingType::Auto);
 
     addAction(&_xDimensionPickerAction);

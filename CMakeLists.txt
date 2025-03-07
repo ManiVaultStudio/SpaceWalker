@@ -198,6 +198,11 @@ target_compile_definitions(${PROJECT} PRIVATE NOGDI)
 
 target_compile_features(${PROJECT} PRIVATE cxx_std_20)
 
+set_target_properties(${PROJECT}
+    PROPERTIES
+    FOLDER ViewPlugins
+)
+
 # -----------------------------------------------------------------------------
 # Target include directories
 # -----------------------------------------------------------------------------

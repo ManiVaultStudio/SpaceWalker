@@ -11,7 +11,7 @@ MiscellaneousAction::MiscellaneousAction(QObject* parent, const QString& title) 
     _spaceWalkerPlugin(dynamic_cast<SpaceWalkerPlugin*>(parent->parent())),
     _backgroundColorAction(this, "Background color")
 {
-    setIcon(Application::getIconFont("FontAwesome").getIcon("cog"));
+    setIcon(mv::util::StyledIcon("cog"));
     setLabelSizingType(LabelSizingType::Auto);
     setConfigurationFlag(WidgetAction::ConfigurationFlag::ForceCollapsedInGroup);
 

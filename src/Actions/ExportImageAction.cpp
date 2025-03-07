@@ -41,7 +41,7 @@ ExportImageAction::ExportImageAction(QObject* parent, const QString& title) :
     _exportCancelAction(this, "Cancel", { TriggersAction::Trigger("Export", "Export dimensions"), TriggersAction::Trigger("Cancel", "Cancel export")  }),
     _aspectRatio()
 {
-    setIcon(mv::Application::getIconFont("FontAwesome").getIcon("camera"));
+    setIcon(mv::util::StyledIcon("camera"));
     setLabelWidthFixed(100);
     setConnectionPermissionsToForceNone(true);
     setConfigurationFlag(WidgetAction::ConfigurationFlag::ForceCollapsedInGroup);

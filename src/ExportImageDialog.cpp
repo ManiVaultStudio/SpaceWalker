@@ -13,7 +13,7 @@ ExportImageDialog::ExportImageDialog(QWidget* parent, SpaceWalkerPlugin& spaceWa
     _exportImageAction(&spaceWalkerPlugin, "ExportImageAction")
 {
     setWindowTitle("Export " + spaceWalkerPlugin.getPositionDataset()->getGuiName() + " to image(s)");
-    setWindowIcon(Application::getIconFont("FontAwesome").getIcon("file-export"));
+    setWindowIcon(mv::util::StyledIcon("file-export"));
     setModal(true);
 
     auto layout = new QVBoxLayout();
