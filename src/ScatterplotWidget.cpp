@@ -35,8 +35,8 @@ namespace
 ScatterplotWidget::ScatterplotWidget() :
     _densityRenderer(DensityRenderer::RenderMode::DENSITY),
     _backgroundColor(0, 0, 22, 255),
-    _pointRenderer(),
-    _cellRenderer(),
+    _pointRenderer(this),
+    _cellRenderer(this),
     //_pixelSelectionTool(this),
     _showRandomWalk(false),
     _showDirections(false)
@@ -47,6 +47,9 @@ ScatterplotWidget::ScatterplotWidget() :
     setFocusPolicy(Qt::ClickFocus);
 
     _pointRenderer.setPointScaling(Relative);
+
+    _pointRenderer.getNavigator().setZoomMarginScreen(10.f);
+    _cellRenderer.getNavigator().setZoomMarginScreen(10.f);
 
     //// Configure pixel selection tool
     //_pixelSelectionTool.setEnabled(true);
@@ -169,18 +172,18 @@ Matrix3f createProjectionMatrix(Bounds bounds)
 // by reference then we can upload the data to the GPU, but not store it in the widget.
 void ScatterplotWidget::setData(const std::vector<Vector2f>* points)
 {
-    auto dataBounds = getDataBounds(*points);
+    _dataBounds = getDataBounds(*points);
 
-    dataBounds.ensureMinimumSize(1e-07f, 1e-07f);
-    dataBounds.makeSquare();
-    dataBounds.expand(0.01f);
+    const auto dataBoundsRect = QRectF(QPointF(_dataBounds.getLeft(), _dataBounds.getBottom()), QSizeF(_dataBounds.getWidth(), _dataBounds.getHeight()));
 
-    _dataBounds = dataBounds;
+    _pointRenderer.setDataBounds(dataBoundsRect);
+    _densityRenderer.setDataBounds(dataBoundsRect);
+    _cellRenderer.setDataBounds(dataBoundsRect);
 
-    // Pass bounds and data to renderers
-    _pointRenderer.setBounds(_dataBounds);
-    _densityRenderer.setBounds(_dataBounds);
-    _cellRenderer.setBounds(_dataBounds);
+	
+
+    _pointRenderer.getNavigator().resetView(true);
+    _cellRenderer.getNavigator().resetView(true);
 
     _pointRenderer.setData(*points);
     _densityRenderer.setData(points);

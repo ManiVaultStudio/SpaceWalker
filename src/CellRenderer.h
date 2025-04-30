@@ -1,6 +1,6 @@
 #pragma once
 
-#include "renderers/Renderer.h"
+#include "renderers/Renderer2D.h"
 
 #include "graphics/BufferObject.h"
 
@@ -84,19 +84,20 @@ namespace mv
             bool _dirtyColors           = false;
         };
 
-        class CellRenderer : public Renderer
+        class CellRenderer : public Renderer2D
         {
         public:
+
+            CellRenderer(QWidget* sourceWidget, QObject* parent = nullptr);
+
             void setData(const std::vector<Vector2f>& points);
             void setColorChannelScalars(const std::vector<float>& scalars);
             void setColors(const std::vector<Vector3f>& colors);
 
             void setScalarEffect(const ScalarEffect effect);
             void setColormap(const QImage& image);
-            void setBounds(const Bounds& bounds);
 
             void init() override;
-            void resize(QSize renderSize) override;
             void render() override;
             void destroy() override;
 
@@ -106,12 +107,18 @@ namespace mv
             Vector3f getColorMapRange() const;
             void setColorMapRange(const float& min, const float& max);
 
+            /**
+             * Set data bounds to \p dataBounds
+             * @param dataBounds Data bounds
+             */
+            void setDataBounds(const QRectF& dataBounds) override;
+
+            /** Update the world bounds */
+            QRectF computeWorldBounds() const override;
+
         private:
             /* Point properties */
             ScalarEffect   _pointEffect = ScalarEffect::None;
-
-            /* Window properties */
-            QSize _windowSize;
 
             /* Rendering variables */
             ShaderProgram _shader;
@@ -119,9 +126,6 @@ namespace mv
 
             CellArrayObject _gpuPoints;
             Texture2D _colormap;
-
-            Matrix3f _orthoM;
-            Bounds _bounds = Bounds(-1, 1, -1, 1);
 
             std::int32_t    _numSelectedPoints;     /** Number of selected (highlighted points) */
         };

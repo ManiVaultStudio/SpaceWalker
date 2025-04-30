@@ -218,6 +218,13 @@ namespace mv
             _triangleBuffer.destroy();
         }
 
+        CellRenderer::CellRenderer(QWidget* sourceWidget, QObject* parent) :
+            Renderer2D(parent)
+        {
+            if (sourceWidget)
+                setSourceWidget(sourceWidget);
+        }
+
         void CellRenderer::setData(const std::vector<Vector2f>& positions)
         {
             _gpuPoints.setPositions(positions);
@@ -241,11 +248,6 @@ namespace mv
         void CellRenderer::setColormap(const QImage& image)
         {
             _colormap.loadFromImage(image);
-        }
-
-        void CellRenderer::setBounds(const Bounds& bounds)
-        {
-            _bounds = bounds;
         }
 
         void CellRenderer::loadShaders()
@@ -276,51 +278,46 @@ namespace mv
             loadShaders();
         }
 
-        void CellRenderer::resize(QSize renderSize)
-        {
-            int w = renderSize.width();
-            int h = renderSize.height();
-
-            _windowSize.setWidth(w);
-            _windowSize.setHeight(h);
-        }
-
         void CellRenderer::render()
         {
-            if (_needsReload)
-            {
-                loadShaders();
-                _needsReload = false;
-            }
+            beginRender();
+	        {
+		        if (_needsReload)
+		        {
+		        	loadShaders();
+		        	_needsReload = false;
+		        }
 
-            int w = _windowSize.width();
-            int h = _windowSize.height();
-            int size = w < h ? w : h;
-            glViewport(w / 2 - size / 2, h / 2 - size / 2, size, size);
+            	//int w = _windowSize.width();
+            	//int h = _windowSize.height();
+            	//int size = w < h ? w : h;
+            	//glViewport(w / 2 - size / 2, h / 2 - size / 2, size, size);
 
-            // World to clip transformation
-            _orthoM = createProjectionMatrix(_bounds);
+            	//// World to clip transformation
+            	//_orthoM = createProjectionMatrix(_bounds);
 
-            _shader.bind();
+            	_shader.bind();
 
-            // Point size uniforms
-            _shader.uniformMatrix3f("orthoM", _orthoM);
-            qDebug() << _gpuPoints.hasColorScalars();
-            _shader.uniform1i("hasScalars", _gpuPoints.hasColorScalars());
-            _shader.uniform1i("hasColors", _gpuPoints.hasColors());
-            _shader.uniform1i("numSelectedPoints", _numSelectedPoints);
-            _shader.uniform1i("scalarEffect", 1);
+            	// Point size uniforms
+                _shader.uniformMatrix3f("orthoM", getModelViewProjectionMatrix().data());
+            	qDebug() << _gpuPoints.hasColorScalars();
+            	_shader.uniform1i("hasScalars", _gpuPoints.hasColorScalars());
+            	_shader.uniform1i("hasColors", _gpuPoints.hasColors());
+            	_shader.uniform1i("numSelectedPoints", _numSelectedPoints);
+            	_shader.uniform1i("scalarEffect", 1);
 
-            if (_gpuPoints.hasColorScalars())
-                _shader.uniform3f("colorMapRange", _gpuPoints.getColorMapRange());
+            	if (_gpuPoints.hasColorScalars())
+            		_shader.uniform3f("colorMapRange", _gpuPoints.getColorMapRange());
 
-            if (_pointEffect == ScalarEffect::Color) {
-                _colormap.bind(0);
-                _shader.uniform1i("colormap", 0);
-                qDebug() << "Colormap";
-            }
+            	if (_pointEffect == ScalarEffect::Color) {
+            		_colormap.bind(0);
+            		_shader.uniform1i("colormap", 0);
+            		qDebug() << "Colormap";
+            	}
 
-            _gpuPoints.draw();
+            	_gpuPoints.draw();
+	        }
+            endRender();
         }
 
         void CellRenderer::destroy()
@@ -336,6 +333,21 @@ namespace mv
         void CellRenderer::setColorMapRange(const float& min, const float& max)
         {
             return _gpuPoints.setColorMapRange(Vector3f(min, max, max - min));
+        }
+
+        void CellRenderer::setDataBounds(const QRectF& dataBounds)
+        {
+	        Renderer2D::setDataBounds(dataBounds);
+        }
+
+        QRectF CellRenderer::computeWorldBounds() const
+        {
+            const auto marginX  = getNavigator().getZoomMarginScreen() * static_cast<float>(getDataBounds().height()) / (static_cast<float>(getRenderSize().height() - 2.f * getNavigator().getZoomMarginScreen()));
+            const auto marginY  = getNavigator().getZoomMarginScreen() * static_cast<float>(getDataBounds().width()) / (static_cast<float>(getRenderSize().width() - 2.f * getNavigator().getZoomMarginScreen()));
+            const auto margin   = std::max(marginX, marginY);
+            const auto margins  = QMarginsF(margin, margin, margin, margin);
+
+            return getDataBounds().marginsAdded(margins);
         }
 
     } // namespace gui

@@ -103,6 +103,12 @@ public:
 
     Bounds getBounds() const {
         return _dataBounds;
+        return Bounds(
+            _pointRenderer.getWorldBounds().left(),
+            _pointRenderer.getWorldBounds().right(),
+            _pointRenderer.getWorldBounds().bottom(),
+            _pointRenderer.getWorldBounds().top()
+        );
     }
 
     Vector3f getColorMapRange() const;
