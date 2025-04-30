@@ -32,8 +32,7 @@ namespace
 }
 
 ProjectionView::ProjectionView() :
-    _pointRenderer(),
-    _pixelRatio(1.0)
+    _pointRenderer(this)
 {
     //setContextMenuPolicy(Qt::CustomContextMenu);
     //setAcceptDrops(true);
@@ -43,6 +42,8 @@ ProjectionView::ProjectionView() :
 
     _pointRenderer.setPointScaling(Relative);
     _pointRenderer.setPointSize(1.5f);
+
+    _pointRenderer.getNavigator().setZoomMarginScreen(10.f);
 
     QSurfaceFormat surfaceFormat;
 
@@ -94,19 +95,17 @@ void ProjectionView::setData(const std::vector<Vector2f>* points)
 {
     auto dataBounds = getDataBounds(*points);
 
-    dataBounds.ensureMinimumSize(1e-07f, 1e-07f);
-    dataBounds.makeSquare();
-    dataBounds.expand(0.1f);
-
-    _dataBounds = dataBounds;
+    const auto dataBoundsRect = QRectF(QPointF(dataBounds.getLeft(), dataBounds.getBottom()), QSizeF(dataBounds.getWidth(), dataBounds.getHeight()));
 
     // Pass bounds and data to renderer
-    _pointRenderer.setBounds(_dataBounds);
+    _pointRenderer.setDataBounds(dataBoundsRect);
     _pointRenderer.setData(*points);
 
     _pointRenderer.setSelectionOutlineColor(Vector3f(1, 0, 0));
     _pointRenderer.setAlpha(1.0f);
     //_pointRenderer.setPointScaling(PointScaling::Relative);
+
+    _pointRenderer.getNavigator().resetView(true);
 
     update();
 }

@@ -232,8 +232,14 @@ bool SpaceWalkerPlugin::eventFilter(QObject* target, QEvent* event)
         if (!_mousePressed)
             break;
 
-        Vector2f mousePos = Vector2f(mouseEvent->position().x(), mouseEvent->position().y());
+        auto widget = dynamic_cast<QWidget*>(target);
 
+        qreal dpr = widget->devicePixelRatio();
+        QPointF logicalPos = mouseEvent->localPos();
+        QPointF physicalPos = logicalPos * dpr;
+
+        //Vector2f mousePos = Vector2f(physicalPos.x(), physicalPos.y());
+        Vector2f mousePos = Vector2f(mouseEvent->position().x(), mouseEvent->position().y());// -Vector2f(100, 100);
         if (_positionDataset.isValid())
             mousePositionChanged(mousePos);
 
