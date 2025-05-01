@@ -543,13 +543,20 @@ void ScatterplotWidget::paintGL()
         invM[0] = 1;
         invM[4] = -1;
 
-        Vector2f cp = toScreen * invM * orthoM * _currentPoint;
+        //Vector2f cp = toScreen * invM * orthoM * _currentPoint;
+
+        const auto screenPoint  = _pointRenderer.getWorldPositionToScreenPoint(QVector3D(_currentPoint.x, _currentPoint.y, 0.f));
+        const auto cp           = Vector2f(screenPoint.x(), screenPoint.y());
 
         if (_showFilterCircles)
         {
             // Render peak filter circles
-            float inner_r = ((toScreen * invM * orthoM * (_currentPoint + Vector2f(_radii.x, 0))) - cp).x;
-            float outer_r = ((toScreen * invM * orthoM * (_currentPoint + Vector2f(_radii.y, 0))) - cp).x;
+            const auto screenPointInnerRadius = _pointRenderer.getWorldPositionToScreenPoint(QVector3D(_currentPoint.x + _radii.x, _currentPoint.y, 0.f));
+            const auto screenPointOuterRadius = _pointRenderer.getWorldPositionToScreenPoint(QVector3D(_currentPoint.x + _radii.y, _currentPoint.y, 0.f));
+
+            float inner_r = (screenPointInnerRadius - screenPoint).x();
+            float outer_r = (screenPointOuterRadius - screenPoint).x();
+
             painter.setPen(QPen(QColor(255, 0, 0, 255)));
             painter.drawEllipse(QPointF(cp.x, cp.y), inner_r, inner_r);
             painter.drawEllipse(QPointF(cp.x, cp.y), outer_r, outer_r);
