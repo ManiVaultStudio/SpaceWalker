@@ -56,21 +56,22 @@ namespace
     }
 }
 
-int findClosestPointToMouse(const DataMatrix& projection, const Bounds& bounds, const QSizeF& widgetDimensions, Vector2f mousePos, std::vector<int> mask)
+int findClosestPointToMouse(const PointRenderer& pointRenderer, const DataMatrix& projection, const Bounds& bounds, const QSizeF& widgetDimensions, Vector2f mousePos, std::vector<int> mask)
 {
+    
     int closestIndex = 0;
     float minDist = std::numeric_limits<float>::max();
 
-    Matrix3f boundsToWidgetCoords = createProjectionToUVMatrix(bounds, widgetDimensions);
+    const auto mousePosInWorldCoords    = pointRenderer.getScreenPointToWorldPosition(pointRenderer.getNavigator().getViewMatrix(), QPoint(mousePos.x, mousePos.y));
+    const auto mousePosInDataCoords     = Vector2f(mousePosInWorldCoords.x(), mousePosInWorldCoords.y());
 
     for (int i = 0; i < mask.size(); i++)
     {
         int maskIndex = mask[i];
         Vector2f pointInProjectionCoords(projection(maskIndex, 0), projection(maskIndex, 1));
-        Vector2f pointInWidgetCoords = boundsToWidgetCoords * pointInProjectionCoords;
 
         // Find closest point to mouse coordinates
-        float dist = (pointInWidgetCoords - mousePos).sqrMagnitude();
+        float dist = (pointInProjectionCoords - mousePosInDataCoords).sqrMagnitude();
 
         if (dist < minDist)
         {
@@ -107,8 +108,9 @@ void SpaceWalkerPlugin::mousePositionChanged(Vector2f mousePos)
     // Loop over either all points or only the masked points and establish whether they are selected or not
     std::vector<int> full(_dataStore.getNumPoints());
     std::iota(full.begin(), full.end(), 0);
+
     QSizeF widgetDimensions(getUI().getMainView().width(), getUI().getMainView().height());
-    int selectedPoint = findClosestPointToMouse(_dataStore.getProjectionView(), bounds, widgetDimensions, mousePos, _mask.empty() ? full : _mask);
+    int selectedPoint = findClosestPointToMouse(getUI().getMainView().getPointRenderer(), _dataStore.getProjectionView(), bounds, widgetDimensions, mousePos, _mask.empty() ? full : _mask);
 
     // Check if the selected point is the same as the previous, then dont update
     if (selectedPoint == _selectedPoint)
