@@ -12,7 +12,7 @@ RenderModeAction::RenderModeAction(QObject* parent, const QString& title) :
     _contourPlotAction(this, "Contour"),
     _cellPlotAction(this, "Cell")
 {
-    setIcon(mv::Application::getIconFont("FontAwesome").getIcon("image"));
+    setIcon(mv::util::StyledIcon("image"));
     setDefaultWidgetFlags(OptionAction::HorizontalButtons);
     setEnabled(false);
 

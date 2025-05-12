@@ -11,7 +11,7 @@ PlotAction::PlotAction(QObject* parent, const QString& title) :
     _densityPlotAction(this, "Density")
 {
     setToolTip("Plot settings");
-    setIcon(mv::Application::getIconFont("FontAwesome").getIcon("paint-brush"));
+    setIcon(mv::util::StyledIcon("paint-brush"));
     setLabelSizingType(LabelSizingType::Auto);
 
     addAction(&_pointPlotAction.getSizeAction());
