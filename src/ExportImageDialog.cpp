@@ -13,7 +13,7 @@ ExportImageDialog::ExportImageDialog(QWidget* parent, SpaceWalkerPlugin& scatter
     _exportImageAction(&scatterplotPlugin, "ExportImageAction")
 {
     setWindowTitle("Export " + scatterplotPlugin.getPositionDataset()->getGuiName() + " to image(s)");
-    setWindowIcon(Application::getIconFont("FontAwesome").getIcon("file-export"));
+    setWindowIcon(mv::util::StyledIcon("file-export"));
     setModal(true);
 
     auto layout = new QVBoxLayout();
