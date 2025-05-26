@@ -35,8 +35,8 @@ namespace
 ScatterplotWidget::ScatterplotWidget() :
     _densityRenderer(DensityRenderer::RenderMode::DENSITY),
     _backgroundColor(0, 0, 22, 255),
-    _pointRenderer(),
-    _cellRenderer(),
+    _pointRenderer(this),
+    _cellRenderer(this),
     //_pixelSelectionTool(this),
     _showRandomWalk(false),
     _showDirections(false)
@@ -47,6 +47,9 @@ ScatterplotWidget::ScatterplotWidget() :
     setFocusPolicy(Qt::ClickFocus);
 
     _pointRenderer.setPointScaling(Relative);
+
+    _pointRenderer.getNavigator().setZoomMarginScreen(10.f);
+    _cellRenderer.getNavigator().setZoomMarginScreen(10.f);
 
     //// Configure pixel selection tool
     //_pixelSelectionTool.setEnabled(true);
@@ -169,18 +172,18 @@ Matrix3f createProjectionMatrix(Bounds bounds)
 // by reference then we can upload the data to the GPU, but not store it in the widget.
 void ScatterplotWidget::setData(const std::vector<Vector2f>* points)
 {
-    auto dataBounds = getDataBounds(*points);
+    _dataBounds = getDataBounds(*points);
 
-    dataBounds.ensureMinimumSize(1e-07f, 1e-07f);
-    dataBounds.makeSquare();
-    dataBounds.expand(0.01f);
+    const auto dataBoundsRect = QRectF(QPointF(_dataBounds.getLeft(), _dataBounds.getBottom()), QSizeF(_dataBounds.getWidth(), _dataBounds.getHeight()));
 
-    _dataBounds = dataBounds;
+    _pointRenderer.setDataBounds(dataBoundsRect);
+    _densityRenderer.setDataBounds(dataBoundsRect);
+    _cellRenderer.setDataBounds(dataBoundsRect);
 
-    // Pass bounds and data to renderers
-    _pointRenderer.setBounds(_dataBounds);
-    _densityRenderer.setBounds(_dataBounds);
-    _cellRenderer.setBounds(_dataBounds);
+	
+
+    _pointRenderer.getNavigator().resetView(true);
+    _cellRenderer.getNavigator().resetView(true);
 
     _pointRenderer.setData(*points);
     _densityRenderer.setData(points);
@@ -540,13 +543,20 @@ void ScatterplotWidget::paintGL()
         invM[0] = 1;
         invM[4] = -1;
 
-        Vector2f cp = toScreen * invM * orthoM * _currentPoint;
+        //Vector2f cp = toScreen * invM * orthoM * _currentPoint;
+
+        const auto screenPoint  = _pointRenderer.getWorldPositionToScreenPoint(QVector3D(_currentPoint.x, _currentPoint.y, 0.f));
+        const auto cp           = Vector2f(screenPoint.x(), screenPoint.y());
 
         if (_showFilterCircles)
         {
             // Render peak filter circles
-            float inner_r = ((toScreen * invM * orthoM * (_currentPoint + Vector2f(_radii.x, 0))) - cp).x;
-            float outer_r = ((toScreen * invM * orthoM * (_currentPoint + Vector2f(_radii.y, 0))) - cp).x;
+            const auto screenPointInnerRadius = _pointRenderer.getWorldPositionToScreenPoint(QVector3D(_currentPoint.x + _radii.x, _currentPoint.y, 0.f));
+            const auto screenPointOuterRadius = _pointRenderer.getWorldPositionToScreenPoint(QVector3D(_currentPoint.x + _radii.y, _currentPoint.y, 0.f));
+
+            float inner_r = (screenPointInnerRadius - screenPoint).x();
+            float outer_r = (screenPointOuterRadius - screenPoint).x();
+
             painter.setPen(QPen(QColor(255, 0, 0, 255)));
             painter.drawEllipse(QPointF(cp.x, cp.y), inner_r, inner_r);
             painter.drawEllipse(QPointF(cp.x, cp.y), outer_r, outer_r);
