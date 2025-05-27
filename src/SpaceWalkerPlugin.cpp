@@ -277,7 +277,6 @@ void SpaceWalkerPlugin::init()
 {
     auto layout = new QVBoxLayout();
     auto gradientViewLayout = new QVBoxLayout();
-    auto dimensionViewsLayout = new QHBoxLayout();
 
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
