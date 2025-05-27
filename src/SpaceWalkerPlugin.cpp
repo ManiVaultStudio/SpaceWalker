@@ -112,8 +112,8 @@ SpaceWalkerPlugin::SpaceWalkerPlugin(const PluginFactory* factory) :
     _primaryToolbarAction.addAction(&_settingsAction.getFilterAction(), 0, GroupAction::Horizontal);
     _primaryToolbarAction.addAction(&_settingsAction.getOverlayAction(), 0, GroupAction::Horizontal);
     _primaryToolbarAction.addAction(&_settingsAction.getExportAction(), 0, GroupAction::Horizontal);
-    _primaryToolbarAction.addAction(&_settingsAction.getSelectionAsMaskAction());
-    _primaryToolbarAction.addAction(&_settingsAction.getClearMaskAction());
+    _primaryToolbarAction.addAction(&_settingsAction.getSelectionAsMaskAction(), 0, GroupAction::Horizontal);
+    _primaryToolbarAction.addAction(&_settingsAction.getClearMaskAction(), 0, GroupAction::Horizontal);
 
     _dropWidget = new DropWidget(_scatterPlotWidget);
 
