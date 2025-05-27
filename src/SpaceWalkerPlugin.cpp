@@ -87,7 +87,6 @@ SpaceWalkerPlugin::SpaceWalkerPlugin(const PluginFactory* factory) :
     _positionSourceDataset(),
     _numPoints(0),
     _primaryToolbarAction(this, "PrimaryToolbar"),
-    _secondaryToolbarAction(this, "SecondaryToolbar"),
     _scatterPlotWidget(new ScatterplotWidget()),
     _projectionViews(2, nullptr),
     _selectedView(),
