@@ -276,18 +276,16 @@ SpaceWalkerPlugin::~SpaceWalkerPlugin()
 void SpaceWalkerPlugin::init()
 {
     auto layout = new QVBoxLayout();
-    auto gradientViewLayout = new QVBoxLayout();
-
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
-    layout->addWidget(_primaryToolbarAction.createWidget(&getWidget()));
 
-    _filterLabel = new QLabel();
-    _filterLabel->setText("Spatial Peak Ranking");
+    _filterLabel = new QLabel("Spatial Peak Ranking");
     QFont font = _filterLabel->font();
     font.setPointSize(font.pointSize() * 2);
     _filterLabel->setFont(font);
 
+    // Central layout
+    auto gradientViewLayout = new QVBoxLayout();
     gradientViewLayout->setContentsMargins(6, 0, 6, 0);
     gradientViewLayout->addWidget(_filterLabel);
     gradientViewLayout->addWidget(_projectionViews[0], 50);
@@ -306,13 +304,17 @@ void SpaceWalkerPlugin::init()
     gradientViewLayout->addWidget(_graphView, 70);
 
     auto leftPanel = new QVBoxLayout();
-    leftPanel->addWidget(_scatterPlotWidget, 90);
+    leftPanel->addWidget(_scatterPlotWidget, 100);
 
-    auto centralPanel = new QHBoxLayout();
-    centralPanel->addLayout(leftPanel, 80);
-    centralPanel->addLayout(gradientViewLayout, 20);
+    auto centralPanelWidget = new QWidget();
+    auto centralPanelLayout = new QHBoxLayout();
 
-    layout->addLayout(centralPanel, 100);
+    centralPanelLayout->setContentsMargins(0, 0, 0, 0);
+
+    centralPanelLayout->addLayout(leftPanel, 100);
+    centralPanelLayout->addLayout(gradientViewLayout, 20);
+
+    centralPanelWidget->setLayout(centralPanelLayout);
 
     auto bottomToolbarWidget = new QWidget();
     auto bottomToolbarLayout = new QHBoxLayout();
@@ -328,7 +330,8 @@ void SpaceWalkerPlugin::init()
     //bottomToolbarLayout->addWidget(_settingsAction.getExportImageAction().createWidget(&getWidget()));
     bottomToolbarLayout->addWidget(_settingsAction.getMiscellaneousAction().createCollapsedWidget(&getWidget()));
 
-    layout->addWidget(_secondaryToolbarAction.createWidget(&getWidget()));
+    layout->addWidget(_primaryToolbarAction.createWidget(&getWidget()));
+    layout->addWidget(centralPanelWidget, 100);
 
     getWidget().setLayout(layout);
 
