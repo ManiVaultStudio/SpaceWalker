@@ -304,14 +304,14 @@ void SpaceWalkerPlugin::init()
     gradientViewLayout->addWidget(_graphView, 70);
 
     auto leftPanel = new QVBoxLayout();
-    leftPanel->addWidget(_scatterPlotWidget, 100);
+    leftPanel->addWidget(_scatterPlotWidget, 90);
 
     auto centralPanelWidget = new QWidget();
     auto centralPanelLayout = new QHBoxLayout();
 
     centralPanelLayout->setContentsMargins(0, 0, 0, 0);
 
-    centralPanelLayout->addLayout(leftPanel, 100);
+    centralPanelLayout->addLayout(leftPanel, 80);
     centralPanelLayout->addLayout(gradientViewLayout, 20);
 
     centralPanelWidget->setLayout(centralPanelLayout);
