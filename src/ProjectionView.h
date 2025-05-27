@@ -82,14 +82,14 @@ protected:
 
 private:
     PointRenderer   _pointRenderer;
-    Bounds          _dataBounds;             /** Bounds of the loaded data */
-    QSize           _windowSize;             /** Size of the scatterplot widget */
+    Bounds          _dataBounds = {};             /** Bounds of the loaded data */
+    QSize           _windowSize = {};             /** Size of the scatterplot widget */
 
-    QString         _projectionName;
+    QString         _projectionName = {};
 
-    QImage          _colorMapImage;
+    QImage          _colorMapImage = {};
 
-    Vector2f        _currentPoint;
+    Vector2f        _currentPoint = {};
 
     bool            _isInitialized = false;
 
