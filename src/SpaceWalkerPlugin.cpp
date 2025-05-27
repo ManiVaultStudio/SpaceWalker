@@ -332,6 +332,7 @@ void SpaceWalkerPlugin::init()
 
     layout->addWidget(_primaryToolbarAction.createWidget(&getWidget()));
     layout->addWidget(centralPanelWidget, 100);
+    //layout->addWidget(bottomToolbarWidget);
 
     getWidget().setLayout(layout);
 
