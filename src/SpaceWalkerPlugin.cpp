@@ -678,7 +678,16 @@ void SpaceWalkerPlugin::onPointSelection()
 
     if (selection->indices.size() > 0)
     {
+
         timer.start();
+
+        std::vector<unsigned int> localIndices;
+        _positionDataset->getLocalSelectionIndices(localIndices);
+
+        if (localIndices.size() == 1) {
+            _selectedPoint = localIndices[0];
+        }
+
         Vector2f center = Vector2f(_dataStore.getProjectionView()(_selectedPoint, 0), _dataStore.getProjectionView()(_selectedPoint, 1));
 
         KnnGraph& knnGraph = !_maskedKnn ? _knnGraph : _maskedKnnGraph;
@@ -704,160 +713,160 @@ void SpaceWalkerPlugin::onPointSelection()
         if (_graphAvailable)
             _floodFill.compute(knnGraph, selectedPoint);
 
-timer.mark("Floodfill");
+            timer.mark("Floodfill");
 
-        /////////////////////
-        // Gradient picker //
-        /////////////////////
-        std::vector<int> dimRanking;
-        switch (_filterType)
-        {
-        case filters::FilterType::SPATIAL_PEAK:
-        {
-            if (_settingsAction.getFilterAction().getRestrictToFloodAction().isChecked())
-                _spatialPeakFilter.computeDimensionRanking(_selectedPoint, dataMatrix, variances, projMatrix, projectionSize, dimRanking, _floodFill.getAllNodes());
-            else
-                _spatialPeakFilter.computeDimensionRanking(_selectedPoint, dataMatrix, variances, projMatrix, projectionSize, dimRanking);
-            break;
-        }
-        case filters::FilterType::HD_PEAK:
-        {
-            _hdFloodPeakFilter.computeDimensionRanking(_selectedPoint, _dataStore.getBaseData(), variances, _floodFill, dimRanking);
-            break;
-        }
-        }
-timer.mark("Ranking");
-
-        // Set appropriate coloring of gradient view, FIXME use colormap later
-        for (int pi = 0; pi < _projectionViews.size(); pi++)
-        {
-            const auto dimValues = dataMatrix(Eigen::all, dimRanking[pi]);
-            std::vector<float> dimV(dimValues.data(), dimValues.data() + dimValues.size());
-            _projectionViews[pi]->setShownDimension(dimRanking[pi]);
-            _projectionViews[pi]->setScalars(dimV, _globalSelectedPoint);
-            _projectionViews[pi]->setProjectionName(_enabledDimNames[dimRanking[pi]]);
-        }
-        // Set selected gradient view
-        if (_selectedDimension >= 0)
-        {
-            qDebug() << "SEL DIM:" << _selectedDimension;
-            const auto dimValues = dataMatrix(Eigen::all, _selectedDimension);
-            std::vector<float> dimV(dimValues.data(), dimValues.data() + dimValues.size());
-            _selectedView->setShownDimension(_selectedDimension);
-            _selectedView->setScalars(dimV, _globalSelectedPoint);
-            _selectedView->setProjectionName(_enabledDimNames[_selectedDimension]);
-        }
-
-        _graphView->setTopDimensions(dimRanking[0], dimRanking[1]);
-
-timer.mark("Filter");
-
-        /////////////////////
-        // Coloring        //
-        /////////////////////
-        _colorScalars.clear();
-        _colorScalars.resize(_positionDataset->getNumPoints(), 0);
-
-        if (_graphAvailable)
-        {
-            switch (_overlayType)
-            {
-            case OverlayType::NONE:
-            {
-                if (_floodFill.getNumWaves() > 0)
+                /////////////////////
+                // Gradient picker //
+                /////////////////////
+                std::vector<int> dimRanking;
+                switch (_filterType)
                 {
-                    _scatterPlotWidget->setColoredBy("Colored by - Flood fill step");
-                    for (int i = 0; i < _floodFill.getNumWaves(); i++)
+                case filters::FilterType::SPATIAL_PEAK:
+                {
+                    if (_settingsAction.getFilterAction().getRestrictToFloodAction().isChecked())
+                        _spatialPeakFilter.computeDimensionRanking(_selectedPoint, dataMatrix, variances, projMatrix, projectionSize, dimRanking, _floodFill.getAllNodes());
+                    else
+                        _spatialPeakFilter.computeDimensionRanking(_selectedPoint, dataMatrix, variances, projMatrix, projectionSize, dimRanking);
+                    break;
+                }
+                case filters::FilterType::HD_PEAK:
+                {
+                    _hdFloodPeakFilter.computeDimensionRanking(_selectedPoint, _dataStore.getBaseData(), variances, _floodFill, dimRanking);
+                    break;
+                }
+                }
+                timer.mark("Ranking");
+
+                // Set appropriate coloring of gradient view, FIXME use colormap later
+                for (int pi = 0; pi < _projectionViews.size(); pi++)
+                {
+                    const auto dimValues = dataMatrix(Eigen::all, dimRanking[pi]);
+                    std::vector<float> dimV(dimValues.data(), dimValues.data() + dimValues.size());
+                    _projectionViews[pi]->setShownDimension(dimRanking[pi]);
+                    _projectionViews[pi]->setScalars(dimV, _globalSelectedPoint);
+                    _projectionViews[pi]->setProjectionName(_enabledDimNames[dimRanking[pi]]);
+                }
+                // Set selected gradient view
+                if (_selectedDimension >= 0)
+                {
+                    qDebug() << "SEL DIM:" << _selectedDimension;
+                    const auto dimValues = dataMatrix(Eigen::all, _selectedDimension);
+                    std::vector<float> dimV(dimValues.data(), dimValues.data() + dimValues.size());
+                    _selectedView->setShownDimension(_selectedDimension);
+                    _selectedView->setScalars(dimV, _globalSelectedPoint);
+                    _selectedView->setProjectionName(_enabledDimNames[_selectedDimension]);
+                }
+
+                _graphView->setTopDimensions(dimRanking[0], dimRanking[1]);
+                
+                timer.mark("Filter");
+
+                /////////////////////
+                // Coloring        //
+                /////////////////////
+                _colorScalars.clear();
+                _colorScalars.resize(_positionDataset->getNumPoints(), 0);
+
+                if (_graphAvailable)
+                {
+                    switch (_overlayType)
                     {
-                        for (int j = 0; j < _floodFill.getWaves()[i].size(); j++)
+                    case OverlayType::NONE:
+                    {
+                        if (_floodFill.getNumWaves() > 0)
                         {
-                            int index = _floodFill.getWaves()[i][j];
-                            _colorScalars[_mask.empty() ? index : _mask[index]] = 1 - (1.0f / _floodFill.getNumWaves()) * i;
+                            _scatterPlotWidget->setColoredBy("Colored by - Flood fill step");
+                            for (int i = 0; i < _floodFill.getNumWaves(); i++)
+                            {
+                                for (int j = 0; j < _floodFill.getWaves()[i].size(); j++)
+                                {
+                                    int index = _floodFill.getWaves()[i][j];
+                                    _colorScalars[_mask.empty() ? index : _mask[index]] = 1 - (1.0f / _floodFill.getNumWaves()) * i;
+                                }
+                            }
                         }
+                        else
+                            _scatterPlotWidget->setColoredBy("Colored by - None");
+
+                        break;
+                    }
+                    case OverlayType::DIM_VALUES:
+                    {
+                        _scatterPlotWidget->setColoredBy("Colored by - Dim: " + _enabledDimNames[dimRanking[0]]);
+                        for (int i = 0; i < _floodFill.getTotalNumNodes(); i++)
+                        {
+                            int node = _floodFill.getAllNodes()[i];
+                            int index = _mask.empty() ? node : _mask[node];
+                            _colorScalars[index] = _normalizedData[dimRanking[0]][index];
+                        }
+                        // TEMP
+                        //const auto dimValues = _dataStore.getFullData()(Eigen::all, dimRanking[0]);
+                        //std::vector<float> dimV(dimValues.data(), dimValues.data() + dimValues.size());
+                        //_colorScalars.assign(dimV.begin(), dimV.end());
+                        break;
+                    }
+                    case OverlayType::LOCAL_DIMENSIONALITY:
+                    {
+                        _scatterPlotWidget->setColoredBy("Colored by - Local Dimensionality");
+                        if (_localHighDimensionality.empty()) break;
+
+                        for (int i = 0; i < _floodFill.getTotalNumNodes(); i++)
+                        {
+                            int node = _floodFill.getAllNodes()[i];
+                            int index = _mask.empty() ? node : _mask[node];
+                            _colorScalars[index] = _localHighDimensionality[node];
+                        }
+                        break;
+                    }
+                    case OverlayType::DIRECTIONS:
+                    {
+                        std::vector<float> scalars(dataMatrix.rows(), 0);
+                        std::vector<Vector2f> directions(_floodFill.getTotalNumNodes() * 2);
+
+                        for (int i = 0; i < _floodFill.getTotalNumNodes(); i++)
+                        {
+                            float idx = _floodFill.getAllNodes()[i];
+                            directions[i * 2 + 0] = _directions[idx * 2 + 0];
+                            directions[i * 2 + 1] = _directions[idx * 2 + 1];
+                            scalars[idx] = 0.5f;
+                        }
+                        getScatterplotWidget().setDirections(directions);
+
+                        break;
+                    }
                     }
                 }
-                else
-                    _scatterPlotWidget->setColoredBy("Colored by - None");
 
-                break;
-            }
-            case OverlayType::DIM_VALUES:
-            {
-                _scatterPlotWidget->setColoredBy("Colored by - Dim: " + _enabledDimNames[dimRanking[0]]);
-                for (int i = 0; i < _floodFill.getTotalNumNodes(); i++)
+                // Set color scalars in the main view, if we are looking at a data view, subset the scalars first
+                if (viewIndices.size() > 0)
                 {
-                    int node = _floodFill.getAllNodes()[i];
-                    int index = _mask.empty() ? node : _mask[node];
-                    _colorScalars[index] = _normalizedData[dimRanking[0]][index];
-                }
-                // TEMP
-                //const auto dimValues = _dataStore.getFullData()(Eigen::all, dimRanking[0]);
-                //std::vector<float> dimV(dimValues.data(), dimValues.data() + dimValues.size());
-                //_colorScalars.assign(dimV.begin(), dimV.end());
-                break;
-            }
-            case OverlayType::LOCAL_DIMENSIONALITY:
-            {
-                _scatterPlotWidget->setColoredBy("Colored by - Local Dimensionality");
-                if (_localHighDimensionality.empty()) break;
-
-                for (int i = 0; i < _floodFill.getTotalNumNodes(); i++)
-                {
-                    int node = _floodFill.getAllNodes()[i];
-                    int index = _mask.empty() ? node : _mask[node];
-                    _colorScalars[index] = _localHighDimensionality[node];
-                }
-                break;
-            }
-            case OverlayType::DIRECTIONS:
-            {
-                std::vector<float> scalars(dataMatrix.rows(), 0);
-                std::vector<Vector2f> directions(_floodFill.getTotalNumNodes() * 2);
-
-                for (int i = 0; i < _floodFill.getTotalNumNodes(); i++)
-                {
-                    float idx = _floodFill.getAllNodes()[i];
-                    directions[i * 2 + 0] = _directions[idx * 2 + 0];
-                    directions[i * 2 + 1] = _directions[idx * 2 + 1];
-                    scalars[idx] = 0.5f;
-                }
-                getScatterplotWidget().setDirections(directions);
-
-                break;
-            }
-            }
-        }
-
-        // Set color scalars in the main view, if we are looking at a data view, subset the scalars first
-        if (viewIndices.size() > 0)
-        {
-            std::vector<float> viewScalars(numPoints);
+                    std::vector<float> viewScalars(numPoints);
 #pragma omp parallel for
-            for (int i = 0; i < numPoints; i++)
-            {
-                viewScalars[i] = _colorScalars[viewIndices[i]];
-            }
-            getScatterplotWidget().setScalars(viewScalars);
-        }
-        else
-            getScatterplotWidget().setScalars(_colorScalars);
+                    for (int i = 0; i < numPoints; i++)
+                    {
+                        viewScalars[i] = _colorScalars[viewIndices[i]];
+                    }
+                    getScatterplotWidget().setScalars(viewScalars);
+                }
+                else
+                    getScatterplotWidget().setScalars(_colorScalars);
 
-        timer.mark("Compute color scalars");
+                timer.mark("Compute color scalars");
 
-        // Store scalars in floodfill dataset
-        normalizeVector(_colorScalars);
-        updateFloodScalarOutput(_colorScalars);
+                // Store scalars in floodfill dataset
+                normalizeVector(_colorScalars);
+                updateFloodScalarOutput(_colorScalars);
 
-        timer.mark("Publish color scalars");
+                timer.mark("Publish color scalars");
 
-        /////////////////////
-        // Graphs          //
-        /////////////////////
+                /////////////////////
+                // Graphs          //
+                /////////////////////
 
-        // Start a timer to compute the graphs in 100ms, if the timer is restarted before graphs are not computed
-        _graphTimer->start(100);
+                // Start a timer to compute the graphs in 100ms, if the timer is restarted before graphs are not computed
+                _graphTimer->start(100);
 
-        timer.finish("Graphs");
+                timer.finish("Graphs");
     }
 }
 
